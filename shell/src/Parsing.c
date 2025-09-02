@@ -29,7 +29,7 @@ int name(char* input) {
 int input(char *inp){
 	int i=0;
 	int n = strlen(inp);
-	while(i<n && inp[i] == ' ')
+    if(i<n && inp[i] == ' ')
 		i++;
 	if(i == n )
 		return 0;
@@ -44,19 +44,19 @@ int input(char *inp){
 int output(char *oup){
 	int i=0;
 	int n = strlen(oup);
-	while(i<n && oup[i] == ' ')
+    if(i<n && oup[i] == ' ')
 		i++;
 	if(i == n )
 		return 0;
 	if(i+1 < n && oup[i] == '>'&&oup[i+1] != '>'){
 		i++;
-		while(i<n && oup[i] == ' ')
+		if(i<n && oup[i] == ' ')
 			i++;
 		return name(oup+i);
 	}
 	if(i+1 < n && oup[i] == '>'&&oup[i+1] == '>'){
 		i=i+2;
-		while(i<n && oup[i] == ' ')
+		if(i<n && oup[i] == ' ')
 			i++;
 		return name(oup+i);
 	}
@@ -78,7 +78,7 @@ int atomic(char *at){
 	buff2[buff2_counter]='\0';
 	if(!name(buff2))
 		return 0;
-	while(i<n && at[i] == ' ')
+	if(i<n && at[i] == ' ')
 		i++;	
 	while(i<n){
 		char *buff = (char*)malloc(sizeof(char)*(n+1));
@@ -90,7 +90,7 @@ int atomic(char *at){
 		buff[buff_counter]='\0';
 		if(!name(buff) && !input(buff) && !output(buff))
 			return 0;
-		while(i<n && at[i] == ' ')
+		if(i<n && at[i] == ' ')
 			i++;
 	}
 	if(flag==0)
@@ -114,7 +114,7 @@ int cmd_group(char *cmd_g){
 		free(buff);
 		int temp = i;
 		i++;
-		while(i<n && cmd_g[i] == ' ')
+		if(i<n && cmd_g[i] == ' ')
 			i++;
 		if(cmd_g[temp]=='|' && i == n)
 			return 0;
@@ -126,7 +126,7 @@ int cmd_group(char *cmd_g){
 int validate(char *cmd){
 	int n = strlen(cmd);
 	n= n-1;
-	while(cmd[n] == ' ')
+	if(cmd[n] == ' ')
 		n--;
 	n++;
 	if(cmd[n-1] == ';')
@@ -145,7 +145,7 @@ int validate(char *cmd){
 		if(cmd_group(buff)==0)
 			return 0;
 		free(buff);
-		while(i<n && cmd[i]==' ')
+		if(i<n && cmd[i]==' ')
 			i++;
 
 	}

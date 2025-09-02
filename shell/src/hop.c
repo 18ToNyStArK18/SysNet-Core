@@ -25,7 +25,7 @@ int hop(char *command,char *prev){
 	int i=3;
 	int flag=0;
 	int temp_ = 3;
-	while(temp_ <n && command[temp_] == ' ')
+	if(temp_ <n && command[temp_] == ' ')
 		temp_++;
 	if(temp_ == n){
 		
@@ -35,7 +35,7 @@ int hop(char *command,char *prev){
 
 	}
 	for(i;i<n;i++){
-		while(i<n && command[i] == ' ')
+		if(i<n && command[i] == ' ')
 			i++;
 		if(i<n && command[i] == '~'){
 

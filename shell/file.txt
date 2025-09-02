@@ -1,0 +1,4 @@
+killall 3233
+ps -f
+kill 3233
+0
