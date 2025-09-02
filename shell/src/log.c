@@ -91,7 +91,7 @@ int add_cmd(char *cmd){
 	ftruncate(fd, 0);
 	for(int i=0;i<file_count;i++){
 		if(strcmp(cmd,file_data[i])==0)
-			return NULL;
+			return -1;
 	}
 	if(file_count != 16){
 		for(int i =0;i<file_count-1;i++){
@@ -130,4 +130,5 @@ int add_cmd(char *cmd){
 		return 1;
 
 		}
+	return 1;
 }

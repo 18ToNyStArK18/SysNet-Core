@@ -12,7 +12,7 @@
 #include"../include/log.h"
 #include <fcntl.h>  
 #include <unistd.h>
-
+#include "../include/Input.h"
 char * FindPath(){
 	char *working_dir = (char *)malloc(sizeof(char)*PATH_MAX);
 	if(getcwd(working_dir,PATH_MAX) == NULL){
@@ -91,7 +91,9 @@ running:
 		if(!validate(cmd_refined)){
 			printf("Invalid Syntax!\n");
 			continue;
-		}	
+		}
+		redirect(cmd_refined);
+
 		if(strncmp(cmd_refined,"log",3) != 0)
 			add_cmd(cmd_refined);
 
