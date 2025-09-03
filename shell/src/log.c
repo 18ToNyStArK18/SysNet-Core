@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include <unistd.h>
-#include"../include/log.h"
+#include"../include/include.h"
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -12,20 +12,21 @@
 //Do not store a command if it is identical to the previously executed command in the log. Here identical can mean syntactically or exactly. Take it to mean exactly.
 
 
-char *my_log(char *command){
+char *my_log(char *command,char * home_path){
 	if(strncmp(command,"log ",4)!=0 && strcmp(command,"log")!=0)
 		return NULL;
 	int n = strlen(command);
+	n--;
+	while(command[n]==' ')
+	n--;
+	n++;
 	char *file_data[16];
 	for(int i=0;i<16;i++)
 		file_data[i]= (char *)malloc(sizeof(char)*4097);
-	char *working_dir = (char *)malloc(sizeof(char)*PATH_MAX);
-	if(getcwd(working_dir,PATH_MAX) == NULL){
-		perror("Error finding the curr_dir\n");
-	}
-	working_dir = (char *)realloc(working_dir,strlen(working_dir) + 10);
-	strcat(working_dir,"/file.txt");
-	int fd = open(working_dir,O_CREAT | O_RDWR,0777);
+	char * dir = (char *)malloc(PATH_MAX);
+	strcpy(dir,home_path);
+	strcat(dir,"/file.txt");
+	int fd = open(dir,O_CREAT | O_RDWR,0777);
 	char *buff = (char *)malloc(sizeof(char) * 4097 * 15);
 	int file_count = 0;
 	int bytes;
@@ -40,7 +41,7 @@ char *my_log(char *command){
 	}
 
 	if(n == 3){
-		for(int i=0;i<file_count-1 && i < 15;i++)
+		for(int i=0;i<file_count ;i++)
 			printf("%s\n",file_data[i]);
 		return NULL;
 	}
@@ -57,23 +58,20 @@ char *my_log(char *command){
 		if(command[i]== ' ')
 			i++;
 		if(i==n-1)
-			return file_data[command[i]-'0'-1];
+			return file_data[file_count - command[i]+'0'];
 		else
-			return file_data[(command[i] - '0')*10 + command[i+1] - '0'-1];
+			return file_data[file_count-((command[i] - '0')*10 + command[i+1] - '0')];
 	}
 	return NULL;
 }
-int add_cmd(char *cmd){
+int add_cmd(char *cmd,char *home_path){
 	char *file_data[16];
 	for(int i=0;i<16;i++)
 		file_data[i]= (char *)malloc(sizeof(char)*4097);
-	char *working_dir = (char *)malloc(sizeof(char)*PATH_MAX);
-	if(getcwd(working_dir,PATH_MAX) == NULL){
-		perror("Error finding the curr_dir\n");
-	}
-	working_dir = (char *)realloc(working_dir,strlen(working_dir) + 10);
-	strcat(working_dir,"/file.txt");
-	int fd = open(working_dir,O_CREAT | O_RDWR,0777);
+	char * dir = (char *)malloc(PATH_MAX);
+	strcpy(dir,home_path);
+	strcat(dir,"/file.txt");
+	int fd = open(dir,O_CREAT | O_RDWR,0777);
 	char *buff = (char *)malloc(sizeof(char) * 4097);
 	int file_count = 0;
 	int bytes;
@@ -88,45 +86,26 @@ int add_cmd(char *cmd){
 	}
 
 	lseek(fd, 0, SEEK_SET);
-	ftruncate(fd, 0);
 	for(int i=0;i<file_count;i++){
 		if(strcmp(cmd,file_data[i])==0)
 			return -1;
 	}
-	if(file_count != 16){
-		for(int i =0;i<file_count-1;i++){
+
+	ftruncate(fd, 0);
+	if(file_count != 15){
+		for(int i =0;i<file_count;i++){
 			write(fd,file_data[i],strlen(file_data[i]));
 			write(fd,"\n",1);
 		}
 		write(fd,cmd,strlen(cmd));
-		write(fd,"\n",1);
-		write(fd,"0",1);
 		return 1;
 	}
 	else{
-		int oldest =-1;
-		if(strlen(file_data[15]) == 1)
-			oldest = file_data[15][0] - '0';
-		else
-			oldest = (file_data[15][0] - '0')*10 + file_data[15][1] - '0';
-		strcpy(file_data[oldest],cmd);
-		oldest = (oldest + 1)%15;
-		for(int i =0;i<file_count-1;i++){
+		for(int i =1;i<file_count;i++){
 			write(fd,file_data[i],strlen(file_data[i]));
 			write(fd,"\n",1);
 		}
-		
-		char *old = (char *)malloc(sizeof(char)*3);
-		if(oldest > 9){
-			old[0] = '1';
-			old[1] = oldest % 10 + '0';
-			old[2]='\0';
-		}
-		else{
-			old[0] = oldest + '0';
-			old[1] = '\0';
-		}
-		write(fd,old,(strlen(old)));
+		write(fd,cmd,strlen(cmd));
 		return 1;
 
 		}

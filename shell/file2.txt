@@ -12,4 +12,3 @@ cat < file.txt
 hop ..
 reveal
 cat file.txt > file2.txt 
-cat file.txt 

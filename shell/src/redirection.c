@@ -1,126 +1,111 @@
-#include "../include/Input.h"
+#include "../include/include.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>	
+#include <stdio.h>
 
 int createfile(char * file){
-	return 1;
+    return 1;
 }
-int redirect(char*command){
-	int n = strlen(command);
-	/*  int std_in = dup(STDIN_FILENO);
-		dup2(fd,STDIN_FILENO);
-		close(fd);
 
-	//code ends here
-	dup2(std_in,STDIN_FILENO);
-	close(std_in)
-	*/
-
-	char *refined = (char *)malloc(n +1);
-	refined[0] = '\0';
-	int i=0;
-	while(i<n){
-		int j=0;
-		char *buff = (char *)malloc(n +1);
-		buff[0]='\0';
-		while( i < n && command[i] != '>' && command[i] != '<')
-			buff[j++] = command[i++];
-		buff[j]='\0';
-		if(i<n && command[i]=='>' &&  ((i < n-1 && command[i+1] != '>') || i==n-1)){
+char * redirect(char *command){
+    int n = strlen(command);
+    
+    char *input = NULL;
+    char *output = NULL;
+    int output_type = 0; 
+    
+    char *base_command = (char *)malloc(n + 1);
+    int base_len = 0;
+    
+    int i = 0;
+    while(i < n && command[i] != '>' && command[i] != '<') {
+        base_command[base_len++] = command[i++];
+    }
+    base_command[base_len] = '\0';
+    while(i < n) {
+        if(command[i] == '>') {
+            i++; // skip first '>'
+            int is_append = 0;
+            
+            if(i < n && command[i] == '>') {
+                is_append = 1;
+                i++; // skip second '>'
+            }
+            while(i < n && (command[i] == ' ' || command[i] == '\t')) {
+                i++;
+            }
+            
+            int start = i;
+            while(i < n && command[i] != '>' && command[i] != '<' && 
+                  command[i] != ' ' && command[i] != '\t') {
+                i++;
+            }
+            
+            if(i > start) {
+                if(output) {
+					createfile(output);
+                    free(output);
+                }
+                int curr_len = i - start;
+                output = (char *)malloc(curr_len + 1);
+                strncpy(output, command + start, curr_len);
+                output[curr_len] = '\0';
+                output_type = is_append ? 2 : 1;
+            }
+        }
+        else if(command[i] == '<') {
+            i++; // skip '<'
+            
+            while(i < n && (command[i] == ' ' || command[i] == '\t')) {
+                i++;
+            }
+            
+            int start = i;
+            while(i < n && command[i] != '>' && command[i] != '<' && 
+                  command[i] != ' ' && command[i] != '\t') {
+                i++;
+            }
+            
+            if(i > start) {
+                
+                if(input) {
+                    free(input);
+                }
+                
+                
+                int curr_len = i - start;
+                input = (char *)malloc(curr_len + 1);
+                strncpy(input, command + start, curr_len);
+                input[curr_len] = '\0';
+            }
+        }
+		else
 			i++;
-			if(j)
-			strcat(refined,buff);
-			strcat(refined,">");
-			buff[0]='\0';
-			j=0;
-			while(i < n){
-				if( i < n && command[i] == '<' || (i < n-1 && command[i] == '>' && command[i+1] == '>') ){
-					buff[j] = '\0';
-					strcat(refined,buff);
-					j=0;
-					break;
-				}
-				else if(command[i]=='>'){
-					int a = createfile(buff);
-					if(a == -1)
-						return -1;
-					buff[0]='\0';
-					j=0;
-					i++;
-				}
-				if(i<n){
-					buff[j++] = command[i++];
-				}
-			}
-			if(j){
-				buff[j]='\0';
-				strcat(refined,buff);
-			}
-		}
-		else if(i<n-1 && command[i+1] == '>' && command[i] == '>'){
-			i = i+2;
-			buff[j]='\0';
-			strcat(refined,buff);
-			strcat(refined,">>");
-			buff[0]='\0';
-			j=0;
-			while(i<n){
-				if( i < n && command[i] == '<' ||( i < n-1 && (command[i] == '>' && command[i+1] != '>'))){
-					buff[j]='\0';
-					strcat(refined,buff);
-					j = 0;
-					break;
-				}
-				else if(i < n-1 && command[i]=='>' && command[i+1] =='>'){
+    }
+    
+    char *refined = (char *)malloc(n + 100);     
+	strcpy(refined, base_command);
+    if(input) {
+        strcat(refined, " < ");
+        strcat(refined, input);
+    }
+    
+	if(output) {
+        if(output_type == 2) {
+            strcat(refined, " >> ");
+        } else {
+            strcat(refined, " > ");
+        }
+        strcat(refined,output);
+    }
+    
+    free(base_command);
+    if(input) free(input);
+    if(output) free(output);
+    return refined;
 
-					int a =  createfile(buff);
-					if(a==-1)
-						return -1;
-					buff[0] = '\0';
-					j = 0;
-					i = i +2 ;
-				}
-				if(i<n)
-					buff[j++] =  command[i++];
-			}
-			if(j){
-				buff[j]='\0';
-				strcat(refined,buff);
-			}
-		}
-		else if(i < n  && command[i] == '<'){
-			i++;
-			buff[j]='\0';
-			strcat(refined,buff);
-			strcat(refined,"<");
-			buff[0] = '\0';
-			j=0;
-			while(i < n){
-				if(i<n && command[i] == '>'){
-					buff[j] = '\0';
-					strcat(refined,buff);
-					j = 0;
-					break;
-				}
-				else if(i < n && command[i] == '<'){
-					buff[0] = '\0';
-					j=0;
-					i = i +1;
-				}
-				if(i<n)
-					buff[j++] = command[i++];
-			}
-			if(j){
-				buff[j]='\0';
-				strcat(refined,buff);
-			}
-		}
-		free(buff);
-	}
-	printf("%s\n",refined);
-	return 1;
 }
+

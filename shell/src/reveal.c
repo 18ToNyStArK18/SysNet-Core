@@ -4,7 +4,7 @@
 #include<pwd.h>
 #include<unistd.h>
 #include<linux/limits.h>
-#include"../include/reveal.h"
+#include"../include/include.h"
 #include<dirent.h>
 
 int cmp(const void *a, const void *b) {
@@ -13,7 +13,7 @@ int cmp(const void *a, const void *b) {
     return strcmp(pa, pb);
 }
 
-int my_reveal(char *command,char *prev){
+int my_reveal(char *command,char *prev,char * home_path){
 	if(strncmp(command,"reveal ",7) != 0 && strcmp(command,"reveal") != 0){
 		return 0;
 	}
@@ -50,8 +50,7 @@ int my_reveal(char *command,char *prev){
 			else if(i == n-1 && command[i] == '~'){
 				flag =1;
 				// home dir
-				struct passwd *pw = getpwuid(getuid());
-				strcpy(dir,pw->pw_dir);
+				strcpy(dir,home_path);
 			}
 			else{
 				flag =1;

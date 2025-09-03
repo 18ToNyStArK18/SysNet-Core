@@ -1,4 +1,4 @@
-#include"../include/hop.h"
+#include"../include/include.h"
 #include<stdio.h>
 #include<regex.h>
 #include<string.h>
@@ -7,7 +7,7 @@
 #include<unistd.h>
 #include<sys/utsname.h>
 #include<linux/limits.h>
-int hop(char *command,char *prev){
+int hop(char *command,char *prev,char * home_path){
 	char *temp = (char *)malloc(sizeof(char)*PATH_MAX);
 	if(getcwd(temp,PATH_MAX) == NULL){
 		perror("ERROR FINDING THE CURR_PATH");
@@ -15,11 +15,7 @@ int hop(char *command,char *prev){
 
 	int n = strlen(command);
 	char *Home_dir= (char *)malloc(sizeof(char)*PATH_MAX);
-	struct passwd *inf = getpwuid(getuid());
-	if(inf == NULL){
-		perror("Error getting user info");
-	}
-	strcpy(Home_dir,inf->pw_dir);
+	strcpy(Home_dir,home_path);
 	if(n<3 || command[0] !='h' || command[1] != 'o' || command[2] !='p')
 		return 0;
 	int i=3;
