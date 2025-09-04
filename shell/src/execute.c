@@ -10,6 +10,7 @@
 #include <fcntl.h>  
 #include <unistd.h>
 #include"../include/include.h"
+int succesfull = 1;
 int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	char * new_cmd = (char *)malloc(strlen(cmd)+1);
 	new_cmd = redirect(cmd);
@@ -81,14 +82,17 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		add_cmd(cmd,home_path);
 
 	if(strncmp(command,"hop",3) == 0 ){
-		if( hop(command,prev,home_path)==-1)
+		if( hop(command,prev,home_path)==-1){
 			printf("No such directory!\n");
+			succesfull = 0;
+		}
 		return 1;
 	}
 	else if(strncmp(command,"reveal",6) == 0){
 		int temp = my_reveal(command,prev,home_path);
 		if(temp == -1){
 			printf("No such directory!\n");
+			succesfull =0;
 		}
 	}
 	else if(strncmp(command,"log",3)==0){
@@ -105,8 +109,21 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			execlp("bash", "bash", "-c", new_cmd, NULL);
 			_exit(127);
 		}
-		else 
-			wait(NULL);
+		else {
+			int status;
+			waitpid(f, &status, 0);  // wait for this child
+			if (WIFEXITED(status)) {
+				int code = WEXITSTATUS(status);
+				if (code == 127) {
+					succesfull = 0;   // exec failed
+				} else {
+					succesfull = 1;   // exec ran fine
+				}
+			} else {
+				succesfull = 0;       // abnormal termination (signal, etc.)
+			}
+		}
+
 	} 
 	if(strlen(input)){
 		int c;
@@ -175,6 +192,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 }
 int my_exec(char *cmd,char *prev,char *home_path,char *path_req){
 	int n = strlen(cmd);
+	int job_count = 0;
 	n= n-1;
 	if(cmd[n] == ' ')
 		n--;
@@ -192,8 +210,23 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req){
 		}
 		i++;
 		buff[buff_counter]='\0';
-		if(cmd_exec(buff,prev,home_path,path_req)==0)
-			return 0;
+		if(cmd[i-1] == '&'){
+			int fd  = fork();
+			if(fd == 0){
+				printf("[%d] %d\n",job_count,getpid());
+				cmd_exec(buff,prev,home_path,path_req);
+				if(succesfull)
+					printf("%s with pid %d exited normally\n",buff,getpid());
+				else{
+					printf("%s with pid %d exited abnormally\n",buff,getpid());
+				}
+				exit(0);
+			}
+			else
+				job_count++;
+		}
+		else
+			cmd_exec(buff,prev,home_path,path_req);
 		free(buff);
 		if(i<n && cmd[i]==' ')
 			i++;
@@ -201,7 +234,7 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req){
 	}
 	if(flag==0)
 		return 0;
-	return 1;
+	return job_count;
 }
 
 

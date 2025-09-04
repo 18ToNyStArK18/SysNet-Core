@@ -35,6 +35,7 @@ char *FindPath(char *home_path)
 
 int main()
 {
+	int jobs= 0;
 	char *username = getlogin();
 	struct utsname sys;
 	char *home_path = (char *)malloc(PATH_MAX);
@@ -55,6 +56,8 @@ int main()
 		char *cmd_refined = (char *)malloc(sizeof(char) * 4097);
 
 		scanf(" %[^\n]", command);
+		for(int aa =0;aa < jobs;aa++)
+			wait(NULL);
 		int counter = 0, i = 0;
 		int n = strlen(command);
 		int flag = 0;
@@ -92,11 +95,16 @@ int main()
 			printf("Invalid Syntax!\n");
 			continue;
 		}
-		if (my_exec(cmd_refined, prev, home_path, path_req) == -1)
+		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req);
+
+		if(temp_jobs == -1){
+			jobs = 0;
 			printf("Error running cmf\n");
-		
-			path_req = FindPath(home_path);
-	
+		}
+		else
+			jobs = temp_jobs;
+		path_req = FindPath(home_path);
+
 		// 	redirect(cmd_refined);
 
 		// 	if(strncmp(cmd_refined,"log",3) != 0)

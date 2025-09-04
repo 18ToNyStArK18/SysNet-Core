@@ -14,6 +14,10 @@ int hop(char *command,char *prev,char * home_path){
 	}
 
 	int n = strlen(command);
+	n--;
+	while(command[n]==' ')
+		n--;
+	n++;
 	char *Home_dir= (char *)malloc(sizeof(char)*PATH_MAX);
 	strcpy(Home_dir,home_path);
 	if(n<3 || command[0] !='h' || command[1] != 'o' || command[2] !='p')

@@ -1,15 +1,13 @@
-revreveal 
-head -n 3
-cat file.txt
-reveal -la ../..
-reveal -la ../../..
-reveal -la ../../.. 
-grep a  100 
-tail -n 100 
-grep a
-head -n 10
-cat < file.txt
+clear
+sleep 20
+sleep 10 
+hop ~
 hop ..
-reveal
-cat file.txt > file2.txt 
-cat file.txt 
+hop //
+sleep 20 
+lol 
+lol
+gdb shell.out
+hop blah 
+a
+hop .. sgua
