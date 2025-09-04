@@ -1,8 +1,0 @@
-.
-..
-Makefile
-a.txt
-file.txt
-include
-shell.out
-src

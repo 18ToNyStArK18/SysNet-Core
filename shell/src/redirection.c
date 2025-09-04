@@ -5,8 +5,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 int createfile(char * file){
+    int i=0;
+    while(file[i] == ' ')
+        i++;
+    int n = strlen(file);
+    n--;
+    while(file[n]==' ')
+        n--;
+    n++;
+    file[n]='\0';
+    FILE *fp = fopen(file+i,"w");
+    fclose(fp);
     return 1;
 }
 
@@ -64,8 +74,7 @@ char * redirect(char *command){
             }
             
             int start = i;
-            while(i < n && command[i] != '>' && command[i] != '<' && 
-                  command[i] != ' ' && command[i] != '\t') {
+            while(i < n && command[i] != '>' && command[i] != '<' && command[i] != ' ' && command[i] != '\t') {
                 i++;
             }
             

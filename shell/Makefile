@@ -1,3 +1,9 @@
 .PHONY: all 
 all:
-	gcc src/main.c src/Parsing.c src/hop.c src/reveal.c src/log.c src/redirection.c src/execute.c include/include.h -o shell.out -O0 -g
+	gcc  -std=c99 \
+  -D_POSIX_C_SOURCE=200809L \
+  -D_XOPEN_SOURCE=700 \
+  -Wall -Wextra -Werror \
+  -Wno-unused-parameter \
+  -fno-asm \
+  	src/main.c src/Parsing.c src/hop.c src/reveal.c src/log.c src/redirection.c src/execute.c include/include.h -o shell.out -O0 -g

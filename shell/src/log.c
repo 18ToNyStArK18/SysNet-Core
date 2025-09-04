@@ -8,10 +8,6 @@
 #include <sys/stat.h>
 #include<linux/limits.h>
 
-//didnt implement this 
-//Do not store a command if it is identical to the previously executed command in the log. Here identical can mean syntactically or exactly. Take it to mean exactly.
-
-
 char *my_log(char *command,char * home_path){
 	if(strncmp(command,"log ",4)!=0 && strcmp(command,"log")!=0)
 		return NULL;
@@ -20,26 +16,24 @@ char *my_log(char *command,char * home_path){
 	while(command[n]==' ')
 	n--;
 	n++;
-	char *file_data[16];
-	for(int i=0;i<16;i++)
+	char *file_data[15];
+	for(int i=0;i<15;i++)
 		file_data[i]= (char *)malloc(sizeof(char)*4097);
 	char * dir = (char *)malloc(PATH_MAX);
 	strcpy(dir,home_path);
-	strcat(dir,"/file.txt");
-	int fd = open(dir,O_CREAT | O_RDWR,0777);
-	char *buff = (char *)malloc(sizeof(char) * 4097 * 15);
+	strcat(dir,"/file.txt"); // storing in a file 
+	FILE *fp = fopen(dir, "r");
+	if (!fp) {
+        return NULL;
+    }
 	int file_count = 0;
-	int bytes;
-
-	while((bytes = read(fd, buff, 4096)) > 0) {
-		buff[bytes] = '\0'; // null terminate
-		char *line = strtok(buff, "\n");
-		while(line != NULL && file_count < 16) {
-			strcpy(file_data[file_count++], line);
-			line = strtok(NULL, "\n");
-		}
-	}
-
+	char line[4096];
+	while (fgets(line, sizeof(line), fp) != NULL && file_count < 16) {
+        // Remove trailing newline
+        line[strcspn(line, "\n")] = '\0';
+        strcpy(file_data[file_count++], line);
+    }
+	fclose(fp);
 	if(n == 3){
 		for(int i=0;i<file_count ;i++)
 			printf("%s\n",file_data[i]);
@@ -49,11 +43,12 @@ char *my_log(char *command,char * home_path){
 	if(command[i] == ' ')
 		i++;
 	if(strcmp(command + i,"purge")==0){
-		ftruncate(fd, 0);
+		fp = fopen(dir,"w");
+		fclose(fp);
 		return NULL;
 	}
 	else if(strncmp(command+i,"execute",7)==0){
-		while(command[i]!=  ' ')
+		while(command[i]!= ' ')
 			i++;
 		if(command[i]== ' ')
 			i++;
@@ -65,47 +60,46 @@ char *my_log(char *command,char * home_path){
 	return NULL;
 }
 int add_cmd(char *cmd,char *home_path){
-	char *file_data[16];
-	for(int i=0;i<16;i++)
+	char *file_data[15];
+	for(int i=0;i<15;i++)
 		file_data[i]= (char *)malloc(sizeof(char)*4097);
 	char * dir = (char *)malloc(PATH_MAX);
 	strcpy(dir,home_path);
 	strcat(dir,"/file.txt");
-	int fd = open(dir,O_CREAT | O_RDWR,0777);
-	char *buff = (char *)malloc(sizeof(char) * 4097);
+	FILE *fp = fopen(dir, "r");
 	int file_count = 0;
-	int bytes;
+	if (!fp) {
+		goto create;
+    }
+	
+	char line[4096];
+	while (fgets(line, sizeof(line), fp) != NULL && file_count < 16) {
+        // Remove trailing newline
+        line[strcspn(line, "\n")] = '\0';
+        strcpy(file_data[file_count++], line);
+    }
+	fclose(fp);
 
-	while((bytes = read(fd, buff, 4096)) > 0) {
-		buff[bytes] = '\0'; // null terminate
-		char *line = strtok(buff, "\n");
-		while(line != NULL && file_count < 16) {
-			strcpy(file_data[file_count++], line);
-			line = strtok(NULL, "\n");
-		}
-	}
-
-	lseek(fd, 0, SEEK_SET);
 	for(int i=0;i<file_count;i++){
 		if(strcmp(cmd,file_data[i])==0)
-			return -1;
+			return 1;
 	}
-
-	ftruncate(fd, 0);
+	create:
+	fp = fopen(dir,"w");
 	if(file_count != 15){
 		for(int i =0;i<file_count;i++){
-			write(fd,file_data[i],strlen(file_data[i]));
-			write(fd,"\n",1);
+			fprintf(fp,"%s\n",file_data[i]);
 		}
-		write(fd,cmd,strlen(cmd));
+		fprintf(fp,"%s\n",cmd);
+		fclose(fp);
 		return 1;
 	}
 	else{
 		for(int i =1;i<file_count;i++){
-			write(fd,file_data[i],strlen(file_data[i]));
-			write(fd,"\n",1);
+			fprintf(fp,"%s\n",file_data[i]);
 		}
-		write(fd,cmd,strlen(cmd));
+		fprintf(fp,"%s\n",cmd);
+		fclose(fp);
 		return 1;
 
 		}

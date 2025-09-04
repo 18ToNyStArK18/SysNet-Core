@@ -94,6 +94,8 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			printf("No such directory!\n");
 			succesfull =0;
 		}
+		if(temp != 1)
+			succesfull = 0;
 	}
 	else if(strncmp(command,"log",3)==0){
 		command=my_log(command,home_path);
@@ -120,7 +122,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 					succesfull = 1;   // exec ran fine
 				}
 			} else {
-				succesfull = 0;       // abnormal termination (signal, etc.)
+				succesfull = 0; 
 			}
 		}
 
@@ -138,7 +140,6 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 
 }
 int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
-	int flag =0;
 	int n = strlen(cmd_g);
 	int i=0;
 	int num_pipes=0;
@@ -157,7 +158,6 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		int buff_counter=0;
 		while(i<n && cmd_g[i] != '|'){
 			buff[buff_counter++] = cmd_g[i++];
-			flag=1;
 		}
 		buff[buff_counter]='\0';
 		i++;

@@ -35,17 +35,18 @@ char *FindPath(char *home_path)
 
 int main()
 {
-	int jobs= 0;
+	int jobs = 0;
 	char *username = getlogin();
-	struct utsname sys;
+	struct utsname sys; // for sysname and all
 	char *home_path = (char *)malloc(PATH_MAX);
-	if (getcwd(home_path, PATH_MAX) == NULL)
+	if (getcwd(home_path, PATH_MAX) == NULL) // the curr_directory when the code is run is considered as home directory
 		perror("Error finding home dir\n");
 	char *path_req = FindPath(home_path);
 	char *prev = (char *)malloc(sizeof(char) * PATH_MAX);
 	prev[0] = '\0';
 	while (1)
 	{
+		// prompting of our shell
 		printf("<%s", username);
 		if (uname(&sys) == 0)
 		{
@@ -56,19 +57,19 @@ int main()
 		char *cmd_refined = (char *)malloc(sizeof(char) * 4097);
 
 		scanf(" %[^\n]", command);
-		for(int aa =0;aa < jobs;aa++)
+		for (int aa = 0; aa < jobs; aa++)
 			wait(NULL);
 		int counter = 0, i = 0;
 		int n = strlen(command);
-		int flag = 0;
+		int found_space = 0;
 		while (i < n)
 		{
-			flag = 0;
+			found_space = 0;
 			if (command[i] == '"')
 			{
 				cmd_refined[counter++] = '"';
 				i++;
-				while (i < n && i < command[i] != '"')
+				while (i < n && command[i] != '"')
 					cmd_refined[counter++] = command[i++];
 				if (i != n)
 					cmd_refined[counter++] = command[i++];
@@ -76,69 +77,34 @@ int main()
 			while (command[i] == ' ')
 			{
 				i++;
-				flag = 1;
+				found_space = 1;
 			}
-			if (flag)
+			if (found_space) // found atlest one space => one space
 				cmd_refined[counter++] = ' ';
 			else
 				cmd_refined[counter++] = command[i++];
 		}
-		if (cmd_refined[counter - 1] == ' ')
+		if (cmd_refined[counter - 1] == ' ') // if end is space negelect it
 		{
 			cmd_refined[counter - 1] = '\0';
 		}
 		else
 			cmd_refined[counter] = '\0';
 
-		if (!validate(cmd_refined))
+		if (!validate(cmd_refined)) // checking the string
 		{
 			printf("Invalid Syntax!\n");
 			continue;
 		}
-		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req);
+		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req); // executing
 
-		if(temp_jobs == -1){
+		if (temp_jobs == -1)
+		{
 			jobs = 0;
 			printf("Error running cmf\n");
 		}
 		else
 			jobs = temp_jobs;
-		path_req = FindPath(home_path);
-
-		// 	redirect(cmd_refined);
-
-		// 	if(strncmp(cmd_refined,"log",3) != 0)
-		// 		add_cmd(cmd_refined,home_path);
-
-		// 	if(strncmp(cmd_refined,"hop",3) == 0 && hop(cmd_refined,prev,home_path)==-1){
-		// 		printf("No such directory!\n");
-		// 		continue;
-		// 	}
-		// 	else if (strncmp(cmd_refined,"hop",3)==0){
-		// 		path_req = FindPath(home_path);
-		// 	}
-		// 	else if(strncmp(cmd_refined,"reveal",6) == 0){
-		// 		int temp = my_reveal(cmd_refined,prev,home_path);
-		// 		if(temp == -1){
-		// 			printf("No such directory!\n");
-		// 		}
-		// 	}
-		// 	else if(strncmp(cmd_refined,"log",3)==0){
-		// 		cmd_refined=my_log(cmd_refined,home_path);
-		// 		if(cmd_refined)
-		// 			goto running;
-		// 	}
-		// 	else{
-		// 		int fk = fork();
-		// 		if (fk == 0) {
-		// 			int devnull = open("/dev/null", O_WRONLY);
-		// 			dup2(devnull, STDERR_FILENO);
-		// 			close(devnull);
-		// 			execlp("bash", "bash", "-c", cmd_refined, NULL);
-		// 			_exit(127);
-		// 		}
-		// 		else
-		// 			wait(NULL);
-		// 	}
+		path_req = FindPath(home_path); // updating the path every time bcz path may change when we use hop
 	}
 }

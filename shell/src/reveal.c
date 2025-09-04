@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+#include<strings.h>
 #include<stdlib.h>
 #include<pwd.h>
 #include<unistd.h>
@@ -10,7 +11,7 @@
 int cmp(const void *a, const void *b) {
     const char *pa = *(const char * const *)a;
     const char *pb = *(const char * const *)b;
-    return strcmp(pa, pb);
+    return strcasecmp(pa, pb);
 }
 
 int my_reveal(char *command,char *prev,char * home_path){
@@ -24,14 +25,19 @@ int my_reveal(char *command,char *prev,char * home_path){
 	char dir[PATH_MAX];
 	strcpy(dir,".");
 	n++;
-	int a=0,l=0,flag=0;
+	int a=0,l=0;
 	for(int i=7;i<n;i++){
 		if(command[i] == '-' && i != n-1){
+			i++;
 			while(i < n && command[i] != ' '){
 				if(command[i]=='a')
 					a=1;
 				else if(command[i] == 'l')
 					l=1;
+				else{
+					printf("Wrong Flag\n");
+					return -2;
+				}
 				i++;
 			}
 		}
@@ -42,18 +48,15 @@ int my_reveal(char *command,char *prev,char * home_path){
 		}
 		else{
 			if(i == n-1 && command[i] == '-'){
-				flag=1;
 				// prev dir
 				//
 				strcpy(dir,prev);
 			}
 			else if(i == n-1 && command[i] == '~'){
-				flag =1;
 				// home dir
 				strcpy(dir,home_path);
 			}
 			else{
-				flag =1;
 				char *buff = (char*)malloc(sizeof(char*)*n);
 				int buff_counter = 0;
 				while(i < n)
@@ -67,6 +70,8 @@ int my_reveal(char *command,char *prev,char * home_path){
 		}
 	}
 	//took help to write this part of this code but this is not ai generated code
+	if(strlen(dir)==0) // no prev the do cuurent dir
+		strcpy(dir,".");
 	DIR *dir_ = opendir(dir);
 	if(!dir_)
 		return -1;
