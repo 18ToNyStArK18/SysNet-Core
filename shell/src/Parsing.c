@@ -14,7 +14,7 @@ int name(char *input)
 {
 	regex_t regex;
 	int result;
-	if(strncmp(input,"log",3)==0)
+	if(strncmp(input,"log ",4)==0 || strcmp(input,"log")==0)
 		log_found =1;
 	const char *pattern = "^[^|&><;]+$";
 

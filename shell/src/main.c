@@ -9,7 +9,7 @@
 #include "../include/include.h"
 #include <fcntl.h>
 #include <unistd.h>
-
+int job_count=0;
 char *FindPath(char *home_path)
 {
 	char *working_dir = (char *)malloc(sizeof(char) * PATH_MAX);
@@ -35,7 +35,6 @@ char *FindPath(char *home_path)
 
 int main()
 {
-	int jobs = 0;
 	char *username = getlogin();
 	struct utsname sys; // for sysname and all
 	char *home_path = (char *)malloc(PATH_MAX);
@@ -119,15 +118,12 @@ int main()
 			temp =1;
 		else
 			temp =0;
-		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req,temp,jobs); // executing
+		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req,temp); // executing
 
 		if (temp_jobs == -1)
 		{
-			jobs = 0;
 			printf("Error running cmf\n");
 		}
-		else
-			jobs += temp_jobs;
 		path_req = FindPath(home_path); // updating the path every time bcz path may change when we use hop
 	}
 }

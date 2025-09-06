@@ -10,8 +10,9 @@
 #include <fcntl.h>  
 #include <unistd.h>
 #include"../include/include.h"
+
+
 int succesfull = 1;
-int temp_job_num;
 int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	char * new_cmd = (char *)malloc(strlen(cmd)+1);
 	new_cmd = redirect(cmd);
@@ -98,10 +99,21 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	else if(strncmp(command,"log",3)==0){
 		command=my_log(command,home_path);
 		if(command)
-			my_exec(command,prev,home_path,path_req,0,temp_job_num); 
+			my_exec(command,prev,home_path,path_req,0); 
+	}
+	else if(strncmp(command,"ping ",5)==0){
+		int r = ping(command);
+		if(r){
+			printf("Sent signal signal_number to process with pid %d\n",r);
+		}
+		else
+			printf("No such process found\n");
+	}
+	else if(strcmp(command,"activities") == 0){
+		activ();
 	}
 	else{
-		int f = fork();
+		pid_t f = fork();
 		if(f == 0){
 			int devnull = open("/dev/null", O_WRONLY);
 			dup2(devnull, STDERR_FILENO);
@@ -110,6 +122,9 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			_exit(127);
 		}
 		else {
+			strcpy(jobs[job_count].data,new_cmd);
+			jobs[job_count++].pid = f;
+
 			int status;
 			waitpid(f, &status, 0);  // wait for this child
 			if (WIFEXITED(status)) {
@@ -159,7 +174,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		}
 		buff[buff_counter]='\0';
 		i++;
-		int pid = fork();
+		pid_t pid = fork();
 		if(pid == 0){
 			if(cmd_index > 0)
 				dup2(pipes[cmd_index - 1][0], STDIN_FILENO);
@@ -172,6 +187,8 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			atomic_exec(buff,prev,home_path,path_req);
 			exit(0);
 		}
+		strcpy(jobs[job_count].data,buff);
+		jobs[job_count++].pid = pid;
 		free(buff);
 		if(i<n && cmd_g[i] == ' ')
 			i++;
@@ -188,7 +205,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	}
 	return 1;
 }
-int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log,int job_count){
+int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 	int n = strlen(cmd);
 	n= n-1;
 	if(cmd[n] == ' ')
@@ -208,7 +225,7 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log,int job_
 		i++;
 		buff[buff_counter]='\0';
 		if(cmd[i-1] == '&'){
-			int fd  = fork();
+			pid_t fd  = fork();
 			if(fd == 0){
 				printf("[%d] %d\n",job_count,getpid());
 				cmd_exec(buff,prev,home_path,path_req);
@@ -226,8 +243,8 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log,int job_
 				exit(0);
 			}
 			else{
-				job_count++;
-				temp_job_num = job_count;
+				strcpy(jobs[job_count++].data,buff);
+				jobs[job_count++].pid= fd;
 			}
 		}
 		else
@@ -241,7 +258,7 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log,int job_
 		return 0;
 	if(!log)
 		add_cmd(cmd,home_path);
-	return job_count;
+	return 1;
 }
 
 
