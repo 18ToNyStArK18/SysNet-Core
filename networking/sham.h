@@ -24,11 +24,12 @@ uint16_t window_size; // Flow control window size
 typedef struct pack_str
 {
     sham a;
+    int len;
     char data[1025];
 }pack_str;
 typedef struct s_truct
 {
-    int pos;
+    int len;
     int end;
     char data[1025];
     struct timeval time;
@@ -38,5 +39,5 @@ typedef struct s_truct
 #define FIN 0X3
 #define timer 500000
 static inline long elapsed_ms(struct timeval a, struct timeval b) {
-    return (b.tv_sec - a.tv_sec)/1000 + (b.tv_usec - a.tv_usec)*1000 ;
+    return (b.tv_sec - a.tv_sec)*1000L + (b.tv_usec - a.tv_usec)/1000L ;
 }

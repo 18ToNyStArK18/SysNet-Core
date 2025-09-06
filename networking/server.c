@@ -1,4 +1,113 @@
 #include "sham.h"
+void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender) {
+    printf("Reciever: recieved FIN\n");
+    pack_str pkt;
+    socklen_t len = sizeof(*sender);
+
+    // Send ACK
+    memset(&pkt, 0, sizeof(pkt));
+    pkt.a.flags = htons(ACK);
+    sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
+    printf("Reciever: Sent ACK\n");
+
+    // Send FIN
+    memset(&pkt, 0, sizeof(pkt));
+    pkt.a.flags = htons(FIN);
+    sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
+    printf("Reciever: Sent FIN\n");
+
+    // Wait for final ACK
+    while (1) {
+        memset(&pkt, 0, sizeof(pkt));
+        int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
+        if ((ntohs(pkt.a.flags) & ACK) == ACK) {
+            printf("Reciver: Recived Final ACK\n");
+            break;
+        }
+    }
+}
+
+
+void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender) {
+    printf("Initiater: Sent FIN\n");
+    pack_str pkt;
+    socklen_t len = sizeof(*sender);
+
+    // Wait until we get ACK
+    while (1) {
+        memset(&pkt, 0, sizeof(pkt));
+        int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
+        if ((ntohs(pkt.a.flags) & ACK) == ACK) {
+            printf("Initiator: Recived ACK\n");
+            break;
+        }
+    }
+
+    // Wait until we get FIN
+    while (1) {
+        memset(&pkt, 0, sizeof(pkt));
+        int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
+        if ((ntohs(pkt.a.flags) & FIN) == FIN) {
+            printf("Initiator: Recived FIN\n");
+            break;
+        }
+    }
+
+    // Send final ACK
+    memset(&pkt, 0, sizeof(pkt));
+    pkt.a.flags = htons(ACK);
+    sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
+    printf("Intitater: Sent Final ACK\n");
+}
+
+
+void client_3_way_handshake(int socketfd, struct sockaddr_in *server_addr)
+{
+    socklen_t sock_len = sizeof(*server_addr);
+    sham packet, response;
+    int rec;
+    uint32_t seq = 1;
+
+    // Send SYN
+    memset(&packet, 0, sizeof(packet));
+    packet.seq_num = htonl(seq);
+    packet.flags = htons(SYN);
+
+    sendto(socketfd, &packet, sizeof(packet), 0, (struct sockaddr *)server_addr, sock_len);
+    printf("CLIENT: Sent SYN with seq_num=%u\n", seq);
+
+    // Receive SYN+ACK
+    rec = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)server_addr, &sock_len);
+    if (rec < 0)
+    {
+        perror("recvfrom failed");
+        exit(1);
+    }
+
+    uint32_t server_seq_num = ntohl(response.seq_num);
+    uint32_t ack_num = ntohl(response.ack_num);
+
+    if (ntohs(response.flags) == (SYN | ACK))
+    {
+        printf("CLIENT: Received SYN+ACK with server_seq=%u, ack=%u\n", server_seq_num, ack_num);
+    }
+    else
+    {
+        printf("CLIENT: Wrong flags in response!\n");
+        exit(1);
+    }
+
+    // Send ACK
+    memset(&packet, 0, sizeof(packet));
+    packet.flags = htons(ACK);
+    packet.ack_num = htonl(server_seq_num + 1);
+
+    sendto(socketfd, &packet, sizeof(packet), 0, (struct sockaddr *)server_addr, sock_len);
+    printf("CLIENT: Sent ACK=%u\n", server_seq_num + 1);
+
+    printf("CLIENT: Connection established!\n");
+    return;
+}
 int comp(const void *a, const void *b)
 {
 	not_ACKed A = *(not_ACKed *)a;
@@ -98,121 +207,6 @@ int main(int argc, char *argv[])
 	// chat mode   -----------------------------------------
 	if (chat_mode)
 	{
-		char *data_sent[10];	 // for storing the data_sent
-		char *data_recieved[10]; // for storing the data_recieved
-		int sent_bytes[10];		 // storing the endbytes
-		int current_sent_bytes = 0;
-		struct timeval sent_time[10];
-		memset(sent_bytes, 0, sizeof(sent_bytes));
-		for (int i = 0; i < 10; i++)
-		{
-			data_sent[i] = (char *)malloc(1025);
-			data_sent[i][0] = '\0';
-			data_recieved[i] = (char *)malloc(1025);
-			data_recieved[i][0] = '\0';
-		}
-
-		for (int i = 0; i < 10; i++)
-			memset(&sent_time[i], 0, sizeof(sent_time[i]));
-		socklen_t len = sizeof(client);
-		int k = 0;
-		while (1)
-		{
-			int maxfd = socketfd + 1;
-			fd_set readfds;
-			FD_ZERO(&readfds);
-			FD_SET(0, &readfds);		// stdin
-			FD_SET(socketfd, &readfds); // from socket
-			select(maxfd, &readfds, NULL, NULL, NULL);
-			char *buff = (char *)malloc(1025);
-			// checking the timer value
-			for (int i = 0; i < 10; i++)
-			{
-				struct timeval curr_time;
-				gettimeofday(&curr_time, NULL);
-				if (sent_bytes[i] && elapsed_ms(sent_time[i], curr_time) >= timer)
-				{
-					pack_str curr_packet;
-					strcpy(curr_packet.data, data_sent[i]);
-					curr_packet.a.seq_num = htonl(sent_bytes[i] - strlen(data_sent[i]) + 1);
-					curr_packet.a.flags = htons(0);
-					curr_packet.a.ack_num = htonl(0);
-					sendto(socketfd, &curr_packet, sizeof(curr_packet), 0, (struct sockaddr *)&client, len);
-					gettimeofday(&sent_time[i], NULL);
-				}
-			}
-			// if user input
-			if (FD_ISSET(0, &readfds))
-			{
-				fgets(buff, 1025, stdin);
-				int size = strlen(buff);
-				int available = 0;
-				for (available = 0; available < 10; available++)
-				{
-					if (strlen(data_sent[available]) == 0)
-						break;
-				}
-				if (available < 10)
-				{
-					strcpy(data_sent[available], buff);
-					current_sent_bytes = current_sent_bytes + size;
-					sent_bytes[available] = current_sent_bytes + 1;
-					pack_str curr_packet;
-					curr_packet.a.seq_num = htonl(current_sent_bytes - size + 1);
-					curr_packet.a.flags = htons(0);
-					curr_packet.a.ack_num = htonl(0);
-					strcpy(curr_packet.data, buff);
-					sendto(socketfd, &curr_packet, sizeof(curr_packet), 0, (struct sockaddr *)&client, len);
-					gettimeofday(&sent_time[available], NULL);
-				}
-			}
-			if (FD_ISSET(socketfd, &readfds))
-			{
-				pack_str response;
-				int rec = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)&client, &len);
-				uint16_t flags = ntohs(response.a.flags);
-				if (flags & ACK)
-				{
-					uint32_t ack_rec = ntohl(response.a.ack_num);
-					for (int i = 0; i < 10; i++)
-					{
-						if (sent_bytes[i] == ack_rec)
-						{
-							sent_bytes[i] = 0;
-							data_sent[i][0] = '\0';
-							memset(&sent_time[i], 0, sizeof(sent_time[i]));
-						}
-					}
-				}
-				else
-				{
-					// printf("%s\n\n\n",response.data);
-					uint32_t rec_seq = ntohl(response.a.seq_num);
-					int index = (rec_seq - 1) / 1024;
-					printf("%d %u\n\n\n", index, rec_seq);
-					if (strlen(data_recieved[index % 10]) == 0)
-						strcpy(data_recieved[index % 10], response.data);
-					pack_str ack_send;
-					ack_send.a.flags = htons(ACK);
-					ack_send.a.ack_num = htonl(rec_seq + strlen(response.data));
-					sendto(socketfd, &ack_send, sizeof(ack_send), 0, (struct sockaddr *)&client, len);
-				}
-			}
-			while (strlen(data_recieved[k % 10]) != 0)
-			{
-				printf("%s", data_recieved[k % 10]);
-				data_recieved[k % 10][0] = '\0';
-				k++;
-			}
-			int i = 0;
-			while (i < 10 && !strlen(data_recieved[i]))
-				i++;
-			if (i == 10)
-				k = 0;
-		}
-
-		close(socketfd);
-		exit(0);
 	}
 	// file mode -------------------------------------------
 	else
@@ -220,34 +214,47 @@ int main(int argc, char *argv[])
 		socklen_t len = sizeof(client);
 		int recieved = 1;
 		not_ACKed buffer_data[10];
+		pack_str file;
+		int f = recvfrom(socketfd,&file,sizeof(file),0,(struct sockaddr *)&client,&len);
+		if(f < 0){
+			printf("Error in recieveing data\n");
+		}
+		char *output_file = (char *)malloc(1024);
+		if(ntohl(file.a.seq_num) == 0)
+			strcpy(output_file,file.data);
+		else{
+			printf("Didnt recieve the file name\n");
+			exit(0);
+		}
 		for (int i = 0; i < 10; i++)
 		{
 			buffer_data[i].data[0] = '\0';
 			buffer_data[i].end = 0;
+			buffer_data[i].len = 0;
 		}
-		// recieve output.txt
-		char output_file[] = "output.txt"; // temporary
-		FILE *fp = fopen(output_file, "w");
+		FILE *fp = fopen(output_file, "wb");
 		while (1)
 		{
 			pack_str response;
 			int r = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)&client, &len);
 			if(ntohs(response.a.flags) & FIN){
+				four_way_hand_shake_reciever(socketfd,&client);
 				fclose(fp);
 				printf("FILE succesfully recieved\n");
 				exit(0);
 			}
-			strcpy(buffer_data[0].data, response.data);
-			buffer_data[0].end = ntohs(response.a.seq_num) + strlen(buffer_data[0].data);
+			memcpy(buffer_data[0].data, response.data,ntohl(response.len));
+			buffer_data[0].len = ntohl(response.len);
+			buffer_data[0].end = ntohl(response.a.seq_num) + buffer_data[0].len;
 			qsort(buffer_data, 10, sizeof(buffer_data[0]), comp);
 			int i = 0;
 			while (buffer_data[i].end == 0)
 				i++;
 			for (i; i < 10; i++)
 			{
-				if (recieved + strlen(buffer_data[i].data) == buffer_data[i].end)
+				if (recieved + buffer_data[i].len == buffer_data[i].end)
 				{
-					fwrite(buffer_data[i].data,1,strlen(buffer_data[i].data),fp);
+					fwrite(buffer_data[i].data,1,buffer_data[i].len,fp);
 					recieved = buffer_data[i].end;
 					buffer_data[i].data[0] = '\0';
 					buffer_data[i].end = 0;	
@@ -256,8 +263,9 @@ int main(int argc, char *argv[])
 					break;
 			}
 			pack_str sending;
-			sending.a.ack_num = htons(recieved);
+			sending.a.ack_num = htonl(recieved);
 			sendto(socketfd, &sending, sizeof(sending), 0, (struct sockaddr *)&client, len);
+			// printf("%d\n",recieved);
 		}
 	}
 	close(socketfd);
