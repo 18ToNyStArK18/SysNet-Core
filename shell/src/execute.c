@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include"../include/include.h"
 int succesfull = 1;
+int temp_job_num;
 int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	char * new_cmd = (char *)malloc(strlen(cmd)+1);
 	new_cmd = redirect(cmd);
@@ -97,7 +98,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	else if(strncmp(command,"log",3)==0){
 		command=my_log(command,home_path);
 		if(command)
-			my_exec(command,prev,home_path,path_req,0); 
+			my_exec(command,prev,home_path,path_req,0,temp_job_num); 
 	}
 	else{
 		int f = fork();
@@ -187,9 +188,8 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	}
 	return 1;
 }
-int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
+int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log,int job_count){
 	int n = strlen(cmd);
-	int job_count = 0;
 	n= n-1;
 	if(cmd[n] == ' ')
 		n--;
@@ -212,15 +212,23 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 			if(fd == 0){
 				printf("[%d] %d\n",job_count,getpid());
 				cmd_exec(buff,prev,home_path,path_req);
+				char *temp_path = (char *)malloc(1025);
+				temp_path[0]='\0';
+				strcat(temp_path,home_path);
+				strcat(temp_path,"/jobs.txt");
+				FILE *fp = fopen(temp_path,"a");
 				if(succesfull)
-					printf("%s with pid %d exited normally\n",buff,getpid());
+					fprintf(fp,"%s with pid %d exited normally\n",buff,getpid());
 				else{
-					printf("%s with pid %d exited abnormally\n",buff,getpid());
+					fprintf(fp,"%s with pid %d exited abnormally\n",buff,getpid());
 				}
+				fclose(fp);
 				exit(0);
 			}
-			else
+			else{
 				job_count++;
+				temp_job_num = job_count;
+			}
 		}
 		else
 			cmd_exec(buff,prev,home_path,path_req);

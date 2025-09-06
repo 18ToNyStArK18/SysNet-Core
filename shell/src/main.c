@@ -57,8 +57,6 @@ int main()
 		char *cmd_refined = (char *)malloc(sizeof(char) * 4097);
 
 		scanf(" %[^\n]", command);
-		for (int aa = 0; aa < jobs; aa++)
-			wait(NULL);
 		int counter = 0, i = 0;
 		int n = strlen(command);
 		int found_space = 0;
@@ -90,6 +88,27 @@ int main()
 		}
 		else
 			cmd_refined[counter] = '\0';
+		char *temp_path = (char *)malloc(1025);
+		char *idk = (char *)malloc(1025);
+		strcpy(idk,"cat ");
+        temp_path[0]='\0';
+        strcat(temp_path,home_path); 
+        strcat(temp_path,"/jobs.txt");
+		strcat(idk,temp_path);
+		int fd = fork();
+		if(fd == 0){
+			FILE *fp = fopen(temp_path,"r");
+			if(fp == NULL)
+				exit(0);
+			fclose(fp);
+			execlp("bash","bash","-c",idk,NULL);
+			exit(127);
+		}
+		else{
+			waitpid(fd,NULL,0);
+		}
+		FILE *fp = fopen(temp_path,"w");
+		fclose(fp); 
 		int temp = validate(cmd_refined);
 		if (!temp && temp != 118 ) // checking the string
 		{
@@ -100,7 +119,7 @@ int main()
 			temp =1;
 		else
 			temp =0;
-		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req,temp); // executing
+		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req,temp,jobs); // executing
 
 		if (temp_jobs == -1)
 		{
@@ -108,7 +127,7 @@ int main()
 			printf("Error running cmf\n");
 		}
 		else
-			jobs = temp_jobs;
+			jobs += temp_jobs;
 		path_req = FindPath(home_path); // updating the path every time bcz path may change when we use hop
 	}
 }
