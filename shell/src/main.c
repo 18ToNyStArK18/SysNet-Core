@@ -90,13 +90,17 @@ int main()
 		}
 		else
 			cmd_refined[counter] = '\0';
-
-		if (!validate(cmd_refined)) // checking the string
+		int temp = validate(cmd_refined);
+		if (!temp && temp != 118 ) // checking the string
 		{
 			printf("Invalid Syntax!\n");
 			continue;
 		}
-		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req); // executing
+		if(temp == 118)
+			temp =1;
+		else
+			temp =0;
+		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req,temp); // executing
 
 		if (temp_jobs == -1)
 		{

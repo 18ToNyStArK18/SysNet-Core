@@ -13,7 +13,7 @@ int name(char *input);
 int input(char *inp);
 int output(char *oup);
 int my_reveal(char *command , char *prev,char * home_path);
-int my_exec(char* cmd,char *prev,char *home_path,char *path_req);
+int my_exec(char* cmd,char *prev,char *home_path,char *path_req,int log_exec);
 int atomic_exec(char *cmd_g,char *prev,char *home_path,char *path_req);
 int cmd_exec(char *cmd,char *prev,char *home_path,char *path_req);
 char * FindPath(char * home_path);

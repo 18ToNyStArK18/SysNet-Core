@@ -78,9 +78,6 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		dup2(oup,STDOUT_FILENO);
 		close(oup);
 	}
-	if(strncmp(command,"log",3) != 0)
-		add_cmd(cmd,home_path);
-
 	if(strncmp(command,"hop",3) == 0 ){
 		if( hop(command,prev,home_path)==-1){
 			printf("No such directory!\n");
@@ -100,7 +97,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	else if(strncmp(command,"log",3)==0){
 		command=my_log(command,home_path);
 		if(command)
-			my_exec(command,prev,home_path,path_req); 
+			my_exec(command,prev,home_path,path_req,0); 
 	}
 	else{
 		int f = fork();
@@ -190,7 +187,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	}
 	return 1;
 }
-int my_exec(char *cmd,char *prev,char *home_path,char *path_req){
+int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 	int n = strlen(cmd);
 	int job_count = 0;
 	n= n-1;
@@ -234,6 +231,8 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req){
 	}
 	if(flag==0)
 		return 0;
+	if(!log)
+		add_cmd(cmd,home_path);
 	return job_count;
 }
 

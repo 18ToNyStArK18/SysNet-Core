@@ -80,10 +80,10 @@ int add_cmd(char *cmd,char *home_path){
     }
 	fclose(fp);
 
-	for(int i=0;i<file_count;i++){
-		if(strcmp(cmd,file_data[i])==0)
+	
+		if(strcmp(cmd,file_data[file_count-1])==0)
 			return 1;
-	}
+	
 	create:
 	fp = fopen(dir,"w");
 	if(file_count != 15){

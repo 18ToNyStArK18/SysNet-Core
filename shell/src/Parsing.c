@@ -9,11 +9,13 @@
 #include "../include/include.h"
 // Idea is to split recurssively and check for everything
 // llm code begins
+int log_found = 0;
 int name(char *input)
 {
 	regex_t regex;
 	int result;
-
+	if(strncmp(input,"log",3)==0)
+		log_found =1;
 	const char *pattern = "^[^|&><;]+$";
 
 	if (regcomp(&regex, pattern, REG_EXTENDED) != 0)
@@ -145,6 +147,7 @@ int cmd_group(char *cmd_g)
 int validate(char *cmd)
 {
 	int n = strlen(cmd);
+	log_found = 0;
 	n--;
 	if (cmd[n] == ' ') // removing trailing spaces
 		n--;
@@ -172,5 +175,7 @@ int validate(char *cmd)
 	}
 	if (flag == 0)
 		return 0;
+	if(log_found)
+		return 118;
 	return 1;
 }
