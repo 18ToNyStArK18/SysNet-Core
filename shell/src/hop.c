@@ -14,8 +14,6 @@ int hop(char *command, char *prev, char *home_path)
 	{
 		perror("ERROR FINDING THE CURR_PATH");
 	}
-	char *before_hop = (char *)malloc(PATH_MAX + 1);
-	strcpy(before_hop, temp);
 	int n = strlen(command);
 	n--;
 	while (command[n] == ' ')
@@ -35,13 +33,17 @@ int hop(char *command, char *prev, char *home_path)
 	}
 	for (int i = 3; i < n; i++)
 	{
+		char *working_dir = (char *)malloc(sizeof(char) * PATH_MAX + 1);
+		if (getcwd(working_dir, PATH_MAX) == NULL)
+		{
+			perror("ERROR FINDING THE CURR_PATH");
+		}
 		if (i < n && command[i] == ' ') // spaces
 			i++;
 		if (i < n && command[i] == '~')
 		{
 
 			if (chdir(Home_dir) == -1){
-				chdir(before_hop);
 				return -1;
 			}
 		}
@@ -49,6 +51,7 @@ int hop(char *command, char *prev, char *home_path)
 		{
 			if (strlen(prev) == 0)
 			{
+				strcpy(prev,working_dir);
 				return 1;
 			}
 			chdir(prev);
@@ -64,9 +67,9 @@ int hop(char *command, char *prev, char *home_path)
 			{
 				if (chdir("..") == -1)
 				{
-					chdir(before_hop);
 					return -1;
 				}
+				i++;
 			}
 			else
 			{
@@ -79,12 +82,11 @@ int hop(char *command, char *prev, char *home_path)
 				temp[temp_counter] = '\0';
 				if (chdir(temp) == -1)
 				{
-					chdir(before_hop);
 					return -1;
 				}
 			}
 		}
+		strcpy(prev,working_dir);
 	}
-	strcpy(prev, temp);
 	return 1;
 }
