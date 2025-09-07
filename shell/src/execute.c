@@ -66,7 +66,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	if(strlen(input)){
 		inp = open(input,O_RDONLY);
 		if(inp == -1){
-			printf("No such file exists\n");
+			printf("No such file or directory!\n");
 			return 0;
 		}
 		dup2(inp,STDIN_FILENO);
@@ -118,19 +118,21 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			int devnull = open("/dev/null", O_WRONLY);
 			dup2(devnull, STDERR_FILENO);
 			close(devnull);
+	
 			execlp("bash", "bash", "-c", new_cmd, NULL);
+
 			_exit(127);
 		}
 		else {
 			
 			add_proc(cmd,f,home_path);
-
 			int status;
-			waitpid(f, &status, 0);  // wait for this child
+			waitpid(f, &status, 0); // wait for this child
 			if (WIFEXITED(status)) {
 				int code = WEXITSTATUS(status);
 				if (code == 127) {
 					succesfull = 0;   // exec failed
+					printf("Command not found\n");
 				} else {
 					succesfull = 1;   // exec ran fine
 				}
@@ -187,6 +189,8 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			atomic_exec(buff,prev,home_path,path_req);
 			exit(0);
 		}
+		wait(NULL);
+		close(pipes[cmd_index][1]);
 		add_proc(buff,pid,home_path);
 		free(buff);
 		if(i<n && cmd_g[i] == ' ')

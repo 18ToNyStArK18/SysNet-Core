@@ -22,7 +22,11 @@ void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
     {
         memset(&pkt, 0, sizeof(pkt));
         int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
-        if ((ntohs(pkt.a.flags) & ACK) == ACK)
+        if (r < 0)
+        {
+            printf("error recieving the packet");
+        }
+        if ((ntohs(pkt.a.flags)) == ACK)
         {
             printf("Reciver: Recived Final ACK\n");
             break;
@@ -41,7 +45,10 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
     {
         memset(&pkt, 0, sizeof(pkt));
         int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
-        if ((ntohs(pkt.a.flags) & ACK) == ACK)
+        if (r < 0)
+            printf("error recieving the packet");
+
+        if ((ntohs(pkt.a.flags)) == ACK)
         {
             printf("Initiator: Recived ACK\n");
             break;
@@ -53,7 +60,9 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
     {
         memset(&pkt, 0, sizeof(pkt));
         int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
-        if ((ntohs(pkt.a.flags) & FIN) == FIN)
+        if (r < 0)
+            printf("error recieving the code");
+        if ((ntohs(pkt.a.flags)) == FIN)
         {
             printf("Initiator: Recived FIN\n");
             break;
@@ -86,8 +95,7 @@ void client_3_way_handshake(int socketfd, struct sockaddr_in *server_addr)
     rec = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)server_addr, &sock_len);
     if (rec < 0)
     {
-        perror("recvfrom failed");
-        exit(1);
+        printf("recvfrom failed");
     }
 
     uint32_t server_seq_num = ntohl(response.seq_num);
@@ -153,6 +161,7 @@ int main(int argc, char *argv[])
         if (argc == 6)
             loss_rate = atof(argv[5]);
     }
+    printf("loss_rate = %f", loss_rate);
     int socketfd;
     struct sockaddr_in server_addr;
 
@@ -209,8 +218,9 @@ int main(int argc, char *argv[])
                     if (rec > 0)
                     {
                         // Check if it's an ACK for data we sent
-                        if ((ntohs(response.a.flags) & ACK) == ACK)
+                        if ((ntohs(response.a.flags)) == ACK)
                         {
+
                             int ack_num = ntohl(response.a.ack_num);
                             for (int i = 0; i < 10; i++)
                             {
@@ -224,8 +234,13 @@ int main(int argc, char *argv[])
                                 }
                             }
                         }
+                        else if ((ntohs(response.a.flags)) == FIN){
+                        	four_way_hand_shake_reciever(socketfd,&server_addr);
+                        	exit(0);
+                        }
                         else
                         {
+
                             // It's actual data - store and process
                             if (ntohl(response.len) > 0)
                             {
@@ -301,7 +316,6 @@ int main(int argc, char *argv[])
                             }
 
                             int msg_len = strlen(buff);
-                            printf("%d\n",msg_len);
                             data_sent[free_index].len = msg_len;
                             strcpy(data_sent[free_index].data, buff);
                             tot_size += msg_len;
@@ -342,8 +356,11 @@ int main(int argc, char *argv[])
                 }
             }
         }
-
-        printf("\nChat ended.\n");
+        pack_str pc;
+        pc.a.flags = htons(FIN);
+        sendto(socketfd, &pc, sizeof(pc), 0, (struct sockaddr *)&server_addr, len);
+        four_way_hand_shake_sender(socketfd, &server_addr);
+        exit(0);
     }
     // file mode ------------------------------------------------------------------
     else
@@ -383,6 +400,8 @@ int main(int argc, char *argv[])
             {
                 pack_str response;
                 int rec = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)&server_addr, &len);
+                if (rec < 0)
+                    printf("error recieving the packet");
                 int ack_num = ntohl(response.a.ack_num);
                 // printf("%d\n",ack_num);
                 for (int i = 0; i < 10; i++)
@@ -407,10 +426,13 @@ int main(int argc, char *argv[])
                     break;
                 }
                 int free_index = 0;
-                for (free_index; free_index < 10; free_index++)
+                for (int i = 0; i < 10; i++)
                 {
-                    if (buffer_data[free_index].len == 0)
+                    if (buffer_data[i].len == 0)
+                    {
+                        free_index = i;
                         break;
+                    }
                 }
                 buffer_data[free_index].len = n;
                 memcpy(buffer_data[free_index].data, buff, n);

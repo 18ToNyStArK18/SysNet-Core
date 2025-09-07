@@ -25,7 +25,6 @@ typedef struct {
     pid_t pid;
     char data[256];
 } Job;
-
 extern Job jobs[100];
 extern int job_count;
 #endif

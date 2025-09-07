@@ -22,7 +22,11 @@ void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
 	{
 		memset(&pkt, 0, sizeof(pkt));
 		int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
-		if ((ntohs(pkt.a.flags) & ACK) == ACK)
+		if (r < 0)
+		{
+			printf("error recieving the packet");
+		}
+		if ((ntohs(pkt.a.flags)) == ACK)
 		{
 			printf("Reciver: Recived Final ACK\n");
 			break;
@@ -41,7 +45,10 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
 	{
 		memset(&pkt, 0, sizeof(pkt));
 		int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
-		if ((ntohs(pkt.a.flags) & ACK) == ACK)
+		if (r < 0)
+			printf("error recieving the packet");
+
+		if ((ntohs(pkt.a.flags)) == ACK)
 		{
 			printf("Initiator: Recived ACK\n");
 			break;
@@ -53,7 +60,9 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
 	{
 		memset(&pkt, 0, sizeof(pkt));
 		int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
-		if ((ntohs(pkt.a.flags) & FIN) == FIN)
+		if (r < 0)
+			printf("error recieving the code");
+		if ((ntohs(pkt.a.flags)) == FIN)
 		{
 			printf("Initiator: Recived FIN\n");
 			break;
@@ -129,7 +138,7 @@ void server_3_way_handshake(int socketfd, struct sockaddr_in *client)
 	int rec = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)client, &len);
 	if (rec < 0)
 	{
-		perror("recvfrom failed");
+		printf("recvfrom failed");
 		exit(1);
 	}
 
@@ -200,7 +209,7 @@ int main(int argc, char *argv[])
 		perror("SOCKET CREATION FAILED");
 		return 0;
 	}
-
+	printf("loss_rate = %f\n", loss_rate);
 	memset(&server, 0, sizeof(server));
 	memset(&client, 0, sizeof(client));
 
@@ -252,7 +261,7 @@ int main(int argc, char *argv[])
 					if (rec > 0)
 					{
 						// Check if it's an ACK for data we sent
-						if ((ntohs(response.a.flags) & ACK) == ACK)
+						if ((ntohs(response.a.flags)) == ACK)
 						{
 							int ack_num = ntohl(response.a.ack_num);
 							for (int i = 0; i < 10; i++)
@@ -266,6 +275,11 @@ int main(int argc, char *argv[])
 									data_sent[i].time.tv_sec = 0;
 								}
 							}
+						}
+						else if ((ntohs(response.a.flags)) == FIN)
+						{
+							four_way_hand_shake_reciever(socketfd, &client);
+							exit(0);
 						}
 						else
 						{
@@ -384,8 +398,11 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-
-		printf("\nChat ended.\n");
+		pack_str pc;
+		pc.a.flags = htons(FIN);
+		sendto(socketfd, &pc, sizeof(pc), 0, (struct sockaddr *)&client, len);
+		four_way_hand_shake_sender(socketfd, &client);
+		exit(0);
 	}
 	// file mode -------------------------------------------
 	else
@@ -418,6 +435,8 @@ int main(int argc, char *argv[])
 		{
 			pack_str response;
 			int r = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)&client, &len);
+			if (r < 0)
+				printf("error in recieving packet");
 			if (ntohs(response.a.flags) & FIN)
 			{
 				four_way_hand_shake_reciever(socketfd, &client);
@@ -432,14 +451,14 @@ int main(int argc, char *argv[])
 			int i = 0;
 			while (buffer_data[i].end == 0)
 				i++;
-			for (i; i < 10; i++)
+			for (int i2 = i; i2 < 10; i2++)
 			{
-				if (recieved + buffer_data[i].len == buffer_data[i].end)
+				if (recieved + buffer_data[i2].len == buffer_data[i2].end)
 				{
-					fwrite(buffer_data[i].data, 1, buffer_data[i].len, fp);
-					recieved = buffer_data[i].end;
-					buffer_data[i].data[0] = '\0';
-					buffer_data[i].end = 0;
+					fwrite(buffer_data[i2].data, 1, buffer_data[i2].len, fp);
+					recieved = buffer_data[i2].end;
+					buffer_data[i2].data[0] = '\0';
+					buffer_data[i2].end = 0;
 				}
 				else
 					break;
