@@ -110,7 +110,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			printf("No such process found\n");
 	}
 	else if(strcmp(command,"activities") == 0){
-		activ();
+		activ(home_path);
 	}
 	else{
 		pid_t f = fork();
@@ -122,8 +122,8 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			_exit(127);
 		}
 		else {
-			strcpy(jobs[job_count].data,new_cmd);
-			jobs[job_count++].pid = f;
+			
+			add_proc(cmd,f,home_path);
 
 			int status;
 			waitpid(f, &status, 0);  // wait for this child
@@ -187,8 +187,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			atomic_exec(buff,prev,home_path,path_req);
 			exit(0);
 		}
-		strcpy(jobs[job_count].data,buff);
-		jobs[job_count++].pid = pid;
+		add_proc(buff,pid,home_path);
 		free(buff);
 		if(i<n && cmd_g[i] == ' ')
 			i++;
@@ -243,8 +242,8 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 				exit(0);
 			}
 			else{
-				strcpy(jobs[job_count++].data,buff);
-				jobs[job_count++].pid= fd;
+				job_count++;
+				add_proc(buff,fd,home_path);
 			}
 		}
 		else

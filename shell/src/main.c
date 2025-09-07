@@ -55,7 +55,11 @@ int main()
 		char *command = (char *)malloc(sizeof(char) * 4097);
 		char *cmd_refined = (char *)malloc(sizeof(char) * 4097);
 
-		scanf(" %[^\n]", command);
+		if(scanf(" %[^\n]", command)==EOF){
+			kill_jobs(home_path);
+			printf("logout\n");
+				exit(0);
+		}
 		int counter = 0, i = 0;
 		int n = strlen(command);
 		int found_space = 0;

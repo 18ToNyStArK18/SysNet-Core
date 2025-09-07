@@ -18,11 +18,14 @@ int atomic_exec(char *cmd_g,char *prev,char *home_path,char *path_req);
 int cmd_exec(char *cmd,char *prev,char *home_path,char *path_req);
 char * FindPath(char * home_path);
 int ping(char *cmd);
-void activ();
+void activ(char * home_path);
+void add_proc(char*cmd,pid_t pid,char * home_path);
+void kill_jobs(char * home_path);
 typedef struct {
     pid_t pid;
     char data[256];
 } Job;
+
 extern Job jobs[100];
 extern int job_count;
 #endif
