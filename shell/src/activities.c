@@ -43,7 +43,7 @@ void activ(char *home_path) {
 
         FILE *statfp = fopen(statpath, "r");
         if (!statfp) {
-			//printf("[%d] : %s - Finished\n", pid, data[i].command);
+			printf("[%d] : %s - Finished\n", pid, data[i].command);
             continue;
         }
 
@@ -55,7 +55,7 @@ void activ(char *home_path) {
             printf("[%d] : %s - Stopped\n", pid, data[i].command);
             fprintf(fp, "%d %s\n", pid, data[i].command);
         } else if (state == 'Z') {
-    			//printf("[%d] : %s - Finished\n", pid, data[i].command);
+    		printf("[%d] : %s - Finished\n", pid, data[i].command);
 		} else {
             printf("[%d] : %s - Running\n", pid, data[i].command);
             fprintf(fp, "%d %s\n", pid, data[i].command);

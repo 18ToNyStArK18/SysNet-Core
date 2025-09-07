@@ -12,8 +12,8 @@
 #include"../include/include.h"
 
 
-int succesfull = 1;
 int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
+
 	char * new_cmd = (char *)malloc(strlen(cmd)+1);
 	new_cmd = redirect(cmd);
 	char *input = (char *)malloc(strlen(cmd)+1);
@@ -67,7 +67,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		inp = open(input,O_RDONLY);
 		if(inp == -1){
 			printf("No such file or directory!\n");
-			return 0;
+			return(-1);
 		}
 		dup2(inp,STDIN_FILENO);
 		close(inp);
@@ -83,18 +83,16 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	if(strncmp(command,"hop",3) == 0 ){
 		if( hop(command,prev,home_path)==-1){
 			printf("No such directory!\n");
-			succesfull = 0;
+			return(-1);
 		}
-		return 1;
+		return(1);
 	}
 	else if(strncmp(command,"reveal",6) == 0){
 		int temp = my_reveal(command,prev,home_path);
 		if(temp == -1){
 			printf("No such directory!\n");
-			succesfull =0;
+			return -1;
 		}
-		if(temp != 1)
-			succesfull = 0;
 	}
 	else if(strncmp(command,"log",3)==0){
 		command=my_log(command,home_path);
@@ -113,34 +111,11 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		activ(home_path);
 	}
 	else{
-		pid_t f = fork();
-		if(f == 0){
-			int devnull = open("/dev/null", O_WRONLY);
-			dup2(devnull, STDERR_FILENO);
-			close(devnull);
-	
-			execlp("bash", "bash", "-c", new_cmd, NULL);
-
-			_exit(127);
-		}
-		else {
-			
-			add_proc(cmd,f,home_path);
-			int status;
-			waitpid(f, &status, 0); // wait for this child
-			if (WIFEXITED(status)) {
-				int code = WEXITSTATUS(status);
-				if (code == 127) {
-					succesfull = 0;   // exec failed
-					printf("Command not found\n");
-				} else {
-					succesfull = 1;   // exec ran fine
-				}
-			} else {
-				succesfull = 0; 
-			}
-		}
-
+		//int devnull = open("/dev/null", O_WRONLY);
+		//dup2(devnull, STDERR_FILENO);
+		//close(devnull);
+		execlp("bash", "bash", "-c", new_cmd, NULL);
+		return(-1);
 	} 
 	if(strlen(input)){
 		int c;
@@ -151,19 +126,34 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	}
 	if(strlen(output))
 		dup2(std_out,STDOUT_FILENO);
-	return 1;
+	return 1;;
 
 }
 int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	int n = strlen(cmd_g);
 	int i=0;
+	pid_t pgid = -1; // common pgid for all foreground processes so that i kill all at the same time
 	int num_pipes=0;
 	for(int ii=0;ii<n;ii++){
 		if(cmd_g[ii]=='|')
 			num_pipes++;
 	}
-	if(!num_pipes)
-		return atomic_exec(cmd_g,prev,home_path,path_req);
+	if(!num_pipes){
+		if(strncmp(cmd_g,"hop ",4) == 0 || strcmp(cmd_g,"hop")==0)
+			return atomic_exec(cmd_g,prev,home_path,path_req);
+		int f = fork();
+		if(f==0){
+			signal(SIGINT, SIG_DFL);
+			if (atomic_exec(cmd_g,prev,home_path,path_req)==-1)
+				exit(127);
+			exit(0);
+		}
+		int status;
+		wait(&status);
+		if(WIFEXITED(status) && WEXITSTATUS(status) == 127)
+			return -1;
+		return 1;
+	}
 	int pipes[num_pipes][2];
 	int cmd_index=0;
 	for(int i=0;i<num_pipes;i++)
@@ -178,6 +168,11 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		i++;
 		pid_t pid = fork();
 		if(pid == 0){
+			signal(SIGINT, SIG_DFL);
+			if(pgid == -1)
+				setpgid(0,0);
+			else
+				setpgid(0,pgid);
 			if(cmd_index > 0)
 				dup2(pipes[cmd_index - 1][0], STDIN_FILENO);
 			if(cmd_index < num_pipes)
@@ -186,11 +181,13 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 				close(pipes[j][0]);
 				close(pipes[j][1]);
 			}
-			atomic_exec(buff,prev,home_path,path_req);
+			if(atomic_exec(buff,prev,home_path,path_req)==-1)
+				exit(127);
 			exit(0);
 		}
-		wait(NULL);
-		close(pipes[cmd_index][1]);
+		if(pgid == -1)
+			pgid = pid;
+		setpgid(pid,pgid);
 		add_proc(buff,pid,home_path);
 		free(buff);
 		if(i<n && cmd_g[i] == ' ')
@@ -201,11 +198,16 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		close(pipes[j][0]);
 		close(pipes[j][1]);
 	}
-
-
-	for (int j = 0; j <= num_pipes; j++) {
-		wait(NULL);
+	tcsetpgrp(STDIN_FILENO, pgid);
+	int status;
+	int is_successfull=1;
+	while (waitpid(-pgid, &status, 0) > 0){
+		 if(WIFEXITED(status) && WEXITSTATUS(status) == 127)
+			is_successfull = 0;
 	}
+	tcsetpgrp(STDIN_FILENO, getpgrp());
+	if(!is_successfull)
+		return -1;
 	return 1;
 }
 int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
@@ -231,13 +233,15 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 			pid_t fd  = fork();
 			if(fd == 0){
 				printf("[%d] %d\n",job_count,getpid());
-				cmd_exec(buff,prev,home_path,path_req);
+				int successfull = 1;
+				if(cmd_exec(buff,prev,home_path,path_req)==-1)
+					successfull = 0;
 				char *temp_path = (char *)malloc(1025);
 				temp_path[0]='\0';
 				strcat(temp_path,home_path);
 				strcat(temp_path,"/jobs.txt");
 				FILE *fp = fopen(temp_path,"a");
-				if(succesfull)
+				if(successfull)
 					fprintf(fp,"%s with pid %d exited normally\n",buff,getpid());
 				else{
 					fprintf(fp,"%s with pid %d exited abnormally\n",buff,getpid());

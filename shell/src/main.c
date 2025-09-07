@@ -34,102 +34,106 @@ char *FindPath(char *home_path) {
 }
 
 int main() {
-    // ignore Ctrl-C in the shell itself
-    char *username = getlogin();
+	// ignore Ctrl-C in the shell itself
+	signal(SIGINT, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);  // Ignore background write to terminal  
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTSTP,SIG_IGN);
+	char *username = getlogin();
 	char *sysname = (char *)malloc(1025);
 	gethostname(sysname,1024);
-    char *home_path = (char *)malloc(PATH_MAX);
-    if (getcwd(home_path, PATH_MAX) == NULL)
-        perror("Error finding home dir\n");
+	char *home_path = (char *)malloc(PATH_MAX);
+	if (getcwd(home_path, PATH_MAX) == NULL)
+		perror("Error finding home dir\n");
 
-    char *path_req = FindPath(home_path);
-    char *prev = (char *)malloc(PATH_MAX);
-    prev[0] = '\0';
+	char *path_req = FindPath(home_path);
+	char *prev = (char *)malloc(PATH_MAX);
+	prev[0] = '\0';
 
-    while (1) {
-        // shell prompt
-        printf("<%s", username);
-            printf("@%s:", sysname);
-        printf("%s> ", path_req);
+	while (1) {
+		// shell prompt
+		printf("<%s", username);
+		printf("@%s:", sysname);
+		printf("%s> ", path_req);
 
-        char *command = (char *)malloc(4097);
-        char *cmd_refined = (char *)malloc(4097);
+		char *command = (char *)malloc(4097);
+		char *cmd_refined = (char *)malloc(4097);
 
-        if (scanf(" %[^\n]", command) == EOF) {
-            kill_jobs(home_path);
-            printf("logout\n");
-            exit(0);
-        }
+		if (scanf(" %[^\n]", command) == EOF) {
+			kill_jobs(home_path);
+			printf("logout\n");
+			exit(0);
+		}
 
-        // refine command (remove extra spaces)
-        int counter = 0, i = 0;
-        int n = strlen(command);
-        int found_space = 0;
-        while (i < n) {
-            found_space = 0;
-            if (command[i] == '"') {
-                cmd_refined[counter++] = '"';
-                i++;
-                while (i < n && command[i] != '"')
-                    cmd_refined[counter++] = command[i++];
-                if (i != n)
-                    cmd_refined[counter++] = command[i++];
-            }
-            while (command[i] == ' ') {
-                i++;
-                found_space = 1;
-            }
-            if (found_space)
-                cmd_refined[counter++] = ' ';
-            else
-                cmd_refined[counter++] = command[i++];
-        }
-        if (cmd_refined[counter - 1] == ' ')
-            cmd_refined[counter - 1] = '\0';
-        else
-            cmd_refined[counter] = '\0';
+		// refine command (remove extra spaces)
+		int counter = 0, i = 0;
+		int n = strlen(command);
+		int found_space = 0;
+		while (i < n) {
+			found_space = 0;
+			if (command[i] == '"') {
+				cmd_refined[counter++] = '"';
+				i++;
+				while (i < n && command[i] != '"')
+					cmd_refined[counter++] = command[i++];
+				if (i != n)
+					cmd_refined[counter++] = command[i++];
+			}
+			while (command[i] == ' ') {
+				i++;
+				found_space = 1;
+			}
+			if (found_space)
+				cmd_refined[counter++] = ' ';
+			else
+				cmd_refined[counter++] = command[i++];
+		}
+		if (cmd_refined[counter - 1] == ' ')
+			cmd_refined[counter - 1] = '\0';
+		else
+			cmd_refined[counter] = '\0';
 
-        // clear jobs.txt before executing new command
-        char *temp_path = (char *)malloc(1025);
-        char *idk = (char *)malloc(1025);
-        strcpy(idk, "cat ");
-        temp_path[0] = '\0';
-        strcat(temp_path, home_path);
-        strcat(temp_path, "/jobs.txt");
-        strcat(idk, temp_path);
+		// clear jobs.txt before executing new command
+		char *temp_path = (char *)malloc(1025);
+		char *idk = (char *)malloc(1025);
+		strcpy(idk, "cat ");
+		temp_path[0] = '\0';
+		strcat(temp_path, home_path);
+		strcat(temp_path, "/jobs.txt");
+		strcat(idk, temp_path);
 
-        int fd = fork();
-        if (fd == 0) {
-            FILE *fp = fopen(temp_path, "r");
-            if (fp == NULL)
-                exit(0);
-            fclose(fp);
-            execlp("bash", "bash", "-c", idk, NULL);
-            exit(127);
-        } else {
-            waitpid(fd, NULL, 0);
-        }
-        FILE *fp = fopen(temp_path, "w");
-        fclose(fp);
+		int fd = fork();
+		if (fd == 0) {
+			FILE *fp = fopen(temp_path, "r");
+			if (fp == NULL)
+				exit(0);
+			fclose(fp);
+			execlp("bash", "bash", "-c", idk, NULL);
+			exit(127);
+		} else {
+			waitpid(fd, NULL, 0);
+		}
+		FILE *fp = fopen(temp_path, "w");
+		fclose(fp);
 
-        // validate command
-        int temp = validate(cmd_refined);
-        if (!temp && temp != 118) {
-            printf("Invalid Syntax!\n");
-            continue;
-        }
-        if (temp == 118)
-            temp = 1;
-        else
-            temp = 0;
+		// validate command
+		int temp = validate(cmd_refined);
+		if (!temp && temp != 118) {
+			printf("Invalid Syntax!\n");
+			continue;
+		}
+		if (temp == 118)
+			temp = 1;
+		else
+			temp = 0;
 
-        // execute command
-        int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req, temp);
-        if (temp_jobs == -1)
-            printf("Error running command\n");
+		// execute command
+		int temp_jobs = my_exec(cmd_refined, prev, home_path, path_req, temp);
+		if (temp_jobs == -1)
+			printf("Error running command\n");
 
-        // update path
-        path_req = FindPath(home_path);
-    }
+		// update path
+		path_req = FindPath(home_path);
+	}
 }
 
