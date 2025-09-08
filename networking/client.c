@@ -1,6 +1,10 @@
 #include "sham.h"
+char file[] = "client_log.txt";
 void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
 {
+    FILE *fp = fopen(file, "a");
+    struct timeval curr_time;
+    struct tm *tm_info;
     printf("Reciever: recieved FIN\n");
     pack_str pkt;
     socklen_t len = sizeof(*sender);
@@ -9,11 +13,20 @@ void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
     memset(&pkt, 0, sizeof(pkt));
     pkt.a.flags = htons(ACK);
     sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
+    gettimeofday(&curr_time, NULL);
+    tm_info = localtime(&curr_time.tv_sec);
+    char buffer[30];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+    fprintf(fp, "[%s.%06ld] [LOG] SND ACK FOR FIN\n", buffer, curr_time.tv_usec);
     printf("Reciever: Sent ACK\n");
 
     // Send FIN
     memset(&pkt, 0, sizeof(pkt));
     pkt.a.flags = htons(FIN);
+    gettimeofday(&curr_time, NULL);
+    tm_info = localtime(&curr_time.tv_sec);
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+    fprintf(fp, "[%s.%06ld] [LOG] SND FIN\n", buffer, curr_time.tv_usec);
     sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
     printf("Reciever: Sent FIN\n");
 
@@ -22,16 +35,25 @@ void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
     {
         memset(&pkt, 0, sizeof(pkt));
         int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
+        gettimeofday(&curr_time, NULL);
+        tm_info = localtime(&curr_time.tv_sec);
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+        fprintf(fp, "[%s.%06ld] [LOG] SND ACK FOR FIN\n", buffer, curr_time.tv_usec);
         if (r < 0)
         {
             printf("error recieving the packet");
         }
         if ((ntohs(pkt.a.flags)) == ACK)
         {
+            gettimeofday(&curr_time, NULL);
+            tm_info = localtime(&curr_time.tv_sec);
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+            fprintf(fp, "[%s.%06ld] [LOG] SND FIN\n", buffer, curr_time.tv_usec);
             printf("Reciver: Recived Final ACK\n");
             break;
         }
     }
+    fclose(fp);
 }
 
 void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
@@ -82,7 +104,9 @@ void client_3_way_handshake(int socketfd, struct sockaddr_in *server_addr)
     sham packet, response;
     int rec;
     uint32_t seq = 1;
-
+    FILE *fp = fopen(file, "a");
+    struct timeval curr_time;
+    struct tm *tm_info;
     // Send SYN
     memset(&packet, 0, sizeof(packet));
     packet.seq_num = htonl(seq);
@@ -234,9 +258,10 @@ int main(int argc, char *argv[])
                                 }
                             }
                         }
-                        else if ((ntohs(response.a.flags)) == FIN){
-                        	four_way_hand_shake_reciever(socketfd,&server_addr);
-                        	exit(0);
+                        else if ((ntohs(response.a.flags)) == FIN)
+                        {
+                            four_way_hand_shake_reciever(socketfd, &server_addr);
+                            exit(0);
                         }
                         else
                         {

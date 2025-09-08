@@ -10,7 +10,30 @@
 #include <fcntl.h>  
 #include <unistd.h>
 #include"../include/include.h"
-
+Job jobs[1000];
+void job_finished(int jid, char *home_path){
+	Job temp_jobs[1000];
+	int file_count =0;
+	char  file_path[1024];
+	sprintf(file_path,"%s/jobs_list.txt",home_path);
+	FILE *fp = fopen(file_path,"r");
+	if(!fp)
+		return;
+	while(fscanf(fp,"%d %d %d %[^\n]",&temp_jobs[file_count].jid,&temp_jobs[file_count].pid,&temp_jobs[file_count].state,temp_jobs[file_count].data) != -1 ){
+		file_count++;
+	}
+	fclose(fp);
+	for(int i=0;i<file_count;i++){
+		if(temp_jobs[i].jid == jid){
+			temp_jobs[i].state = 0;
+		}
+	}
+	fp = fopen(file_path,"w");
+	for(int i=0;i<file_count;i++){
+		fprintf(fp,"%d %d %d %s\n",temp_jobs[i].jid,temp_jobs[i].pid,temp_jobs[i].state,temp_jobs[i].data);	
+	}
+	fclose(fp);
+}
 
 int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 
@@ -87,6 +110,12 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		}
 		return(1);
 	}
+	else if(strncmp(command,"fg",2)==0){
+		fg_command(command, home_path);	
+	}
+	else if(strncmp(command,"bg",2)==0){
+		bg_command(command, home_path);	
+	}
 	else if(strncmp(command,"reveal",6) == 0){
 		int temp = my_reveal(command,prev,home_path);
 		if(temp == -1){
@@ -139,7 +168,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			num_pipes++;
 	}
 	if(!num_pipes){
-		if(strncmp(cmd_g,"hop ",4) == 0 || strcmp(cmd_g,"hop")==0)
+		if(strncmp(cmd_g,"hop ",4) == 0 || strcmp(cmd_g,"hop")==0 || strcmp(cmd_g,"fg")==0 || strncmp(cmd_g,"fg ",3) == 0  || strcmp(cmd_g,"bg")==0 || strncmp(cmd_g,"bg ",3) == 0)
 			return atomic_exec(cmd_g,prev,home_path,path_req);
 		int f = fork();
 		if(f==0){
@@ -155,7 +184,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			exit(0);
 		}
 		int status;
-		wait(&status);
+		waitpid(f,&status,0);
 		if(WIFEXITED(status) && WEXITSTATUS(status) != 0){
 			if(WEXITSTATUS(status) == 127)
 				printf("Command not found\n");
@@ -256,13 +285,11 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 	if(cmd[n-1] == ';')
 		return 0;
 	int i=0;
-	int flag=0;
 	while(i<n){
 		char *buff = (char*)malloc(sizeof(char)*(n+1));
 		int buff_counter=0;
 		while(i<n && (cmd[i] != '&'&&cmd[i] !=';')){
 			buff[buff_counter++]=cmd[i++];
-			flag=1;
 		}
 		i++;
 		buff[buff_counter]='\0';
@@ -270,6 +297,7 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 			pid_t fd  = fork();
 			if(fd == 0){
 				printf("[%d] %d\n",job_count,getpid());
+				setpgid(0,0);
 				int successfull = 1;
 				if(cmd_exec(buff,prev,home_path,path_req)==-1)
 					successfull = 0;
@@ -279,15 +307,25 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 				strcat(temp_path,"/jobs.txt");
 				FILE *fp = fopen(temp_path,"a");
 				if(successfull)
-					fprintf(fp,"%s with pid %d exited normally\n",buff,getpid());
+					fprintf(fp,"%swith pid %d exited normally\n",buff,getpid());
 				else{
-					fprintf(fp,"%s with pid %d exited abnormally\n",buff,getpid());
+					fprintf(fp,"%swith pid %d exited abnormally\n",buff,getpid());
 				}
 				fclose(fp);
+				job_finished(job_count,home_path);
 				exit(0);
 			}
 			else{
+				jobs[job_count].pid = fd;
+				jobs[job_count].state = 1;
+				jobs[job_count].jid = job_count;
+				strcpy(jobs[job_count].data,buff);
+				char jobs_file_path [1024];
+				sprintf(jobs_file_path,"%s/jobs_list.txt",home_path);
+				FILE *fp = fopen(jobs_file_path,"a");
+				fprintf(fp,"%d %d %d %s\n",jobs[job_count].jid,jobs[job_count].pid,jobs[job_count].state,jobs[job_count].data);
 				job_count++;
+				fclose(fp);
 				add_proc(buff,fd,home_path);
 			}
 		}
@@ -298,8 +336,6 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 			i++;
 
 	}
-	if(flag==0)
-		return 0;
 	if(!log)
 		add_cmd(cmd,home_path);
 	return 1;

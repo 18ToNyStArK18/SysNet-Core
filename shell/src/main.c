@@ -7,12 +7,11 @@
 #include <sys/wait.h>
 #include <linux/limits.h>
 #include "../include/include.h"
+#include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
 
 int job_count = 0;
-
-
 // find relative path
 char *FindPath(char *home_path) {
     char *working_dir = (char *)malloc(sizeof(char) * PATH_MAX);
@@ -35,16 +34,26 @@ char *FindPath(char *home_path) {
 
 int main() {
 	// ignore Ctrl-C in the shell itself
+//	pid_t shell_pgid = getpid();
+  //  if (setpgid(shell_pgid, shell_pgid) < 0) {
+    //    perror("Couldn't put the shell in its own process group");
+      //  exit(1);
+    //}
+	//tcsetpgrp(STDIN_FILENO, shell_pgid);
 	signal(SIGINT, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);  // Ignore background write to terminal  
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTSTP,SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+    signal(SIGTTIN, SIG_IGN);
 	char *username = getlogin();
 	char *sysname = (char *)malloc(1025);
+
 	gethostname(sysname,1024);
 	char *home_path = (char *)malloc(PATH_MAX);
 	if (getcwd(home_path, PATH_MAX) == NULL)
 		perror("Error finding home dir\n");
+	char  file_path[1024];
+	sprintf(file_path,"%s/jobs_list.txt",home_path);
+	FILE *fp = fopen(file_path,"w");
+	fclose(fp);
 
 	char *path_req = FindPath(home_path);
 	char *prev = (char *)malloc(PATH_MAX);
@@ -58,13 +67,14 @@ int main() {
 
 		char *command = (char *)malloc(4097);
 		char *cmd_refined = (char *)malloc(4097);
-
-		if (scanf(" %[^\n]", command) == EOF) {
-			kill_jobs(home_path);
-			printf("logout\n");
-			exit(0);
-		}
-
+		
+		if (fgets(command, 4096,stdin) == NULL) {
+            // This now only triggers on actual Ctrl+D (EOF)
+            kill_jobs(home_path);
+            printf("\nlogout\n");
+            exit(0);
+        }
+		command[strcspn(command, "\n")] = 0;
 		// refine command (remove extra spaces)
 		int counter = 0, i = 0;
 		int n = strlen(command);

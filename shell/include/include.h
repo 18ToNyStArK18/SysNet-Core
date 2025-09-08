@@ -21,10 +21,15 @@ int ping(char *cmd);
 void activ(char * home_path);
 void add_proc(char*cmd,pid_t pid,char * home_path);
 void kill_jobs(char * home_path);
+void sigtstp_handler(int sig);
+void bg_command(char *command, char *home_path);
 typedef struct {
     pid_t pid;
     char data[256];
+	int jid;
+	int state; // 1 = running 2 = stopped 0 = terminated
 } Job;
-extern Job jobs[100];
+void fg_command(char *command,char *home_path);
+extern Job jobs[1000];
 extern int job_count;
 #endif
