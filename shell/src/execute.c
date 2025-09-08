@@ -111,11 +111,11 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		activ(home_path);
 	}
 	else{
-		//int devnull = open("/dev/null", O_WRONLY);
-		//dup2(devnull, STDERR_FILENO);
-		//close(devnull);
+		int devnull = open("/dev/null", O_WRONLY);
+		dup2(devnull, STDERR_FILENO);
+		close(devnull);
 		execlp("bash", "bash", "-c", new_cmd, NULL);
-		return(-1);
+		return(2);
 	} 
 	if(strlen(input)){
 		int c;
@@ -144,18 +144,29 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		int f = fork();
 		if(f==0){
 			signal(SIGINT, SIG_DFL);
-			if (atomic_exec(cmd_g,prev,home_path,path_req)==-1)
-				exit(127);
+			int return_value = atomic_exec(cmd_g,prev,home_path,path_req);
+			if (return_value==-1)
+				exit(1);
+			if(return_value == 2){
+				fprintf(stderr, "Command not found\n");
+				exit(1);
+			}
+
 			exit(0);
 		}
 		int status;
 		wait(&status);
-		if(WIFEXITED(status) && WEXITSTATUS(status) == 127)
+		if(WIFEXITED(status) && WEXITSTATUS(status) != 0){
+			if(WEXITSTATUS(status) == 127)
+				printf("Command not found\n");
 			return -1;
+		}
 		return 1;
 	}
 	int pipes[num_pipes][2];
 	int cmd_index=0;
+	int last_pid;
+	int num_children=0;
 	for(int i=0;i<num_pipes;i++)
 		pipe(pipes[i]);
 	while(i<n){
@@ -181,12 +192,21 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 				close(pipes[j][0]);
 				close(pipes[j][1]);
 			}
-			if(atomic_exec(buff,prev,home_path,path_req)==-1)
-				exit(127);
+			int return_value = atomic_exec(buff,prev,home_path,path_req);
+			if (return_value==-1)
+				exit(1);
+			if(return_value == 2){
+				fprintf(stderr, "Command not found\n");
+				exit(1);
+			}
+
 			exit(0);
+
 		}
 		if(pgid == -1)
 			pgid = pid;
+		last_pid = pid;
+		num_children++;
 		setpgid(pid,pgid);
 		add_proc(buff,pid,home_path);
 		free(buff);
@@ -200,15 +220,32 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	}
 	tcsetpgrp(STDIN_FILENO, pgid);
 	int status;
-	int is_successfull=1;
-	while (waitpid(-pgid, &status, 0) > 0){
-		 if(WIFEXITED(status) && WEXITSTATUS(status) == 127)
-			is_successfull = 0;
+	int last_cmd_status = 0;
+	pid_t last_cmd_pid = last_pid;  // PID of the last command
+	int children_reaped = 0;
+
+	// Wait for all children, but track the last command's status specially
+	while (children_reaped < num_children) {
+		pid_t waited_pid = waitpid(-pgid, &status, 0);
+		if (waited_pid > 0) {
+			children_reaped++;
+			if (waited_pid == last_cmd_pid) {
+				// This is the last command in the pipeline
+				last_cmd_status = status;
+			}
+		}
 	}
 	tcsetpgrp(STDIN_FILENO, getpgrp());
-	if(!is_successfull)
+	if (WIFEXITED(last_cmd_status)) {
+		int exit_code = WEXITSTATUS(last_cmd_status);
+		if(WEXITSTATUS(last_cmd_status) == 127)
+			printf("Command not found\n");
+
+		return (exit_code == 0) ? 1 : -1;
+	} else {
+		// Command was terminated by signal
 		return -1;
-	return 1;
+	}
 }
 int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 	int n = strlen(cmd);

@@ -1,0 +1,4 @@
+echo new
+echo 'data' > .test/pipe_redir.txt ; cat .test/pipe_redir.txt | wc -c
+echo background_test > .test/bg_test.txt &
+reveal .test | grep builtin_pipe | wc -l
