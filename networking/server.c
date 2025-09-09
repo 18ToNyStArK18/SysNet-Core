@@ -194,7 +194,7 @@ int isFree(not_ACKed a[10])
 }
 int main(int argc, char *argv[])
 {
-
+	srand(time(NULL));
 	FILE *fp = fopen(file, "w");
 	struct timeval curr_time;
 	struct tm *tm_info;
@@ -402,8 +402,14 @@ int main(int argc, char *argv[])
 							gettimeofday(&curr_time, NULL);
 							tm_info = localtime(&curr_time.tv_sec);
 							strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-							fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%u LEN=%d\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1, msg_len);
-							sendto(socketfd, &packet, to_send, 0, (struct sockaddr *)&client, len);
+							if ((float)rand() / RAND_MAX >= loss_rate)
+							{
+								sendto(socketfd, &packet, to_send, 0, (struct sockaddr *)&client, len);
+								fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%u LEN=%d\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1, msg_len);
+							}
+							else{
+								fprintf(fp, "[%s.%06ld] [LOG] DROP DATA SEQ=%u\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1);
+							}
 						}
 					}
 				}
@@ -512,7 +518,7 @@ int main(int argc, char *argv[])
 			gettimeofday(&curr_time, NULL);
 			tm_info = localtime(&curr_time.tv_sec);
 			strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-			fprintf(fp, "[%s.%06ld] [LOG] SND ACK=%u WIN=10\n", buffer, curr_time.tv_usec,recieved);
+			fprintf(fp, "[%s.%06ld] [LOG] SND ACK=%u WIN=10\n", buffer, curr_time.tv_usec, recieved);
 			sendto(socketfd, &sending, sizeof(sending), 0, (struct sockaddr *)&client, len);
 			// printf("%d\n",recieved);
 		}

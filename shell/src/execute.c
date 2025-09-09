@@ -133,7 +133,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			my_exec(command,prev,home_path,path_req,0); 
 	}
 	else if(strncmp(command,"ping ",5)==0){
-		int r = ping(command);
+		int r = ping(command,home_path);
 		if(r){
 			printf("Sent signal signal_number to process with pid %d\n",r);
 		}

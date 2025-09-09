@@ -190,6 +190,7 @@ int comp(const void *a, const void *b)
 }
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
     struct timeval curr_time;
     struct tm *tm_info;
     char buffer[30];
@@ -400,11 +401,21 @@ int main(int argc, char *argv[])
                             packet.len = htonl(msg_len);
 
                             int to_send = sizeof(packet.a) + sizeof(packet.len) + msg_len;
-                            sendto(socketfd, &packet, to_send, 0, (struct sockaddr *)&server_addr, len);
-                            gettimeofday(&curr_time, NULL);
-                            tm_info = localtime(&curr_time.tv_sec);
-                            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-                            fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%u LEN=%u\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1, msg_len);
+                            if ((float)rand() / RAND_MAX >= loss_rate)
+                            {
+                                sendto(socketfd, &packet, to_send, 0, (struct sockaddr *)&server_addr, len);
+                                gettimeofday(&curr_time, NULL);
+                                tm_info = localtime(&curr_time.tv_sec);
+                                strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+                                fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%u LEN=%u\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1, msg_len);
+                            }
+                            else
+                            {
+                                gettimeofday(&curr_time, NULL);
+                                tm_info = localtime(&curr_time.tv_sec);
+                                strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+                                fprintf(fp, "[%s.%06ld] [LOG] DROP DATA SEQ=%u LEN=%u\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1, msg_len);
+                            }
                         }
                     }
                 }
@@ -429,7 +440,8 @@ int main(int argc, char *argv[])
                     gettimeofday(&curr_time, NULL);
                     tm_info = localtime(&curr_time.tv_sec);
                     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-                    fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, data_sent[i].end - data_sent[i].len + 1, data_sent[i].len);
+                    fprintf(fp, "[%s.%06ld] [LOG] TIMEOUT SEQ=%d\n", buffer, curr_time.tv_usec, data_sent[i].end - data_sent[i].len + 1);
+                    fprintf(fp, "[%s.%06ld] [LOG] RETX DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, data_sent[i].end - data_sent[i].len + 1, data_sent[i].len);
                     fflush(stdout);
                 }
             }
@@ -531,11 +543,17 @@ int main(int argc, char *argv[])
                 memcpy(curr_pac.data, buff, n);
                 curr_pac.len = htonl(n);
                 int to_send = sizeof(curr_pac.a) + sizeof(curr_pac.len) + n;
-                gettimeofday(&curr_time, NULL);
-                tm_info = localtime(&curr_time.tv_sec);
-                strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-                fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, total_size - n + 1, n);
-                sendto(socketfd, &curr_pac, to_send, 0, (struct sockaddr *)&server_addr, len);
+                if ((float)rand() / RAND_MAX >= loss_rate)
+                {
+                    gettimeofday(&curr_time, NULL);
+                    tm_info = localtime(&curr_time.tv_sec);
+                    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+                    fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, total_size - n + 1, n);
+                    sendto(socketfd, &curr_pac, to_send, 0, (struct sockaddr *)&server_addr, len);
+                }
+                else{
+                    fprintf(fp, "[%s.%06ld] [LOG] DROP DATA SEQ=%d\n", buffer, curr_time.tv_usec, total_size - n + 1);
+                }
             }
             struct timeval now;
             gettimeofday(&now, NULL);
@@ -551,7 +569,8 @@ int main(int argc, char *argv[])
                     gettimeofday(&curr_time, NULL);
                     tm_info = localtime(&curr_time.tv_sec);
                     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
-                    fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, buffer_data[i].end - buffer_data[i].len, buffer_data[i].len);
+                    fprintf(fp, "[%s.%06ld] [LOG] TIMEOUT SEQ=%d\n", buffer, curr_time.tv_usec, buffer_data[i].end - buffer_data[i].len);
+                    fprintf(fp, "[%s.%06ld] [LOG] RETX DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, buffer_data[i].end - buffer_data[i].len, buffer_data[i].len);
                     sendto(socketfd, &curr_pac, to_send, 0, (struct sockaddr *)&server_addr, len);
                     gettimeofday(&buffer_data[i].time, NULL);
                     flag2 = 0;
