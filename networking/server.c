@@ -1,6 +1,10 @@
 #include "sham.h"
+char file[] = "server_log.txt";
 void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
 {
+	FILE *fp = fopen(file, "a");
+	struct timeval curr_time;
+	struct tm *tm_info;
 	printf("Reciever: recieved FIN\n");
 	pack_str pkt;
 	socklen_t len = sizeof(*sender);
@@ -9,11 +13,20 @@ void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
 	memset(&pkt, 0, sizeof(pkt));
 	pkt.a.flags = htons(ACK);
 	sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
+	gettimeofday(&curr_time, NULL);
+	tm_info = localtime(&curr_time.tv_sec);
+	char buffer[30];
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+	fprintf(fp, "[%s.%06ld] [LOG] SND ACK FOR FIN\n", buffer, curr_time.tv_usec);
 	printf("Reciever: Sent ACK\n");
 
 	// Send FIN
 	memset(&pkt, 0, sizeof(pkt));
 	pkt.a.flags = htons(FIN);
+	gettimeofday(&curr_time, NULL);
+	tm_info = localtime(&curr_time.tv_sec);
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+	fprintf(fp, "[%s.%06ld] [LOG] SND FIN\n", buffer, curr_time.tv_usec);
 	sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
 	printf("Reciever: Sent FIN\n");
 
@@ -22,16 +35,21 @@ void four_way_hand_shake_reciever(int socketfd, struct sockaddr_in *sender)
 	{
 		memset(&pkt, 0, sizeof(pkt));
 		int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
+
 		if (r < 0)
 		{
 			printf("error recieving the packet");
 		}
 		if ((ntohs(pkt.a.flags)) == ACK)
 		{
-			printf("Reciver: Recived Final ACK\n");
+			gettimeofday(&curr_time, NULL);
+			tm_info = localtime(&curr_time.tv_sec);
+			strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+			fprintf(fp, "[%s.%06ld] [LOG] RCV ACK FOR FIN\n", buffer, curr_time.tv_usec);
 			break;
 		}
 	}
+	fclose(fp);
 }
 
 void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
@@ -39,10 +57,14 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
 	printf("Initiater: Sent FIN\n");
 	pack_str pkt;
 	socklen_t len = sizeof(*sender);
-
+	struct timeval curr_time;
+	struct tm *tm_info;
+	char buffer[30];
+	FILE *fp = fopen(file, "a");
 	// Wait until we get ACK
 	while (1)
 	{
+
 		memset(&pkt, 0, sizeof(pkt));
 		int r = recvfrom(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, &len);
 		if (r < 0)
@@ -50,6 +72,11 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
 
 		if ((ntohs(pkt.a.flags)) == ACK)
 		{
+			gettimeofday(&curr_time, NULL);
+			tm_info = localtime(&curr_time.tv_sec);
+			char buffer[30];
+			strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+			fprintf(fp, "[%s.%06ld] [LOG] RCV ACK FOR FIN\n", buffer, curr_time.tv_usec);
 			printf("Initiator: Recived ACK\n");
 			break;
 		}
@@ -64,6 +91,11 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
 			printf("error recieving the code");
 		if ((ntohs(pkt.a.flags)) == FIN)
 		{
+			gettimeofday(&curr_time, NULL);
+			tm_info = localtime(&curr_time.tv_sec);
+			char buffer[30];
+			strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+			fprintf(fp, "[%s.%06ld] [LOG] RCV FIN\n", buffer, curr_time.tv_usec);
 			printf("Initiator: Recived FIN\n");
 			break;
 		}
@@ -73,55 +105,12 @@ void four_way_hand_shake_sender(int socketfd, struct sockaddr_in *sender)
 	memset(&pkt, 0, sizeof(pkt));
 	pkt.a.flags = htons(ACK);
 	sendto(socketfd, &pkt, sizeof(pkt), 0, (struct sockaddr *)sender, len);
+	gettimeofday(&curr_time, NULL);
+	tm_info = localtime(&curr_time.tv_sec);
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+	fprintf(fp, "[%s.%06ld] [LOG] SND ACK FOR FIN\n", buffer, curr_time.tv_usec);
 	printf("Intitater: Sent Final ACK\n");
-}
-
-void client_3_way_handshake(int socketfd, struct sockaddr_in *server_addr)
-{
-	socklen_t sock_len = sizeof(*server_addr);
-	sham packet, response;
-	int rec;
-	uint32_t seq = 1;
-
-	// Send SYN
-	memset(&packet, 0, sizeof(packet));
-	packet.seq_num = htonl(seq);
-	packet.flags = htons(SYN);
-
-	sendto(socketfd, &packet, sizeof(packet), 0, (struct sockaddr *)server_addr, sock_len);
-	printf("CLIENT: Sent SYN with seq_num=%u\n", seq);
-
-	// Receive SYN+ACK
-	rec = recvfrom(socketfd, &response, sizeof(response), 0, (struct sockaddr *)server_addr, &sock_len);
-	if (rec < 0)
-	{
-		perror("recvfrom failed");
-		exit(1);
-	}
-
-	uint32_t server_seq_num = ntohl(response.seq_num);
-	uint32_t ack_num = ntohl(response.ack_num);
-
-	if (ntohs(response.flags) == (SYN | ACK))
-	{
-		printf("CLIENT: Received SYN+ACK with server_seq=%u, ack=%u\n", server_seq_num, ack_num);
-	}
-	else
-	{
-		printf("CLIENT: Wrong flags in response!\n");
-		exit(1);
-	}
-
-	// Send ACK
-	memset(&packet, 0, sizeof(packet));
-	packet.flags = htons(ACK);
-	packet.ack_num = htonl(server_seq_num + 1);
-
-	sendto(socketfd, &packet, sizeof(packet), 0, (struct sockaddr *)server_addr, sock_len);
-	printf("CLIENT: Sent ACK=%u\n", server_seq_num + 1);
-
-	printf("CLIENT: Connection established!\n");
-	return;
+	fclose(fp);
 }
 int comp(const void *a, const void *b)
 {
@@ -131,6 +120,10 @@ int comp(const void *a, const void *b)
 }
 void server_3_way_handshake(int socketfd, struct sockaddr_in *client)
 {
+	FILE *fp = fopen(file, "a");
+	struct timeval curr_time;
+	struct tm *tm_info;
+	char buffer[30];
 	sham packet, response;
 	socklen_t len = sizeof(*client);
 
@@ -143,6 +136,10 @@ void server_3_way_handshake(int socketfd, struct sockaddr_in *client)
 	}
 
 	uint32_t client_seq = ntohl(response.seq_num);
+	gettimeofday(&curr_time, NULL);
+	tm_info = localtime(&curr_time.tv_sec);
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+	fprintf(fp, "[%s.%06ld] [LOG] RCV SYN SEQ=%u\n", buffer, curr_time.tv_usec, client_seq);
 	printf("SERVER: Received SYN with seq_num=%u\n", client_seq);
 
 	if (ntohs(response.flags) != SYN)
@@ -157,7 +154,10 @@ void server_3_way_handshake(int socketfd, struct sockaddr_in *client)
 	packet.seq_num = htonl(server_seq_num);
 	packet.ack_num = htonl(client_seq + 1);
 	packet.flags = htons(SYN | ACK);
-
+	gettimeofday(&curr_time, NULL);
+	tm_info = localtime(&curr_time.tv_sec);
+	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+	fprintf(fp, "[%s.%06ld] [LOG] SND SYN-ACK SEQ=%u ACK=%u\n", buffer, curr_time.tv_usec, server_seq_num, client_seq + 1);
 	sendto(socketfd, &packet, sizeof(packet), 0, (struct sockaddr *)client, len);
 	printf("SERVER: Sent SYN+ACK with seq_num=%u, ack_num=%u\n", server_seq_num, client_seq + 1);
 
@@ -172,10 +172,15 @@ void server_3_way_handshake(int socketfd, struct sockaddr_in *client)
 	uint32_t ack_num = ntohl(packet.ack_num);
 	if (ntohs(packet.flags) == ACK)
 	{
+		gettimeofday(&curr_time, NULL);
+		tm_info = localtime(&curr_time.tv_sec);
+		strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+		fprintf(fp, "[%s.%06ld] [LOG] RCV ACK FOR SYN\n", buffer, curr_time.tv_usec);
 		printf("SERVER: Received ACK=%u\n", ack_num);
 	}
 
 	printf("SERVER: Connection established!\n");
+	fclose(fp);
 	return;
 }
 int isFree(not_ACKed a[10])
@@ -190,6 +195,10 @@ int isFree(not_ACKed a[10])
 int main(int argc, char *argv[])
 {
 
+	FILE *fp = fopen(file, "w");
+	struct timeval curr_time;
+	struct tm *tm_info;
+	char buffer[30];
 	int port = atoi(argv[1]);
 	int socketfd;
 	struct sockaddr_in server, client;
@@ -225,7 +234,9 @@ int main(int argc, char *argv[])
 	}
 
 	printf("SERVER: Listening on port %d...\n", port);
+	fclose(fp);
 	server_3_way_handshake(socketfd, &client);
+	fp = fopen(file, "a");
 	fd_set readfds;
 	// chat mode   -----------------------------------------
 	// CHAT MODE - SERVER.C FIXES
@@ -263,7 +274,12 @@ int main(int argc, char *argv[])
 						// Check if it's an ACK for data we sent
 						if ((ntohs(response.a.flags)) == ACK)
 						{
+
 							int ack_num = ntohl(response.a.ack_num);
+							gettimeofday(&curr_time, NULL);
+							tm_info = localtime(&curr_time.tv_sec);
+							strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+							fprintf(fp, "[%s.%06ld] [LOG] RCV ACK=%d\n", buffer, curr_time.tv_usec, ack_num);
 							for (int i = 0; i < 10; i++)
 							{
 								if (data_sent[i].end != 0 && data_sent[i].end <= ack_num)
@@ -278,6 +294,11 @@ int main(int argc, char *argv[])
 						}
 						else if ((ntohs(response.a.flags)) == FIN)
 						{
+							gettimeofday(&curr_time, NULL);
+							tm_info = localtime(&curr_time.tv_sec);
+							strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+							fprintf(fp, "[%s.%06ld] [LOG] RCV FIN\n", buffer, curr_time.tv_usec);
+							fclose(fp);
 							four_way_hand_shake_reciever(socketfd, &client);
 							exit(0);
 						}
@@ -288,7 +309,10 @@ int main(int argc, char *argv[])
 							{
 								int seq_num = ntohl(response.a.seq_num);
 								int data_len = ntohl(response.len);
-
+								gettimeofday(&curr_time, NULL);
+								tm_info = localtime(&curr_time.tv_sec);
+								strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+								fprintf(fp, "[%s.%06ld] [LOG] RCV DATA SEQ=%u LEN=%d\n", buffer, curr_time.tv_usec, seq_num, data_len);
 								// Find free slot or update existing
 								int slot = -1;
 								for (int i = 0; i < 10; i++)
@@ -331,6 +355,10 @@ int main(int argc, char *argv[])
 								ack_packet.a.ack_num = htonl(recieved);
 								ack_packet.a.flags = htons(ACK);
 								sendto(socketfd, &ack_packet, sizeof(ack_packet), 0, (struct sockaddr *)&client, len);
+								gettimeofday(&curr_time, NULL);
+								tm_info = localtime(&curr_time.tv_sec);
+								strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+								fprintf(fp, "[%s.%06ld] [LOG] SND ACK=%u WIN=10\n", buffer, curr_time.tv_usec, recieved);
 							}
 						}
 					}
@@ -371,6 +399,10 @@ int main(int argc, char *argv[])
 							packet.len = htonl(msg_len);
 
 							int to_send = sizeof(packet.a) + sizeof(packet.len) + msg_len;
+							gettimeofday(&curr_time, NULL);
+							tm_info = localtime(&curr_time.tv_sec);
+							strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+							fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%u LEN=%d\n", buffer, curr_time.tv_usec, tot_size - msg_len + 1, msg_len);
 							sendto(socketfd, &packet, to_send, 0, (struct sockaddr *)&client, len);
 						}
 					}
@@ -393,7 +425,10 @@ int main(int argc, char *argv[])
 					int to_send = sizeof(retrans_packet.a) + sizeof(retrans_packet.len) + data_sent[i].len;
 					sendto(socketfd, &retrans_packet, to_send, 0, (struct sockaddr *)&client, len);
 					gettimeofday(&data_sent[i].time, NULL);
-					printf(".");
+					gettimeofday(&curr_time, NULL);
+					tm_info = localtime(&curr_time.tv_sec);
+					strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+					fprintf(fp, "[%s.%06ld] [LOG] SND DATA SEQ=%u LEN=%d\n", buffer, curr_time.tv_usec, data_sent[i].end - data_sent[i].len + 1, data_sent[i].len);
 					fflush(stdout);
 				}
 			}
@@ -401,6 +436,11 @@ int main(int argc, char *argv[])
 		pack_str pc;
 		pc.a.flags = htons(FIN);
 		sendto(socketfd, &pc, sizeof(pc), 0, (struct sockaddr *)&client, len);
+		gettimeofday(&curr_time, NULL);
+		tm_info = localtime(&curr_time.tv_sec);
+		strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+		fprintf(fp, "[%s.%06ld] [LOG] SND FIN\n", buffer, curr_time.tv_usec);
+		fclose(fp);
 		four_way_hand_shake_sender(socketfd, &client);
 		exit(0);
 	}
@@ -430,7 +470,7 @@ int main(int argc, char *argv[])
 			buffer_data[i].end = 0;
 			buffer_data[i].len = 0;
 		}
-		FILE *fp = fopen(output_file, "wb");
+		FILE *fp2 = fopen(output_file, "wb");
 		while (1)
 		{
 			pack_str response;
@@ -439,8 +479,12 @@ int main(int argc, char *argv[])
 				printf("error in recieving packet");
 			if (ntohs(response.a.flags) & FIN)
 			{
-				four_way_hand_shake_reciever(socketfd, &client);
+				gettimeofday(&curr_time, NULL);
+				tm_info = localtime(&curr_time.tv_sec);
+				strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+				fprintf(fp, "[%s.%06ld] [LOG] RCV FIN\n", buffer, curr_time.tv_usec);
 				fclose(fp);
+				four_way_hand_shake_reciever(socketfd, &client);
 				printf("FILE succesfully recieved\n");
 				exit(0);
 			}
@@ -455,7 +499,7 @@ int main(int argc, char *argv[])
 			{
 				if (recieved + buffer_data[i2].len == buffer_data[i2].end)
 				{
-					fwrite(buffer_data[i2].data, 1, buffer_data[i2].len, fp);
+					fwrite(buffer_data[i2].data, 1, buffer_data[i2].len, fp2);
 					recieved = buffer_data[i2].end;
 					buffer_data[i2].data[0] = '\0';
 					buffer_data[i2].end = 0;
@@ -465,6 +509,10 @@ int main(int argc, char *argv[])
 			}
 			pack_str sending;
 			sending.a.ack_num = htonl(recieved);
+			gettimeofday(&curr_time, NULL);
+			tm_info = localtime(&curr_time.tv_sec);
+			strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+			fprintf(fp, "[%s.%06ld] [LOG] SND ACK=%u WIN=10\n", buffer, curr_time.tv_usec,recieved);
 			sendto(socketfd, &sending, sizeof(sending), 0, (struct sockaddr *)&client, len);
 			// printf("%d\n",recieved);
 		}

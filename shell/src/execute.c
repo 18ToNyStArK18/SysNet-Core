@@ -89,7 +89,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	if(strlen(input)){
 		inp = open(input,O_RDONLY);
 		if(inp == -1){
-			printf("No such file or directory!\n");
+			printf("No such file or directory\n");
 			return(-1);
 		}
 		dup2(inp,STDIN_FILENO);
@@ -100,6 +100,10 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			oup = open(output,O_WRONLY|O_CREAT|O_TRUNC,0777);
 		else
 			oup = open(output,O_APPEND|O_WRONLY|O_CREAT,0777);
+		if(oup == -1){
+			printf("Unable to create file for writing\n");
+			return -1;
+		}
 		dup2(oup,STDOUT_FILENO);
 		close(oup);
 	}
@@ -134,7 +138,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 			printf("Sent signal signal_number to process with pid %d\n",r);
 		}
 		else
-			printf("No such process found\n");
+			printf("No such process found!\n");
 	}
 	else if(strcmp(command,"activities") == 0){
 		activ(home_path);
@@ -177,7 +181,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			if (return_value==-1)
 				exit(1);
 			if(return_value == 2){
-				fprintf(stderr, "Command not found\n");
+				fprintf(stderr, "Command not found!\n");
 				exit(1);
 			}
 
@@ -187,7 +191,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		waitpid(f,&status,0);
 		if(WIFEXITED(status) && WEXITSTATUS(status) != 0){
 			if(WEXITSTATUS(status) == 127)
-				printf("Command not found\n");
+				printf("Command not found!\n");
 			return -1;
 		}
 		return 1;
@@ -225,7 +229,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			if (return_value==-1)
 				exit(1);
 			if(return_value == 2){
-				fprintf(stderr, "Command not found\n");
+				fprintf(stderr, "Command not found!\n");
 				exit(1);
 			}
 
@@ -268,7 +272,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	if (WIFEXITED(last_cmd_status)) {
 		int exit_code = WEXITSTATUS(last_cmd_status);
 		if(WEXITSTATUS(last_cmd_status) == 127)
-			printf("Command not found\n");
+			printf("Command not found!\n");
 
 		return (exit_code == 0) ? 1 : -1;
 	} else {
@@ -277,6 +281,9 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 	}
 }
 int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
+	if(!log)
+		add_cmd(cmd,home_path);
+	
 	int n = strlen(cmd);
 	n= n-1;
 	if(cmd[n] == ' ')
@@ -307,9 +314,9 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 				strcat(temp_path,"/jobs.txt");
 				FILE *fp = fopen(temp_path,"a");
 				if(successfull)
-					fprintf(fp,"%swith pid %d exited normally\n",buff,getpid());
+					fprintf(fp,"%s& with pid %d exited normally\n",buff,getpid());
 				else{
-					fprintf(fp,"%swith pid %d exited abnormally\n",buff,getpid());
+					fprintf(fp,"%s& with pid %d exited abnormally\n",buff,getpid());
 				}
 				fclose(fp);
 				job_finished(job_count,home_path);
@@ -336,9 +343,7 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 			i++;
 
 	}
-	if(!log)
-		add_cmd(cmd,home_path);
-	return 1;
+return 1;
 }
 
 

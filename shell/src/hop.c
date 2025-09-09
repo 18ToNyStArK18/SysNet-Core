@@ -52,7 +52,7 @@ int hop(char *command, char *prev, char *home_path)
 			if (strlen(prev) == 0)
 			{
 				strcpy(prev,working_dir);
-				return 1;
+				return -1;
 			}
 			chdir(prev);
 		}

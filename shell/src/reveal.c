@@ -11,7 +11,7 @@
 int cmp(const void *a, const void *b) {
     const char *pa = *(const char * const *)a;
     const char *pb = *(const char * const *)b;
-    return strcasecmp(pa, pb);
+    return strcmp(pa, pb);
 }
 
 int my_reveal(char *command,char *prev,char * home_path){
@@ -50,6 +50,10 @@ int my_reveal(char *command,char *prev,char * home_path){
 			if(i == n-1 && command[i] == '-'){
 				// prev dir
 				//
+				if(strlen(prev)==0){
+					
+					return -1;
+				}
 				strcpy(dir,prev);
 			}
 			else if(i == n-1 && command[i] == '~'){

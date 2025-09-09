@@ -16,6 +16,8 @@ int createfile(char * file){
     n++;
     file[n]='\0';
     FILE *fp = fopen(file+i,"w");
+	if(!fp)
+		printf("Unable to create file for writing\n");
     fclose(fp);
     return 1;
 }
@@ -81,6 +83,10 @@ char * redirect(char *command){
             if(i > start) {
                 
                 if(input) {
+					FILE *fp = fopen(input,"r");
+					if(!fp){
+						printf("No such file or directory\n");
+					}
                     free(input);
                 }
                 

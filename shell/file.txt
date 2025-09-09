@@ -1,4 +1,10 @@
-echo new
-echo 'data' > .test/pipe_redir.txt ; cat .test/pipe_redir.txt | wc -c
-echo background_test > .test/bg_test.txt &
-reveal .test | grep builtin_pipe | wc -l
+sleep 100 &
+ping 182623 1
+activities
+a
+ping 41686465654 1
+sleep 1 &
+activities
+sleep 100 &
+ping 188794 20
+activities
