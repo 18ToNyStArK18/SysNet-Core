@@ -110,8 +110,26 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	if(strncmp(command,"hop",3) == 0 ){
 		if( hop(command,prev,home_path)==-1){
 			printf("No such directory!\n");
+			if(strlen(input)){
+				int c;
+				while ((c = getchar()) != '\n' && c != EOF) {
+					// discard
+				}
+				dup2(std_in,STDIN_FILENO);
+			}
+			if(strlen(output))
+				dup2(std_out,STDOUT_FILENO);
 			return(-1);
+		}if(strlen(input)){
+			int c;
+			while ((c = getchar()) != '\n' && c != EOF) {
+				// discard
+			}
+			dup2(std_in,STDIN_FILENO);
 		}
+		if(strlen(output))
+			dup2(std_out,STDOUT_FILENO);
+
 		return(1);
 	}
 	else if(strncmp(command,"fg",2)==0){
@@ -124,6 +142,15 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		int temp = my_reveal(command,prev,home_path);
 		if(temp == -1){
 			printf("No such directory!\n");
+			if(strlen(input)){
+				int c;
+				while ((c = getchar()) != '\n' && c != EOF) {
+					// discard
+				}
+				dup2(std_in,STDIN_FILENO);
+			}
+			if(strlen(output))
+				dup2(std_out,STDOUT_FILENO);
 			return -1;
 		}
 	}
@@ -162,7 +189,7 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	return 1;;
 
 }
-int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
+int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req,int is_background){
 	int n = strlen(cmd_g);
 	int i=0;
 	pid_t pgid = -1; // common pgid for all foreground processes so that i kill all at the same time
@@ -228,10 +255,6 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			int return_value = atomic_exec(buff,prev,home_path,path_req);
 			if (return_value==-1)
 				exit(1);
-			if(return_value == 2){
-				fprintf(stderr, "Command not found!\n");
-				exit(1);
-			}
 
 			exit(0);
 
@@ -251,7 +274,8 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 		close(pipes[j][0]);
 		close(pipes[j][1]);
 	}
-	tcsetpgrp(STDIN_FILENO, pgid);
+	if(!is_background)
+		tcsetpgrp(STDIN_FILENO, pgid);
 	int status;
 	int last_cmd_status = 0;
 	pid_t last_cmd_pid = last_pid;  // PID of the last command
@@ -268,7 +292,8 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 			}
 		}
 	}
-	tcsetpgrp(STDIN_FILENO, getpgrp());
+	if(!is_background)
+		tcsetpgrp(STDIN_FILENO, getpgrp());
 	if (WIFEXITED(last_cmd_status)) {
 		int exit_code = WEXITSTATUS(last_cmd_status);
 		if(WEXITSTATUS(last_cmd_status) == 127)
@@ -283,7 +308,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req){
 int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 	if(!log)
 		add_cmd(cmd,home_path);
-	
+
 	int n = strlen(cmd);
 	n= n-1;
 	if(cmd[n] == ' ')
@@ -306,7 +331,7 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 				printf("[%d] %d\n",job_count,getpid());
 				setpgid(0,0);
 				int successfull = 1;
-				if(cmd_exec(buff,prev,home_path,path_req)==-1)
+				if(cmd_exec(buff,prev,home_path,path_req,1)==-1)
 					successfull = 0;
 				char *temp_path = (char *)malloc(1025);
 				temp_path[0]='\0';
@@ -337,13 +362,13 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 			}
 		}
 		else
-			cmd_exec(buff,prev,home_path,path_req);
+			cmd_exec(buff,prev,home_path,path_req,0);
 		free(buff);
 		if(i<n && cmd[i]==' ')
 			i++;
 
 	}
-return 1;
+	return 1;
 }
 
 
