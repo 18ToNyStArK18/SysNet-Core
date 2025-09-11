@@ -26,6 +26,7 @@ int find_job_by_jid(int jid, char* home_path, Job* found_job) {
     while (fscanf(fp, "%d %d %d %[^\n]", &current_job.jid, &current_job.pid, &current_job.state, current_job.data) != EOF) {
         if (current_job.jid == jid && current_job.state != 0) { // Find active or stopped jobs
             *found_job = current_job;
+			printf("%s\n",current_job.data);
             fclose(fp);
             return 1;
         }
@@ -84,7 +85,6 @@ void fg_command(char *command, char *home_path) {
         printf("fg: error accessing job list.\n");
         return;
     }
-
     pid_t pgid = job_to_fg.pid;
 
     if (tcsetpgrp(STDIN_FILENO, pgid) == -1) {
@@ -107,7 +107,6 @@ void fg_command(char *command, char *home_path) {
         printf("\nJob [%d] stopped.\n", jid);
     }
 }
-#include <signal.h> // Make sure you have this include
 
 void bg_command(char *command, char *home_path) {
 	int n = strlen(command);

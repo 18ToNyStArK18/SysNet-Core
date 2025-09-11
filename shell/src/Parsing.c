@@ -8,14 +8,11 @@
 #include <linux/limits.h>
 #include "../include/include.h"
 // Idea is to split recurssively and check for everything
-// llm code begins
 int log_found = 0;
 int name(char *input)
 {
 	regex_t regex;
 	int result;
-	if(strncmp(input,"log ",4)==0 || strcmp(input,"log")==0)
-		log_found =1;
 	const char *pattern = "^[^|&><;]+$";
 
 	if (regcomp(&regex, pattern, REG_EXTENDED) != 0)
@@ -30,7 +27,6 @@ int name(char *input)
 
 	return (result == 0) ? 1 : 0;
 }
-// llm code ends
 int input(char *inp)
 {
 	int i = 0;
@@ -79,8 +75,13 @@ int atomic(char *at)
 	int flag = 0;
 	int n = strlen(at);
 	int i = 0;
+	while(i < n && at[i]==' ')
+		i++;
 	char *buff2 = (char *)malloc(sizeof(char) * (n + 1));
 	int buff2_counter = 0;
+	if(strncmp(at,"log ",4)==0 || strcmp(at,"log")==0)
+		log_found =1;
+
 	while (i < n && at[i] != ' ')
 	{
 		buff2[buff2_counter++] = at[i++];
@@ -120,6 +121,8 @@ int cmd_group(char *cmd_g)
 		n--;
 	n++;
 	int i = 0;
+	while(i < n && cmd_g[i]==' ')
+		i++;
 	while (i < n)
 	{
 		char *buff = (char *)malloc(sizeof(char) * (n + 1));
@@ -155,6 +158,8 @@ int validate(char *cmd)
 	if (cmd[n - 1] == ';') // it should not end with ;
 		return 0;
 	int i = 0;
+	while(i < n && cmd[i]==' ')
+		i++;
 	int flag = 0;
 	while (i < n)
 	{

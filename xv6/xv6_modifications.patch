@@ -1,48 +1,591 @@
-#if defined(FCFS)
+diff --git a/Makefile b/Makefile
+index 2d5f9e4..9377825 100644
+--- a/Makefile
++++ b/Makefile
+@@ -72,7 +72,12 @@ CFLAGS += -fno-builtin-memcpy -Wno-main
+ CFLAGS += -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf
+ CFLAGS += -I.
+ CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
+-
++ifeq ($(SCHEDULER), FCFS)
++    CFLAGS += -DFCFS
++endif
++ifeq ($(SCHEDULER), CFS)
++    CFLAGS += -DCFS
++endif
+ # Disable PIE when possible (for Ubuntu 16.10 toolchain)
+ ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
+ CFLAGS += -fno-pie -no-pie
+@@ -142,8 +147,11 @@ UPROGS=\
+ 	$U/_logstress\
+ 	$U/_forphan\
+ 	$U/_dorphan\
++	$U/_readcount\
++	$U/_cpubound\
++	$U/_priority_test\
+ 
+-fs.img: mkfs/mkfs README $(UPROGS)
++fs.img: mkfs/mkfs README $(UPROGS) kernel/kernel
+ 	mkfs/mkfs fs.img README $(UPROGS)
+ 
+ -include kernel/*.d user/*.d
+diff --git a/kernel/defs.h b/kernel/defs.h
+index 122d9ca..109169f 100644
+--- a/kernel/defs.h
++++ b/kernel/defs.h
+@@ -101,6 +101,8 @@ void            yield(void);
+ int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
+ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
+ void            procdump(void);
++int             get_weight(int);
++void            readcountinit(void);
+ 
+ // swtch.S
+ void            swtch(struct context*, struct context*);
+diff --git a/kernel/main.c b/kernel/main.c
+index f0d3171..c4f3b92 100644
+--- a/kernel/main.c
++++ b/kernel/main.c
+@@ -27,6 +27,7 @@ main()
+     binit();         // buffer cache
+     iinit();         // inode table
+     fileinit();      // file table
++	readcountinit(); // read_count
+     virtio_disk_init(); // emulated hard disk
+     userinit();      // first user process
+     __sync_synchronize();
+diff --git a/kernel/proc.c b/kernel/proc.c
+index 9d6cf3f..47ac216 100644
+--- a/kernel/proc.c
++++ b/kernel/proc.c
+@@ -5,9 +5,35 @@
+ #include "spinlock.h"
+ #include "proc.h"
+ #include "defs.h"
++static const int nice_to_weight[40] = {
++ /* -20 */ 88761, 71755, 56483, 46273, 36291,
++ /* -15 */ 29154, 23254, 18705, 14949, 11916,
++ /* -10 */  9548,  7620,  6100,  4904,  3906,
++ /* -5 */  3121,  2501,  1991,  1586,  1277,
++ /* 0 */  1024,   820,   655,   526,   423,
++ /* 5 */   335,   272,   215,   172,   137,
++ /* 10 */   110,    87,    70,    56,    45,
++ /* 15 */    36,    29,    23,    18,    15,
++};
++int get_weight(int nice) {
++  return nice_to_weight[nice + 20];
++}
++int
++sys_set_priority(void)
++{
++  int new_nice;
++  // Get the integer argument from the user call
++  argint(0, &new_nice);
+ 
+-struct cpu cpus[NCPU];
++  // Validate the nice value (-20 to 19)
++  if(new_nice < -20) new_nice = -20;
++  if(new_nice > 19) new_nice = 19;
+ 
++  myproc()->nice = new_nice;
++  return 0;
++}
++struct cpu cpus[NCPU];
++extern uint ticks;
+ struct proc proc[NPROC];
+ 
+ struct proc *initproc;
+@@ -42,7 +68,8 @@ proc_mapstacks(pagetable_t kpgtbl)
+     kvmmap(kpgtbl, va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
+   }
+ }
+-
++extern struct spinlock readcount_lock;
++extern uint total_read_bytes;
+ // initialize the proc table.
+ void
+ procinit(void)
+@@ -56,6 +83,8 @@ procinit(void)
+       p->state = UNUSED;
+       p->kstack = KSTACK((int) (p - proc));
+   }
++  initlock(&readcount_lock, "readcount"); // Add this line
++  total_read_bytes = 0;
+ }
+ 
+ // Must be called with interrupts disabled,
+@@ -110,7 +139,7 @@ static struct proc*
+ allocproc(void)
+ {
+   struct proc *p;
+-
++  static uint counter = 1;
+   for(p = proc; p < &proc[NPROC]; p++) {
+     acquire(&p->lock);
+     if(p->state == UNUSED) {
+@@ -124,7 +153,11 @@ allocproc(void)
+ found:
+   p->pid = allocpid();
+   p->state = USED;
+-
++  p->nice =0;
++  p->vruntime = 0;
++  p->ticks_in_slice =0;
++  p->time_slice =0;
++  p->ctime = counter++;
+   // Allocate a trapframe page.
+   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
+     freeproc(p);
+@@ -294,11 +327,9 @@ kfork(void)
+   acquire(&wait_lock);
+   np->parent = p;
+   release(&wait_lock);
+-
+   acquire(&np->lock);
+   np->state = RUNNABLE;
+   release(&np->lock);
+-
+   return pid;
+ }
+ 
+@@ -432,30 +463,111 @@ scheduler(void)
+     // to avoid a possible race between an interrupt
+     // and wfi.
+     intr_on();
+-    intr_off();
++    //intr_off();
++// FCFS
++#if defined(FCFS)
++    struct proc *chosen_proc = 0;
+ 
+-    int found = 0;
++    // Find the runnable process with the earliest creation time.
+     for(p = proc; p < &proc[NPROC]; p++) {
+       acquire(&p->lock);
+       if(p->state == RUNNABLE) {
+-        // Switch to chosen process.  It is the process's job
+-        // to release its lock and then reacquire it
+-        // before jumping back to us.
+-        p->state = RUNNING;
+-        c->proc = p;
+-        swtch(&c->context, &p->context);
+-
+-        // Process is done running for now.
+-        // It should have changed its p->state before coming back.
+-        c->proc = 0;
+-        found = 1;
++        if(chosen_proc == 0 || p->ctime < chosen_proc->ctime) {
++          if(chosen_proc)
++            release(&chosen_proc->lock); // Release previous choice
++          chosen_proc = p;
++          continue; // Keep the new choice locked
++        }
+       }
+       release(&p->lock);
+     }
+-    if(found == 0) {
+-      // nothing to run; stop running on this core until an interrupt.
+-      asm volatile("wfi");
 +
-+       struct proc *oldest_proc = 0;
-+       for(p = proc; p < &proc[NPROC] ; p++){
-+               acquire(&p->lock);
-+               if(p->state == RUNNABLE){
-+                       if(oldest_proc == 0 || p->ctime < oldest_proc->ctime){
-+                               if(oldest_proc)
-+                                       release(&oldest_proc->lock);
-+                               oldest_proc = p;
-+                               continue;
-+                       }
-+               }
-+               release(&p->lock);
-+       }
-+       if(oldest_proc){
-+               oldest_proc->state = RUNNING;
-+               c->proc = oldest_proc;
-+               swtch(&c->context , &oldest_proc->context);
-+               c->proc = 0;
-+               release(&oldest_proc->lock);
-+       }
++    // If a runnable process was found, run it.
++    if(chosen_proc) {
++      // Now that we've made our final choice, assign it to the CPU
++      c->proc = chosen_proc;
++      chosen_proc->state = RUNNING;
++
++      swtch(&c->context, &chosen_proc->context);
++
++      // After the process yields, clean up.
++      c->proc = 0;
++      release(&chosen_proc->lock);
+     }
++#elif defined(CFS)
++	//CFS
++	struct proc *min_vrun =0;
++	int num_proc =0;
++	for(p = proc;p<&proc[NPROC];p++){
++		if(p->state == RUNNABLE)
++			num_proc++;
++	}
++	if(num_proc> 0){
++		printf("[Scheduler Tick]\n");
++		for(p = proc; p < &proc[NPROC]; p++) {
++          if(p->state == RUNNABLE) {
++            printf("PID: %d | vRuntime: %d\n", p->pid, p->vruntime);
++          } 
++        }
++		for(p = proc;p<&proc[NPROC];p++){
++			acquire(&p->lock);
++			if(p->state == RUNNABLE){
++				if(min_vrun == 0 || p->vruntime < min_vrun->vruntime){
++					if(min_vrun)
++						release(&min_vrun->lock);
++				min_vrun = p;
++				continue;
++				}
++			}
++			release(&p->lock);
++		}
++	}
++	if(min_vrun){
++		printf("--> Scheduling PID %d (lowest vRuntime)\n", min_vrun->pid);
++		int target_latency = 48;
++		int min_timeslice = 3;
++		min_vrun->time_slice = target_latency / num_proc;
++		if(min_vrun->time_slice < min_timeslice)
++			min_vrun->time_slice = min_timeslice;
++		min_vrun->ticks_in_slice = 0;
++		
++
++		p = min_vrun;
++		p->state = RUNNING;
++		c->proc = p;
++		swtch(&c->context, &p->context);
++		c->proc = 0;
++		release(&p->lock);
++	}
++
++
++
 +
 +#else
-+       //Default
-+       int found = 0;
-+       for(p = proc; p < &proc[NPROC]; p++) {
-+               acquire(&p->lock);
-+               if(p->state == RUNNABLE) {
-+                       // Switch to chosen process.  It is the process's job
-+                       // to release its lock and then reacquire it
-+                       // before jumping back to us.
-+                       p->state = RUNNING;
-+                       c->proc = p;
-+                       swtch(&c->context, &p->context);
++	//Default
++	int found = 0;
++	for(p = proc; p < &proc[NPROC]; p++) {
++		acquire(&p->lock);
++		if(p->state == RUNNABLE) {
++			// Switch to chosen process.  It is the process's job
++			// to release its lock and then reacquire it
++			// before jumping back to us.
++			p->state = RUNNING;
++			c->proc = p;
++			swtch(&c->context, &p->context);
 +
-+                       // Process is done running for now.
-+                       // It should have changed its p->state before coming back.
-+                       c->proc = 0;
-+                       found = 1;
-+               }
-+               release(&p->lock);
-+       }
-+       if(found == 0) {
-+               // nothing to run; stop running on this core until an interrupt.
-+               asm volatile("wfi");
-+       }
++			// Process is done running for now.
++			// It should have changed its p->state before coming back.
++			c->proc = 0;
++			found = 1;
++		}
++		release(&p->lock);
++	}
++	if(found == 0) {
++		// nothing to run; stop running on this core until an interrupt.
++		asm volatile("wfi");
++	}
 +#endif
+   }
+ }
+ 
+diff --git a/kernel/proc.h b/kernel/proc.h
+index d021857..ce16a45 100644
+--- a/kernel/proc.h
++++ b/kernel/proc.h
+@@ -91,10 +91,13 @@ struct proc {
+   int killed;                  // If non-zero, have been killed
+   int xstate;                  // Exit status to be returned to parent's wait
+   int pid;                     // Process ID
+-
++  uint ctime;                   // Creation time	
+   // wait_lock must be held when using this:
+   struct proc *parent;         // Parent process
+-
++  int nice;
++  uint vruntime;
++  int ticks_in_slice;
++  int time_slice;
+   // these are private to the process, so p->lock need not be held.
+   uint64 kstack;               // Virtual address of kernel stack
+   uint64 sz;                   // Size of process memory (bytes)
+diff --git a/kernel/syscall.c b/kernel/syscall.c
+index 076d965..4adb109 100644
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -6,7 +6,7 @@
+ #include "proc.h"
+ #include "syscall.h"
+ #include "defs.h"
+-
++extern uint64 sys_getreadcount(void);
+ // Fetch the uint64 at addr from the current process.
+ int
+ fetchaddr(uint64 addr, uint64 *ip)
+@@ -101,6 +101,7 @@ extern uint64 sys_unlink(void);
+ extern uint64 sys_link(void);
+ extern uint64 sys_mkdir(void);
+ extern uint64 sys_close(void);
++extern uint64 sys_set_priority(void);
+ 
+ // An array mapping syscall numbers from syscall.h
+ // to the function that handles the system call.
+@@ -126,6 +127,8 @@ static uint64 (*syscalls[])(void) = {
+ [SYS_link]    sys_link,
+ [SYS_mkdir]   sys_mkdir,
+ [SYS_close]   sys_close,
++[SYS_getreadcount] sys_getreadcount,
++[SYS_set_priority]  sys_set_priority,
+ };
+ 
+ void
+diff --git a/kernel/syscall.h b/kernel/syscall.h
+index 3dd926d..8c63dbe 100644
+--- a/kernel/syscall.h
++++ b/kernel/syscall.h
+@@ -20,3 +20,5 @@
+ #define SYS_link   19
+ #define SYS_mkdir  20
+ #define SYS_close  21
++#define SYS_getreadcount 22
++#define SYS_set_priority 23
+diff --git a/kernel/sysfile.c b/kernel/sysfile.c
+index d8234ce..1379072 100644
+--- a/kernel/sysfile.c
++++ b/kernel/sysfile.c
+@@ -18,6 +18,8 @@
+ 
+ // Fetch the nth word-sized system call argument as a file descriptor
+ // and return both the descriptor and the corresponding struct file.
++uint total_read_bytes;
++struct spinlock readcount_lock;
+ static int
+ argfd(int n, int *pfd, struct file **pf)
+ {
+@@ -33,7 +35,12 @@ argfd(int n, int *pfd, struct file **pf)
+     *pf = f;
+   return 0;
+ }
+-
++void
++readcountinit(void)
++{
++  initlock(&readcount_lock, "readcount");
++  total_read_bytes = 0;
++}
+ // Allocate a file descriptor for the given file.
+ // Takes over file reference from caller on success.
+ static int
+@@ -76,9 +83,25 @@ sys_read(void)
+   argint(2, &n);
+   if(argfd(0, 0, &f) < 0)
+     return -1;
+-  return fileread(f, p, n);
++  n = fileread(f, p, n);
++  if( n > 0){
++
++	acquire(&readcount_lock);
++	total_read_bytes += n;
++	release(&readcount_lock);
++  }
++  return n;
+ }
++uint64
++sys_getreadcount(void){
++	uint val;
++	acquire(&readcount_lock);
++	val = total_read_bytes;
++	release(&readcount_lock);
+ 
++	return val;
++
++}
+ uint64
+ sys_write(void)
+ {
+diff --git a/kernel/trap.c b/kernel/trap.c
+index a41cd69..e4e1639 100644
+--- a/kernel/trap.c
++++ b/kernel/trap.c
+@@ -81,9 +81,25 @@ usertrap(void)
+     kexit(-1);
+ 
+   // give up the CPU if this is a timer interrupt.
+-  if(which_dev == 2)
+-    yield();
+-
++  if(which_dev == 2){
++     #if defined(FCFS)
++    	//No interrupts
++  	#elif defined(CFS)
++    		// CFS vruntime update
++    struct proc *p = myproc();
++    if(p && p->state == RUNNING) {
++      int weight0 = get_weight(0); // Weight of a default-priority process
++      int weight_p = get_weight(p->nice);
++      p->vruntime += (weight0 * 100) / weight_p; 
++      p->ticks_in_slice++;
++      if(p->ticks_in_slice >= p->time_slice) {
++        yield(); // Time slice is done raise interrupt;
++      }
++    }
++	#else
++	  yield();
++	#endif
++  }
+   prepare_return();
+
+diff --git a/user/cpubound.c b/user/cpubound.c
+index a6c53bf..fd97f37 100644
+--- a/user/cpubound.c
++++ b/user/cpubound.c
+@@ -3,38 +3,53 @@
++ #include "user.h"
++ #include "../kernel/fcntl.h"
+ 
++#define NFORK 10
++#define IO 5
+
++int main() {
++  int n, pid;
++  
++  for (n = 0; n < NFORK; n++) {
++    pid = fork();
++    if (pid < 0)
++      break;
++    if (pid == 0) {
++      if (n < IO) {
++        // --- I/O-bound process using file operations ---
++        char buf[100];
++        // Each I/O process needs a unique filename
++        char filename[] = "iotest_0.txt";
++        filename[7] = '0' + n;
++        // Create and write to a file to ensure it exists
++        int fd = open(filename, O_CREATE | O_WRONLY);
++        if(fd >= 0) {
++            write(fd, "io", 2);
++        }
++        close(fd);
++
++        // Re-open and read from the file to cause I/O sleep
++        fd = open(filename, O_RDONLY);
++        if(fd >= 0){
++            read(fd, buf, sizeof(buf));
++        }
++        close(fd);
++        // --- End of I/O simulation ---
++      } else {
++        // CPU-bound process
++        for (volatile int i = 0; i < 1000000000; i++) {} 
++      }
++      printf("Process %d finished\n", n);
++      exit(0);
++    }
++  }
+
++  // Parent waits for all children
++  for(int i=0; i<NFORK; i++){
++    if(wait(0) < 0) {
++        break; // Break if no more children
++    }
+
++   }
+
++   exit(0);
++ }
+
+diff --git a/user/priority_test.c b/user/priority_test.c
+new file mode 100644
+index 0000000..70556ff
+--- /dev/null
++++ b/user/priority_test.c
+@@ -0,0 +1,27 @@
++#include "../kernel/types.h"
++#include "user.h"
++
++int main() {
++    printf("Starting priority test...\n");
++
++    if (fork() == 0) { // High-priority child
++        set_priority(-10); // Lower nice value = higher priority
++        for (long i = 0; i < 50000000; i++) {
++            if(i % 10000000 == 0) write(1, "H", 1);
++        }
++        exit(0);
++    }
++
++    if (fork() == 0) { // Low-priority child
++        set_priority(10); // Higher nice value = lower priority
++        for (long i = 0; i < 50000000; i++) {
++            if(i % 10000000 == 0) write(1, "L", 1);
++        }
++        exit(0);
++    }
++
++    wait(0);
++    wait(0);
++    printf("\nTest finished.\n");
++    exit(0);
++}
+diff --git a/user/readcount.c b/user/readcount.c
+new file mode 100644
+index 0000000..74ada42
+--- /dev/null
++++ b/user/readcount.c
+@@ -0,0 +1,35 @@
++#include "../kernel/types.h"
++#include "../kernel/stat.h"
++#include "user.h"
++#include "../kernel/fcntl.h"
++
++int main(){
++	char buf[1000];
++	int i_count,f_count,fd;
++	int bytes;
++	i_count = getreadcount();
++	printf("Initial count = %d\n",i_count);
++	fd = open("lol.txt",O_CREATE | O_WRONLY);
++	if(fd < 0){
++		printf("Error Creating / opening file");
++		exit(1);
++	}
++	write(fd,"....................................................................................................",100);
++	close(fd);
++	fd = open("lol.txt",O_RDONLY);
++
++	bytes = read(fd,buf,100);
++	printf("Bytes read = %d\n",bytes);
++	close(fd);
++	f_count = getreadcount();
++	printf("Final count = %d\n difference = %d\n",f_count,f_count - i_count);
++
++	if(f_count - i_count == bytes){
++		printf("Worked\n");
++	}
++	else
++		printf("Failed\n");
++
++	exit(0);
++
++}
+diff --git a/user/user.h b/user/user.h
+index ac84de9..8392cdb 100644
+--- a/user/user.h
++++ b/user/user.h
+@@ -24,6 +24,8 @@ int getpid(void);
+ char* sys_sbrk(int,int);
+ int pause(int);
+ int uptime(void);
++int getreadcount(void);
++int set_priority(int);
+ 
+ // ulib.c
+ int stat(const char*, struct stat*);
+@@ -39,7 +41,6 @@ int memcmp(const void *, const void *, uint);
+ void *memcpy(void *, const void *, uint);
+ char* sbrk(int);
+ char* sbrklazy(int);
+-
+ // printf.c
+ void fprintf(int, const char*, ...) __attribute__ ((format (printf, 2, 3)));
+ void printf(const char*, ...) __attribute__ ((format (printf, 1, 2)));
+diff --git a/user/usys.h b/user/usys.h
+new file mode 100644
+index 0000000..e69de29
+diff --git a/user/usys.pl b/user/usys.pl
+index c5d4c3a..71a3f11 100755
+--- a/user/usys.pl
++++ b/user/usys.pl
+@@ -42,3 +42,5 @@ entry("getpid");
+ entry("sbrk");
+ entry("pause");
+ entry("uptime");
++entry("getreadcount");
++entry("set_priority");

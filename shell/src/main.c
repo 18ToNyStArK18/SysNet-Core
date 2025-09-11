@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <signal.h>
 
-int job_count = 0;
+int job_count = 1;
 // find relative path
 char *FindPath(char *home_path) {
     char *working_dir = (char *)malloc(sizeof(char) * PATH_MAX);
@@ -70,8 +70,8 @@ int main() {
 		
 		if (fgets(command, 4096,stdin) == NULL) {
             // This now only triggers on actual Ctrl+D (EOF)
+            printf("logout\n");
             kill_jobs(home_path);
-            printf("\nlogout\n");
             exit(0);
         }
 		command[strcspn(command, "\n")] = 0;
@@ -129,6 +129,7 @@ int main() {
 		// validate command
 		int temp = validate(cmd_refined);
 		if (!temp && temp != 118) {
+			add_cmd(cmd_refined,home_path);
 			printf("Invalid Syntax!\n");
 			continue;
 		}

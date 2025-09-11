@@ -25,6 +25,15 @@ int my_reveal(char *command,char *prev,char * home_path){
 	char dir[PATH_MAX];
 	strcpy(dir,".");
 	n++;
+	int c =0;
+	for(int i=0;i<n;i++){
+		if(command[i]==' ' && command[i+1] != '-')
+			c++;
+	}
+	if(c > 1){
+		printf("reveal: Invalid Syntax!\n");
+		return -2;
+	}
 	int a=0,l=0;
 	for(int i=7;i<n;i++){
 		if(command[i] == '-' && i != n-1){

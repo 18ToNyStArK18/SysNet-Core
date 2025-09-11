@@ -36,8 +36,7 @@ typedef struct s_truct
 }not_ACKed;
 #define SYN 0X1
 #define ACK 0X2
-#define FIN 0X3
-#define INP_END 0X4
+#define FIN 0X4
 #define timer 500000
 static inline long elapsed_ms(struct timeval a, struct timeval b) {
     return (b.tv_sec - a.tv_sec)*1000L + (b.tv_usec - a.tv_usec)/1000L ;

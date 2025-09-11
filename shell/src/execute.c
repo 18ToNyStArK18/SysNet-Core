@@ -10,9 +10,9 @@
 #include <fcntl.h>  
 #include <unistd.h>
 #include"../include/include.h"
-Job jobs[1000];
+Job jobs[100000];
 void job_finished(int jid, char *home_path){
-	Job temp_jobs[1000];
+	Job temp_jobs[100000];
 	int file_count =0;
 	char  file_path[1024];
 	sprintf(file_path,"%s/jobs_list.txt",home_path);
@@ -36,7 +36,7 @@ void job_finished(int jid, char *home_path){
 }
 
 int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
-
+	
 	char * new_cmd = (char *)malloc(strlen(cmd)+1);
 	new_cmd = redirect(cmd);
 	char *input = (char *)malloc(strlen(cmd)+1);
@@ -47,6 +47,8 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 	command[0]='\0';
 	int output_type = 0;
 	int i = 0,n = strlen(new_cmd),j=0;
+	while(i < n && cmd[i]==' ')
+		i++;
 	while(i < n && new_cmd[i] != '>' && new_cmd[i] != '<'){
 		command[j++] = new_cmd[i++];
 	}
@@ -175,7 +177,17 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 		dup2(devnull, STDERR_FILENO);
 		close(devnull);
 		execlp("bash", "bash", "-c", new_cmd, NULL);
-		return(2);
+		if(strlen(input)){
+			int c;
+			while ((c = getchar()) != '\n' && c != EOF) {
+				// discard
+			}
+			dup2(std_in,STDIN_FILENO);
+		}
+		if(strlen(output))
+			dup2(std_out,STDOUT_FILENO);
+
+		exit(127);
 	} 
 	if(strlen(input)){
 		int c;
@@ -192,6 +204,8 @@ int atomic_exec(char * cmd,char *prev,char *home_path,char *path_req){
 int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req,int is_background){
 	int n = strlen(cmd_g);
 	int i=0;
+	while(i < n && cmd_g[i]==' ')
+		i++;
 	pid_t pgid = -1; // common pgid for all foreground processes so that i kill all at the same time
 	int num_pipes=0;
 	for(int ii=0;ii<n;ii++){
@@ -208,7 +222,7 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req,int is_backgro
 			if (return_value==-1)
 				exit(1);
 			if(return_value == 2){
-				fprintf(stderr, "Command not found!\n");
+				printf("CCommand not found!\n");
 				exit(1);
 			}
 
@@ -216,8 +230,9 @@ int cmd_exec(char *cmd_g,char *prev,char*home_path,char *path_req,int is_backgro
 		}
 		int status;
 		waitpid(f,&status,0);
-		if(WIFEXITED(status) && WEXITSTATUS(status) != 0){
-			if(WEXITSTATUS(status) == 127)
+		int exit = WEXITSTATUS(status);
+		if(WIFEXITED(status) && exit != 0){
+			if(exit == 127)
 				printf("Command not found!\n");
 			return -1;
 		}
@@ -317,6 +332,8 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 	if(cmd[n-1] == ';')
 		return 0;
 	int i=0;
+	while(i < n && cmd[i]==' ')
+		i++;
 	while(i<n){
 		char *buff = (char*)malloc(sizeof(char)*(n+1));
 		int buff_counter=0;
@@ -339,9 +356,9 @@ int my_exec(char *cmd,char *prev,char *home_path,char *path_req,int log){
 				strcat(temp_path,"/jobs.txt");
 				FILE *fp = fopen(temp_path,"a");
 				if(successfull)
-					fprintf(fp,"%s& with pid %d exited normally\n",buff,getpid());
+					fprintf(fp,"%swith pid %d exited normally\n",buff,getpid());
 				else{
-					fprintf(fp,"%s& with pid %d exited abnormally\n",buff,getpid());
+					fprintf(fp,"%swith pid %d exited abnormally\n",buff,getpid());
 				}
 				fclose(fp);
 				job_finished(job_count,home_path);
