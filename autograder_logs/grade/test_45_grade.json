@@ -1,0 +1,8 @@
+{
+    "test_id": "test_45",
+    "section": "B.1",
+    "description": "Tests `hop` with absolute paths, the special `.` path, and navigating to the root directory.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

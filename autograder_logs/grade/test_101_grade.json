@@ -1,0 +1,14 @@
+{
+    "test_id": "test_101",
+    "section": "D.2",
+    "description": "Tests a simple background command, checking for the job ID and the subsequent completion message.",
+    "passed": false,
+    "failure": {
+        "step_index": 2,
+        "command": "echo check cleanup",
+        "reason": "Missing required non-sequential output: 'sleep with pid \\\\d+ exited normally'",
+        "expected": null,
+        "actual": "sleep 1 with pid 29 exited normally\r\ncheck cleanup"
+    },
+    "score": 0.0
+}

@@ -1,0 +1,8 @@
+{
+    "test_id": "test_6",
+    "section": "A.3",
+    "description": "Tests a simple valid command syntax. The shell should not output 'Invalid Syntax!'.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

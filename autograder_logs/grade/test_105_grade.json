@@ -1,0 +1,14 @@
+{
+    "test_id": "test_105",
+    "section": "D.2",
+    "description": "Tests running a command with pipes in the background and checks for multiple cleanup messages.",
+    "passed": false,
+    "failure": {
+        "step_index": 1,
+        "command": "echo check pipe cleanup",
+        "reason": "Missing required non-sequential output: 'ls with pid \\\\d+ exited normally'",
+        "expected": null,
+        "actual": "[1] 29\r\n5\r\nls -1 test | wc -l with pid 29 exited normally\r\ncheck pipe cleanup"
+    },
+    "score": 0.0
+}

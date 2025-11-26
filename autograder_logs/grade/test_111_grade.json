@@ -1,0 +1,14 @@
+{
+    "test_id": "test_111",
+    "section": "E.1",
+    "description": "Checks if activities correctly lists multiple running background processes in lexicographical order.",
+    "passed": false,
+    "failure": {
+        "step_index": 3,
+        "command": "activities",
+        "reason": "Insufficient output lines for sequential check.",
+        "expected": 3,
+        "actual": 5
+    },
+    "score": 0.0
+}

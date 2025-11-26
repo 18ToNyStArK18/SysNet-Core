@@ -1,0 +1,50 @@
+{
+    "testcase": {
+        "section": "D.2",
+        "description": "Tests that a non-existent command run in the background fails gracefully.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "iamnotarealcommand &",
+                "sequential_outputs": [
+                    {
+                        "text": "Command not found!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [
+                    {
+                        "text": "iamnotarealcommand with pid \\\\d+ exited normally",
+                        "is_re": true,
+                        "negative_match": false
+                    }
+                ],
+                "ignore_output": true,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:33:44.732551+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:33:44.732838+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='iamnotarealcommand &', sequential_outputs=[Line(text='Command not found!', is_re=False, negative_match=False)], nonsequential_outputs=[Line(text='iamnotarealcommand with pid \\\\\\\\d+ exited normally', is_re=True, negative_match=False)], ignore_output=True, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:33:44.785760+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> iamnotarealcommand &\n<(null)@osntesting:~> [1] 29\r\n",
+    "py_log": "2025-11-19 22:33:43,491 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f017197d10>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_12ffb63e4bb9479a9795e3a1e8cd497a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmp1kvu7_4x:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2740386\n    child_fd: 50\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f0171928c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:33:44,732 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:44.732551+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:44,732 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:44.732838+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='iamnotarealcommand &', sequential_outputs=[Line(text='Command not found!', is_re=False, negative_match=False)], nonsequential_outputs=[Line(text='iamnotarealcommand with pid \\\\\\\\\\\\\\\\d+ exited normally', is_re=True, negative_match=False)], ignore_output=True, cwd_after=None)\"\n    }\n2025-11-19 22:33:44,785 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:44.785760+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:45,554 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f017197d10>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_12ffb63e4bb9479a9795e3a1e8cd497a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmp1kvu7_4x:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): '[1] 29\\r\\n'\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: None\n    flag_eof: False\n    pid: 2740386\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f0171928c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:33:45,554 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmp1kvu7_4x\n"
+}

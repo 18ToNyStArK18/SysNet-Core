@@ -1,0 +1,14 @@
+{
+    "test_id": "test_108",
+    "section": "D.2",
+    "description": "Tests that a background process is correctly detached from terminal input, causing it to receive an immediate EOF.",
+    "passed": false,
+    "failure": {
+        "step_index": 1,
+        "command": "echo foreground",
+        "reason": "Missing required non-sequential output: 'wc with pid \\\\d+ exited normally'",
+        "expected": null,
+        "actual": "0\r\nwc -l with pid 29 exited abnormally\r\nforeground"
+    },
+    "score": 0.0
+}

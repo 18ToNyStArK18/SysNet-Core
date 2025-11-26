@@ -1,0 +1,8 @@
+{
+    "test_id": "test_50",
+    "section": "B.2",
+    "description": "Tests reveal on an empty directory, both with and without the -a flag.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

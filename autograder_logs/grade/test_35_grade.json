@@ -1,0 +1,8 @@
+{
+    "test_id": "test_35",
+    "section": "A.3",
+    "description": "Tests a valid command and arguments containing various special characters allowed by the grammar for a 'name'.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

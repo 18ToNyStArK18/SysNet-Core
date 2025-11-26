@@ -1,0 +1,8 @@
+{
+    "test_id": "test_33",
+    "section": "A.3",
+    "description": "Tests for 'Invalid Syntax!' when a redirection operator is not followed by a filename but by another operator.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

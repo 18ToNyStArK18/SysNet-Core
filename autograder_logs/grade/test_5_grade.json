@@ -1,0 +1,8 @@
+{
+    "test_id": "test_5",
+    "section": "A.2",
+    "description": "Checks if the shell can handle an input containing only whitespace characters.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

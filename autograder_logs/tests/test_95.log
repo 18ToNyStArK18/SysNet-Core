@@ -1,0 +1,118 @@
+{
+    "testcase": {
+        "section": "C.4",
+        "description": "Tests that output redirection on a non-final command in a pipeline correctly redirects that command's output, starving the next command in the pipe.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "ls test > ls_out.txt | wc -l",
+                "sequential_outputs": [
+                    {
+                        "text": "\\\\s*0\\\\s*",
+                        "is_re": true,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "cmd": "cat ls_out.txt",
+                "sequential_outputs": [
+                    {
+                        "text": "file4.txt",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "file5.txt",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "folder1",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "folder2",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "folder3",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": true
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:33:25.841562+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:33:25.841873+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='ls test > ls_out.txt | wc -l', sequential_outputs=[Line(text='\\\\\\\\s*0\\\\\\\\s*', is_re=True, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:33:25.898036+05:30",
+            "type": "output",
+            "details": "0"
+        },
+        {
+            "time": "2025-11-19T22:33:25.898319+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:33:25.898466+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='cat ls_out.txt', sequential_outputs=[Line(text='file4.txt', is_re=False, negative_match=False), Line(text='file5.txt', is_re=False, negative_match=False), Line(text='folder1', is_re=False, negative_match=False), Line(text='folder2', is_re=False, negative_match=False), Line(text='folder3', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:33:25.954892+05:30",
+            "type": "output",
+            "details": "file4.txt"
+        },
+        {
+            "time": "2025-11-19T22:33:25.955200+05:30",
+            "type": "output",
+            "details": "file5.txt"
+        },
+        {
+            "time": "2025-11-19T22:33:25.955271+05:30",
+            "type": "output",
+            "details": "folder1"
+        },
+        {
+            "time": "2025-11-19T22:33:25.955327+05:30",
+            "type": "output",
+            "details": "folder2"
+        },
+        {
+            "time": "2025-11-19T22:33:25.955379+05:30",
+            "type": "output",
+            "details": "folder3"
+        },
+        {
+            "time": "2025-11-19T22:33:25.955664+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> ls test > ls_out.txt | wc -l\n0\r\n<(null)@osntesting:~> cat ls_out.txt\nfile4.txt\r\nfile5.txt\r\nfolder1\r\nfolder2\r\nfolder3\r\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:33:25,303 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f0175ee900>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_ad522cb558b34a14854c9932080e01ad', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpg025ruk2:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2689246\n    child_fd: 136\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f014e2a2c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:33:25,841 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.841562+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:25,841 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.841873+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='ls test > ls_out.txt | wc -l', sequential_outputs=[Line(text='\\\\\\\\\\\\\\\\s*0\\\\\\\\\\\\\\\\s*', is_re=True, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:33:25,898 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.898036+05:30\",\n        \"type\": \"output\",\n        \"details\": \"0\"\n    }\n2025-11-19 22:33:25,898 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.898319+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:25,898 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.898466+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='cat ls_out.txt', sequential_outputs=[Line(text='file4.txt', is_re=False, negative_match=False), Line(text='file5.txt', is_re=False, negative_match=False), Line(text='folder1', is_re=False, negative_match=False), Line(text='folder2', is_re=False, negative_match=False), Line(text='folder3', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:33:25,955 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.954892+05:30\",\n        \"type\": \"output\",\n        \"details\": \"file4.txt\"\n    }\n2025-11-19 22:33:25,955 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.955200+05:30\",\n        \"type\": \"output\",\n        \"details\": \"file5.txt\"\n    }\n2025-11-19 22:33:25,955 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.955271+05:30\",\n        \"type\": \"output\",\n        \"details\": \"folder1\"\n    }\n2025-11-19 22:33:25,955 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.955327+05:30\",\n        \"type\": \"output\",\n        \"details\": \"folder2\"\n    }\n2025-11-19 22:33:25,955 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.955379+05:30\",\n        \"type\": \"output\",\n        \"details\": \"folder3\"\n    }\n2025-11-19 22:33:25,955 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:25.955664+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:26,566 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - WARNING - Failed to remove container tester_ad522cb558b34a14854c9932080e01ad: 409 Client Error for http+docker://localhost/v1.51/containers/bcfc8012bf55060922f360ebbf90d60f53c1e47c0133e44daba88f24347ec635?v=False&link=False&force=True: Conflict (\"removal of container bcfc8012bf55060922f360ebbf90d60f53c1e47c0133e44daba88f24347ec635 is already in progress\")\n2025-11-19 22:33:26,566 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f0175ee900>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_ad522cb558b34a14854c9932080e01ad', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpg025ruk2:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: None\n    flag_eof: False\n    pid: 2689246\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f014e2a2c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:33:26,566 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmpg025ruk2\n"
+}

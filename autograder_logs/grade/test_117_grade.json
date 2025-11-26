@@ -1,0 +1,14 @@
+{
+    "test_id": "test_117",
+    "section": "E.3",
+    "description": "Tests that Ctrl+C (SIGINT) terminates the foreground process but not the shell.",
+    "passed": false,
+    "failure": {
+        "step_index": -1,
+        "command": "Global Execution",
+        "reason": "Test runner encountered an error (see raw logs).",
+        "expected": null,
+        "actual": null
+    },
+    "score": 0.0
+}

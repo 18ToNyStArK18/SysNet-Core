@@ -1,0 +1,14 @@
+{
+    "test_id": "test_90",
+    "section": "C.4",
+    "description": "Tests a pipeline where a command in the middle is not found. The pipeline should still execute.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "ls test | nonexistentcommand | wc -l",
+        "reason": "Insufficient output lines for sequential check.",
+        "expected": 2,
+        "actual": 1
+    },
+    "score": 0.0
+}

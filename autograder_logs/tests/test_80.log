@@ -1,0 +1,49 @@
+{
+    "testcase": {
+        "section": "C.3",
+        "description": "Tests output redirection to a file in a non-existent directory.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "echo hello > non_existent_dir/file.txt",
+                "sequential_outputs": [
+                    {
+                        "text": "Unable to create file for writing",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:33:05.380558+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:33:05.380892+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='echo hello > non_existent_dir/file.txt', sequential_outputs=[Line(text='Unable to create file for writing', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:33:05.432815+05:30",
+            "type": "output",
+            "details": "Unable to create file for writing"
+        },
+        {
+            "time": "2025-11-19T22:33:05.433060+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> echo hello > non_existent_dir/file.txt\nUnable to create file for writing\r\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:33:04,377 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f0175ee900>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_df247ebf942c4764af2aac209cce3598', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpxlnfskg3:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2629594\n    child_fd: 131\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017192ec0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:33:05,380 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:05.380558+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:05,380 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:05.380892+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='echo hello > non_existent_dir/file.txt', sequential_outputs=[Line(text='Unable to create file for writing', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:33:05,432 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:05.432815+05:30\",\n        \"type\": \"output\",\n        \"details\": \"Unable to create file for writing\"\n    }\n2025-11-19 22:33:05,433 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:33:05.433060+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:33:06,205 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - WARNING - Failed to remove container tester_df247ebf942c4764af2aac209cce3598: 409 Client Error for http+docker://localhost/v1.51/containers/182f637208537411b6f4985f2f8c2555fc1d1cb3f6a934d999c92f260d9b7ae9?v=False&link=False&force=True: Conflict (\"removal of container 182f637208537411b6f4985f2f8c2555fc1d1cb3f6a934d999c92f260d9b7ae9 is already in progress\")\n2025-11-19 22:33:06,205 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f0175ee900>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_df247ebf942c4764af2aac209cce3598', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpxlnfskg3:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: None\n    flag_eof: False\n    pid: 2629594\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017192ec0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:33:06,205 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmpxlnfskg3\n"
+}

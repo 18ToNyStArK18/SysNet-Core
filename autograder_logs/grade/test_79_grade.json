@@ -1,0 +1,8 @@
+{
+    "test_id": "test_79",
+    "section": "C.3",
+    "description": "Tests that '>>' appends to a file rather than overwriting it.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

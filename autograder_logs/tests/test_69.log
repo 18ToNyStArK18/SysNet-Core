@@ -1,0 +1,49 @@
+{
+    "testcase": {
+        "section": "C.1",
+        "description": "Tests that a non-existent command prints 'Command not found!'.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "nonexistentcommand",
+                "sequential_outputs": [
+                    {
+                        "text": "Command not found!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:32:52.563425+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:32:52.563780+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='nonexistentcommand', sequential_outputs=[Line(text='Command not found!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:32:52.618132+05:30",
+            "type": "output",
+            "details": "Command not found!"
+        },
+        {
+            "time": "2025-11-19T22:32:52.618436+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> nonexistentcommand\nCommand not found!\r\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:32:52,259 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f0145013d0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_d31c748c68aa44b098f9f543cf820583', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpmf_v_mmq:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2594902\n    child_fd: 132\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017191fc0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:32:52,563 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:52.563425+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:32:52,563 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:52.563780+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='nonexistentcommand', sequential_outputs=[Line(text='Command not found!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:32:52,618 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:52.618132+05:30\",\n        \"type\": \"output\",\n        \"details\": \"Command not found!\"\n    }\n2025-11-19 22:32:52,618 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:52.618436+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:32:52,927 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f0145013d0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_d31c748c68aa44b098f9f543cf820583', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpmf_v_mmq:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: 129\n    flag_eof: False\n    pid: 2594902\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017191fc0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:32:52,927 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmpmf_v_mmq\n"
+}

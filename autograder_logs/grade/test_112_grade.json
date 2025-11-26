@@ -1,0 +1,14 @@
+{
+    "test_id": "test_112",
+    "section": "E.1",
+    "description": "Checks if activities correctly lists a stopped process after sending SIGTSTP (Ctrl+Z).",
+    "passed": false,
+    "failure": {
+        "step_index": -1,
+        "command": "Global Execution",
+        "reason": "Test runner encountered an error (see raw logs).",
+        "expected": null,
+        "actual": null
+    },
+    "score": 0.0
+}

@@ -1,0 +1,49 @@
+{
+    "testcase": {
+        "section": "A.3",
+        "description": "Tests for 'Invalid Syntax!' with a leading pipe operator.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "| a",
+                "sequential_outputs": [
+                    {
+                        "text": "Invalid Syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:31:35.872724+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:31:35.873047+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='| a', sequential_outputs=[Line(text='Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:31:35.925404+05:30",
+            "type": "output",
+            "details": "Invalid Syntax!"
+        },
+        {
+            "time": "2025-11-19T22:31:35.925716+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> | a\nInvalid Syntax!\r\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:31:35,072 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f014e681a0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_a03053e2195c40d0a8cc1327870b44c7', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpnm_gvr6k:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2381057\n    child_fd: 108\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193c40>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:31:35,872 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:31:35.872724+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:31:35,873 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:31:35.873047+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='| a', sequential_outputs=[Line(text='Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:31:35,925 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:31:35.925404+05:30\",\n        \"type\": \"output\",\n        \"details\": \"Invalid Syntax!\"\n    }\n2025-11-19 22:31:35,925 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:31:35.925716+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:31:36,574 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - WARNING - Failed to remove container tester_a03053e2195c40d0a8cc1327870b44c7: 409 Client Error for http+docker://localhost/v1.51/containers/1149caefd6394288e4ca8cf5aede2667818998f729be5eaa149dc3f37656c52d?v=False&link=False&force=True: Conflict (\"removal of container 1149caefd6394288e4ca8cf5aede2667818998f729be5eaa149dc3f37656c52d is already in progress\")\n2025-11-19 22:31:36,574 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f014e681a0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_a03053e2195c40d0a8cc1327870b44c7', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpnm_gvr6k:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: None\n    flag_eof: False\n    pid: 2381057\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193c40>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:31:36,574 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmpnm_gvr6k\n"
+}

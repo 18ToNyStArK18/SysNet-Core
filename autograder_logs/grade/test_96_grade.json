@@ -1,0 +1,8 @@
+{
+    "test_id": "test_96",
+    "section": "D.1",
+    "description": "Tests basic sequential execution with two simple commands.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,14 @@
+{
+    "test_id": "test_54",
+    "section": "B.2",
+    "description": "Tests that reveal lists files in lexicographical (ASCII) order.",
+    "passed": false,
+    "failure": {
+        "step_index": 3,
+        "command": "reveal -l",
+        "reason": "Mismatch at sequential line 0",
+        "expected": "_",
+        "actual": "1"
+    },
+    "score": 0.0
+}

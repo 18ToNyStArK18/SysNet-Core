@@ -1,0 +1,8 @@
+{
+    "test_id": "test_14",
+    "section": "A.3",
+    "description": "Tests for 'Invalid Syntax!' with consecutive pipe operators.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

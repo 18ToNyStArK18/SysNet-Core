@@ -1,0 +1,8 @@
+{
+    "test_id": "test_43",
+    "section": "B.1",
+    "description": "Tests that 'hop -' does nothing if no previous working directory is stored.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

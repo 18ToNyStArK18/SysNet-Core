@@ -1,0 +1,8 @@
+{
+    "test_id": "test_11",
+    "section": "A.3",
+    "description": "Tests a long, valid chain of sequential commands ending in a background operator.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

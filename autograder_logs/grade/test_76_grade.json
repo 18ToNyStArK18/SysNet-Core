@@ -1,0 +1,8 @@
+{
+    "test_id": "test_76",
+    "section": "C.2",
+    "description": "Tests multiple input redirections where the first file does not exist. The command should not execute.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

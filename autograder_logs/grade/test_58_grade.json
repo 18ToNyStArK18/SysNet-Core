@@ -1,0 +1,8 @@
+{
+    "test_id": "test_58",
+    "section": "B.3",
+    "description": "Tests that using 'log execute' runs a command from history but does not alter the history itself.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

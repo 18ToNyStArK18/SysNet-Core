@@ -1,0 +1,8 @@
+{
+    "test_id": "test_34",
+    "section": "A.3",
+    "description": "Tests for 'Invalid Syntax!' when a command group after a semicolon starts with a redirection operator instead of a command name.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

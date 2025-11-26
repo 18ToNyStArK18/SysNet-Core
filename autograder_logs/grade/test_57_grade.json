@@ -1,0 +1,14 @@
+{
+    "test_id": "test_57",
+    "section": "B.2",
+    "description": "Tests the default (no flags) output format of reveal, which should be space-separated and lexicographically sorted.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "reveal test/folder3",
+        "reason": "Mismatch at sequential line 0",
+        "expected": "^file7.txt\\\\s+file8.txt\\\\s+file9.txt$",
+        "actual": "file7.txt  file8.txt  file9.txt  "
+    },
+    "score": 0.0
+}

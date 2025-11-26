@@ -1,0 +1,49 @@
+{
+    "testcase": {
+        "section": "E.2",
+        "description": "Tests ping command with a non-numeric signal number.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "ping 12345 abc",
+                "sequential_outputs": [
+                    {
+                        "text": "Invalid syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:34:03.077239+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:34:03.077593+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='ping 12345 abc', sequential_outputs=[Line(text='Invalid syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:34:03.129792+05:30",
+            "type": "output",
+            "details": "No such process found!"
+        },
+        {
+            "time": "2025-11-19T22:34:03.130240+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> ping 12345 abc\nNo such process found!\r\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:34:02,523 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f014eab800>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_cb7e0fee91444c978d23dac1b694eb99', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpn55nttx8:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2795139\n    child_fd: 129\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193400>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:34:03,077 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:03.077239+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:34:03,077 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:03.077593+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='ping 12345 abc', sequential_outputs=[Line(text='Invalid syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:34:03,129 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:03.129792+05:30\",\n        \"type\": \"output\",\n        \"details\": \"No such process found!\"\n    }\n2025-11-19 22:34:03,130 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:03.130240+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:34:03,640 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - WARNING - Failed to remove container tester_cb7e0fee91444c978d23dac1b694eb99: 409 Client Error for http+docker://localhost/v1.51/containers/b8392b64fd1b2721845821e8254c364b8917fcce4d0bc3326d7acf8cb66d8268?v=False&link=False&force=True: Conflict (\"removal of container b8392b64fd1b2721845821e8254c364b8917fcce4d0bc3326d7acf8cb66d8268 is already in progress\")\n2025-11-19 22:34:03,640 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f014eab800>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_cb7e0fee91444c978d23dac1b694eb99', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpn55nttx8:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: None\n    flag_eof: False\n    pid: 2795139\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193400>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:34:03,640 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmpn55nttx8\n"
+}

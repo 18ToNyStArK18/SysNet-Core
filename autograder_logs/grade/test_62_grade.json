@@ -1,0 +1,14 @@
+{
+    "test_id": "test_62",
+    "section": "B.3",
+    "description": "Tests that the log command prints a syntax error for various invalid argument combinations.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "log foo",
+        "reason": "Insufficient output lines for sequential check.",
+        "expected": 1,
+        "actual": 0
+    },
+    "score": 0.0
+}

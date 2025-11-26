@@ -1,0 +1,61 @@
+{
+    "testcase": {
+        "section": "E.3",
+        "description": "Tests that Ctrl+C (SIGINT) terminates the foreground process but not the shell.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "sleep 5",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": true,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "code": "c"
+            },
+            {
+                "expect_exit": false,
+                "cmd": "echo Shell is still alive",
+                "sequential_outputs": [
+                    {
+                        "text": "Shell is still alive",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 3.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:34:05.046243+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:34:05.046642+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='sleep 5', sequential_outputs=[], nonsequential_outputs=[], ignore_output=True, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:34:08.099793+05:30",
+            "type": "timeout",
+            "details": "Child timed out:\n    <pexpect.pty_spawn.spawn object at 0x78f014e35670>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_4567544fd40445c385283e7c34d2834a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmplwqusz2r:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.TIMEOUT'>\n    match: <class 'pexpect.exceptions.TIMEOUT'>\n    match_index: 3\n    exitstatus: None\n    flag_eof: False\n    pid: 2801516\n    child_fd: 132\n    closed: False\n    timeout: 3.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193400>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1"
+        },
+        {
+            "time": "2025-11-19T22:34:11.100694+05:30",
+            "type": "error",
+            "details": "Error while reading child's final output: Timeout exceeded.\n<pexpect.pty_spawn.spawn object at 0x78f014e35670>\ncommand: /usr/bin/docker\nargs: [b'/usr/bin/docker', b'run', b'--name', b'tester_4567544fd40445c385283e7c34d2834a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmplwqusz2r:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\nbuffer (last 100 chars): '<(null)@osntesting:~> '\nbefore (last 100 chars): '<(null)@osntesting:~> '\nafter: <class 'pexpect.exceptions.TIMEOUT'>\nmatch: None\nmatch_index: None\nexitstatus: None\nflag_eof: False\npid: 2801516\nchild_fd: 132\nclosed: False\ntimeout: 3.0\ndelimiter: <class 'pexpect.exceptions.EOF'>\nlogfile: <tester.FlexibleIO object at 0x78f017193400>\nlogfile_read: None\nlogfile_send: None\nmaxread: 2000\nignorecase: False\nsearchwindowsize: None\ndelaybeforesend: 0.05\ndelayafterclose: 0.1\ndelayafterterminate: 0.1\nsearcher: searcher_re:\n    0: EOF"
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> sleep 5\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:34:04,727 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f014e35670>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_4567544fd40445c385283e7c34d2834a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmplwqusz2r:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2801516\n    child_fd: 132\n    closed: False\n    timeout: 3.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193400>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:34:05,046 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:05.046243+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:34:05,046 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:05.046642+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='sleep 5', sequential_outputs=[], nonsequential_outputs=[], ignore_output=True, cwd_after=None)\"\n    }\n2025-11-19 22:34:08,099 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:08.099793+05:30\",\n        \"type\": \"timeout\",\n        \"details\": \"Child timed out:\\n    <pexpect.pty_spawn.spawn object at 0x78f014e35670>\\n    command: /usr/bin/docker\\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_4567544fd40445c385283e7c34d2834a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmplwqusz2r:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\\n    buffer (last 100 chars): ''\\n    before (last 100 chars): ''\\n    after: <class 'pexpect.exceptions.TIMEOUT'>\\n    match: <class 'pexpect.exceptions.TIMEOUT'>\\n    match_index: 3\\n    exitstatus: None\\n    flag_eof: False\\n    pid: 2801516\\n    child_fd: 132\\n    closed: False\\n    timeout: 3.0\\n    delimiter: <class 'pexpect.exceptions.EOF'>\\n    logfile: <tester.FlexibleIO object at 0x78f017193400>\\n    logfile_read: None\\n    logfile_send: None\\n    maxread: 2000\\n    ignorecase: False\\n    searchwindowsize: None\\n    delaybeforesend: 0.05\\n    delayafterclose: 0.1\\n    delayafterterminate: 0.1\"\n    }\n2025-11-19 22:34:08,100 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Exit event received, raising ChildProcessExited\n2025-11-19 22:34:11,100 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:34:11.100694+05:30\",\n        \"type\": \"error\",\n        \"details\": \"Error while reading child's final output: Timeout exceeded.\\n<pexpect.pty_spawn.spawn object at 0x78f014e35670>\\ncommand: /usr/bin/docker\\nargs: [b'/usr/bin/docker', b'run', b'--name', b'tester_4567544fd40445c385283e7c34d2834a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmplwqusz2r:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\\nbuffer (last 100 chars): '<(null)@osntesting:~> '\\nbefore (last 100 chars): '<(null)@osntesting:~> '\\nafter: <class 'pexpect.exceptions.TIMEOUT'>\\nmatch: None\\nmatch_index: None\\nexitstatus: None\\nflag_eof: False\\npid: 2801516\\nchild_fd: 132\\nclosed: False\\ntimeout: 3.0\\ndelimiter: <class 'pexpect.exceptions.EOF'>\\nlogfile: <tester.FlexibleIO object at 0x78f017193400>\\nlogfile_read: None\\nlogfile_send: None\\nmaxread: 2000\\nignorecase: False\\nsearchwindowsize: None\\ndelaybeforesend: 0.05\\ndelayafterclose: 0.1\\ndelayafterterminate: 0.1\\nsearcher: searcher_re:\\n    0: EOF\"\n    }\n2025-11-19 22:34:11,497 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Force removed container tester_4567544fd40445c385283e7c34d2834a\n2025-11-19 22:34:11,497 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f014e35670>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_4567544fd40445c385283e7c34d2834a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmplwqusz2r:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): '<(null)@osntesting:~> '\n    before (last 100 chars): '<(null)@osntesting:~> '\n    after: <class 'pexpect.exceptions.TIMEOUT'>\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2801516\n    child_fd: 132\n    closed: False\n    timeout: 3.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017193400>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:34:11,497 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmplwqusz2r\n"
+}

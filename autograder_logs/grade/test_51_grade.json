@@ -1,0 +1,14 @@
+{
+    "test_id": "test_51",
+    "section": "B.2",
+    "description": "Tests reveal with a relative path argument to list contents of another directory.",
+    "passed": false,
+    "failure": {
+        "step_index": 1,
+        "command": "reveal ../folder2",
+        "reason": "Mismatch at sequential line 0",
+        "expected": "file6.txt",
+        "actual": "file6.txt  "
+    },
+    "score": 0.0
+}

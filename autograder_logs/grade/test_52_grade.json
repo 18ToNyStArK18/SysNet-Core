@@ -1,0 +1,8 @@
+{
+    "test_id": "test_52",
+    "section": "B.2",
+    "description": "Tests the 'reveal -l' flag to ensure it lists non-hidden items in a sorted, line-by-line format.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

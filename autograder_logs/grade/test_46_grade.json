@@ -1,0 +1,8 @@
+{
+    "test_id": "test_46",
+    "section": "B.1",
+    "description": "Tests that `hop -` correctly swaps between the two most recent directories upon repeated use.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

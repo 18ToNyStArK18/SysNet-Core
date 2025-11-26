@@ -1,0 +1,8 @@
+{
+    "test_id": "test_63",
+    "section": "B.3",
+    "description": "Tests that log-related commands (log, log purge, log execute) are not themselves added to the command history.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

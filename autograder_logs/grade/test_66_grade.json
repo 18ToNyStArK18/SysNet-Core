@@ -1,0 +1,14 @@
+{
+    "test_id": "test_66",
+    "section": "B.3",
+    "description": "Tests that executing a `hop` command from history correctly changes the CWD and does not alter the history.",
+    "passed": false,
+    "failure": {
+        "step_index": 5,
+        "command": "pwd",
+        "reason": "Mismatch at sequential line 0",
+        "expected": "/app/test/folder2",
+        "actual": "/app/test/folder1"
+    },
+    "score": 0.0
+}

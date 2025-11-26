@@ -1,0 +1,8 @@
+{
+    "test_id": "test_86",
+    "section": "C.3",
+    "description": "Tests combined input and append-output redirection to the same file.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

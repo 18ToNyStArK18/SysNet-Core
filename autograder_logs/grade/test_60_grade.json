@@ -1,0 +1,8 @@
+{
+    "test_id": "test_60",
+    "section": "B.3",
+    "description": "Tests the 15-command history limit and ensures sequential duplicate commands are not logged.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

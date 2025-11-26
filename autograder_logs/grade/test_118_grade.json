@@ -1,0 +1,8 @@
+{
+    "test_id": "test_118",
+    "section": "E.3",
+    "description": "Tests that Ctrl+D on an empty line exits the shell. Note: This does not check for the 'logout' message.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

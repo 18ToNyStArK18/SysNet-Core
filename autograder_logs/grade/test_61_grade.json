@@ -1,0 +1,14 @@
+{
+    "test_id": "test_61",
+    "section": "B.3",
+    "description": "Tests 'log execute' with out-of-bounds indices (e.g., > history size, 0), which should result in no action.",
+    "passed": false,
+    "failure": {
+        "step_index": 4,
+        "command": "pwd",
+        "reason": "Mismatch at sequential line 0",
+        "expected": "/app",
+        "actual": "/app/test"
+    },
+    "score": 0.0
+}

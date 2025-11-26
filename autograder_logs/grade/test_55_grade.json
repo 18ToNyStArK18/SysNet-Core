@@ -1,0 +1,8 @@
+{
+    "test_id": "test_55",
+    "section": "B.2",
+    "description": "Tests that `reveal` on a file path produces a 'No such directory!' error, as it can only operate on directories.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,14 @@
+{
+    "test_id": "test_53",
+    "section": "B.2",
+    "description": "Tests the behavior of 'reveal -', checking for the correct error when no previous directory exists and for correct listing otherwise.",
+    "passed": false,
+    "failure": {
+        "step_index": 3,
+        "command": "reveal -",
+        "reason": "Insufficient output lines for sequential check.",
+        "expected": 2,
+        "actual": 1
+    },
+    "score": 0.0
+}

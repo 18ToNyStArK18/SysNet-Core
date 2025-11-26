@@ -1,0 +1,60 @@
+{
+    "testcase": {
+        "section": "C.2",
+        "description": "Tests that the shell checks for command existence before handling file redirection.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "cmd": "nonexistentcommand < test/file4.txt",
+                "sequential_outputs": [
+                    {
+                        "text": "Command not found!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [
+                    {
+                        "text": "No such file or directory",
+                        "is_re": false,
+                        "negative_match": true
+                    },
+                    {
+                        "text": "cannot open",
+                        "is_re": false,
+                        "negative_match": true
+                    }
+                ],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": true
+    },
+    "events": [
+        {
+            "time": "2025-11-19T22:32:58.614243+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        },
+        {
+            "time": "2025-11-19T22:32:58.614564+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, cmd='nonexistentcommand < test/file4.txt', sequential_outputs=[Line(text='Command not found!', is_re=False, negative_match=False)], nonsequential_outputs=[Line(text='No such file or directory', is_re=False, negative_match=True), Line(text='cannot open', is_re=False, negative_match=True)], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-19T22:32:58.670451+05:30",
+            "type": "output",
+            "details": "Command not found!"
+        },
+        {
+            "time": "2025-11-19T22:32:58.670737+05:30",
+            "type": "output",
+            "details": "<(null)@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<(null)@osntesting:~> nonexistentcommand < test/file4.txt\nCommand not found!\r\n<(null)@osntesting:~> ",
+    "py_log": "2025-11-19 22:32:58,218 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x78f014ec14f0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_224678ccb39d44d69dcf1bec91562127', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpzg047v7e:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2611577\n    child_fd: 131\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017192c80>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:32:58,614 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:58.614243+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:32:58,614 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:58.614564+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, cmd='nonexistentcommand < test/file4.txt', sequential_outputs=[Line(text='Command not found!', is_re=False, negative_match=False)], nonsequential_outputs=[Line(text='No such file or directory', is_re=False, negative_match=True), Line(text='cannot open', is_re=False, negative_match=True)], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-19 22:32:58,670 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:58.670451+05:30\",\n        \"type\": \"output\",\n        \"details\": \"Command not found!\"\n    }\n2025-11-19 22:32:58,670 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-19T22:32:58.670737+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<(null)@osntesting:~> \"\n    }\n2025-11-19 22:32:59,075 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x78f014ec14f0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_224678ccb39d44d69dcf1bec91562127', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpzg047v7e:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<(null)@osntesting:~> '\n    match: <re.Match object; span=(0, 22), match='<(null)@osntesting:~> '>\n    match_index: 0\n    exitstatus: 129\n    flag_eof: False\n    pid: 2611577\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x78f017192c80>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-19 22:32:59,076 - tester.a9cbcfaa-7ef9-48b0-9077-f11b783e5ebb - INFO - Cleaned up temp_dir: /tmp/tmpzg047v7e\n"
+}

@@ -1,0 +1,14 @@
+{
+    "test_id": "test_1",
+    "section": "A.2",
+    "description": "Checks if the shell can handle a single empty input (user pressing enter).",
+    "passed": false,
+    "failure": {
+        "step_index": -1,
+        "command": "Global Execution",
+        "reason": "Test runner encountered an error (see raw logs).",
+        "expected": null,
+        "actual": null
+    },
+    "score": 0.0
+}

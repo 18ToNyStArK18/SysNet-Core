@@ -1,0 +1,8 @@
+{
+    "test_id": "test_48",
+    "section": "B.2",
+    "description": "Tests 'reveal -al' to ensure it lists all files and directories, including hidden ones, in a line-by-line and lexicographically sorted format.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

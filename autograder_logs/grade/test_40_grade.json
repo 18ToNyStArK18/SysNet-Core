@@ -1,0 +1,8 @@
+{
+    "test_id": "test_40",
+    "section": "B.1",
+    "description": "Tests that hop handles an attempt to change directory into a file, which should fail.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

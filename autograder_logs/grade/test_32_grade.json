@@ -1,0 +1,8 @@
+{
+    "test_id": "test_32",
+    "section": "A.3",
+    "description": "Tests valid syntax for a command that ends with a semicolon followed by a background operator.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

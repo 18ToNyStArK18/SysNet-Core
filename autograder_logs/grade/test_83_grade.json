@@ -1,0 +1,14 @@
+{
+    "test_id": "test_83",
+    "section": "C.3",
+    "description": "Tests that output redirection does not redirect stderr. The error from ls should be printed to the terminal, and the output file should be empty.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "ls non_existent_dir > out.txt",
+        "reason": "Insufficient output lines for sequential check.",
+        "expected": 1,
+        "actual": 0
+    },
+    "score": 0.0
+}

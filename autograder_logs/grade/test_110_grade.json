@@ -1,0 +1,14 @@
+{
+    "test_id": "test_110",
+    "section": "E.1",
+    "description": "Checks if activities correctly lists a single running background process.",
+    "passed": false,
+    "failure": {
+        "step_index": 1,
+        "command": "activities",
+        "reason": "Insufficient output lines for sequential check.",
+        "expected": 1,
+        "actual": 2
+    },
+    "score": 0.0
+}
