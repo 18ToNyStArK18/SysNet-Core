@@ -1,0 +1,8 @@
+{
+    "test_id": "test_95",
+    "section": "C.4",
+    "description": "Tests that output redirection on a non-final command in a pipeline correctly redirects that command's output, starving the next command in the pipe.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

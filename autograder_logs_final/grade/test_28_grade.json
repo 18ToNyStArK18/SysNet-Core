@@ -1,0 +1,8 @@
+{
+    "test_id": "test_28",
+    "section": "A.3",
+    "description": "Tests a complex but valid command involving pipes, redirections, sequential, and background operators.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

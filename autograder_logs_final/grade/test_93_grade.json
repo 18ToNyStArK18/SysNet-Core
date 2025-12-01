@@ -1,0 +1,14 @@
+{
+    "test_id": "test_93",
+    "section": "C.4",
+    "description": "Tests that stderr from a piped command is not redirected to the next command.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "ls /nonexistent | wc -c",
+        "reason": "Incorrect number of output lines for sequential check.",
+        "expected": 2,
+        "actual": 1
+    },
+    "score": 0.0
+}

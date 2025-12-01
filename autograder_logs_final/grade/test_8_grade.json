@@ -1,0 +1,8 @@
+{
+    "test_id": "test_8",
+    "section": "A.3",
+    "description": "Tests a complex but valid chain of commands involving pipes, sequential execution, and backgrounding.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

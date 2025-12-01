@@ -1,0 +1,8 @@
+{
+    "test_id": "test_39",
+    "section": "B.1",
+    "description": "Tests that hop prints an error and does not change the current working directory when the target directory does not exist.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,8 @@
+{
+    "test_id": "test_71",
+    "section": "C.2",
+    "description": "Tests basic input redirection. The content of file4.txt should be printed.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

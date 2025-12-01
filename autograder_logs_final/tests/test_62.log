@@ -1,0 +1,145 @@
+{
+    "testcase": {
+        "section": "B.3",
+        "description": "Tests that the log command prints a syntax error for various invalid argument combinations.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "log foo",
+                "sequential_outputs": [
+                    {
+                        "text": "log: Invalid Syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "log execute",
+                "sequential_outputs": [
+                    {
+                        "text": "log: Invalid Syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "log execute foo",
+                "sequential_outputs": [
+                    {
+                        "text": "log: Invalid Syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "log purge bar",
+                "sequential_outputs": [
+                    {
+                        "text": "log: Invalid Syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "log log",
+                "sequential_outputs": [
+                    {
+                        "text": "log: Invalid Syntax!",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-30T06:44:20.803043+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:44:20.803225+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log foo', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:44:20.902608+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:44:20.902993+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log execute', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:44:21.087724+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:44:21.088121+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log execute foo', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:44:21.247026+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:44:21.247408+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log purge bar', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:44:21.457988+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:44:21.458397+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log log', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:44:21.640231+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> log foo\n<osnuser@osntesting:~> log execute\n<osnuser@osntesting:~> log execute foo\n<osnuser@osntesting:~> log purge bar\n<osnuser@osntesting:~> log log\n<osnuser@osntesting:~> ",
+    "py_log": "2025-11-30 06:44:19,785 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x79848a36cb90>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_6e2fff15fda14c47b57c53c32a67066a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpqy5rs1jk:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2202519\n    child_fd: 210\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x79851bf22440>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:44:20,803 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:20.803043+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:44:20,803 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:20.803225+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log foo', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:44:20,902 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:20.902608+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:44:20,903 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:20.902993+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log execute', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:44:21,087 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.087724+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:44:21,088 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.088121+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log execute foo', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:44:21,247 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.247026+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:44:21,247 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.247408+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log purge bar', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:44:21,458 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.457988+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:44:21,458 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.458397+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='log log', sequential_outputs=[Line(text='log: Invalid Syntax!', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:44:21,640 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:44:21.640231+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:44:22,052 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x79848a36cb90>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_6e2fff15fda14c47b57c53c32a67066a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpqy5rs1jk:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<osnuser@osntesting:~> '\n    match: <re.Match object; span=(0, 23), match='<osnuser@osntesting:~> '>\n    match_index: 0\n    exitstatus: 129\n    flag_eof: False\n    pid: 2202519\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x79851bf22440>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:44:22,111 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Cleaned up temp_dir: /tmp/tmpqy5rs1jk\n"
+}

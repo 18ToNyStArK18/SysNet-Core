@@ -1,0 +1,14 @@
+{
+    "test_id": "test_94",
+    "section": "C.4",
+    "description": "Tests a pipeline where the first command is invalid, ensuring subsequent commands still run.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "nonexistentcommand | wc -l",
+        "reason": "Incorrect number of output lines for sequential check.",
+        "expected": 2,
+        "actual": 1
+    },
+    "score": 0.0
+}

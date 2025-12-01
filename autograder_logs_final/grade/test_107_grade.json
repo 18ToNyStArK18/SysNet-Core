@@ -1,0 +1,14 @@
+{
+    "test_id": "test_107",
+    "section": "D.2",
+    "description": "Tests a background command that involves both a pipe and output redirection.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "ls test | sort -r > bg_out.txt &",
+        "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+        "expected": null,
+        "actual": ""
+    },
+    "score": 0.0
+}

@@ -1,0 +1,1205 @@
+{
+    "results": [
+        {
+            "test_id": "test_0",
+            "section": "A.1",
+            "description": "Checks if the shell displays the correct initial prompt. The home directory is /app, so the prompt should display ~.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_1",
+            "section": "A.2",
+            "description": "Checks if the shell can handle a single empty input (user pressing enter).",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_2",
+            "section": "A.2",
+            "description": "Checks if the shell can handle multiple consecutive empty inputs.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_3",
+            "section": "A.2",
+            "description": "Checks if the shell accepts a simple line of text as a syntactically valid command.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_4",
+            "section": "A.2",
+            "description": "Tests if the shell can handle a very long but syntactically valid input.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_5",
+            "section": "A.2",
+            "description": "Checks if the shell can handle an input containing only whitespace characters.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_6",
+            "section": "A.3",
+            "description": "Tests a simple valid command syntax. The shell should not output 'Invalid Syntax!'.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_7",
+            "section": "A.3",
+            "description": "Tests a valid command with excessive whitespace between tokens.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_8",
+            "section": "A.3",
+            "description": "Tests a complex but valid chain of commands involving pipes, sequential execution, and backgrounding.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_9",
+            "section": "A.3",
+            "description": "Tests valid syntax with various operators and no spaces between tokens.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "a<f1|b>f2;c>>f3&",
+                "reason": "Found forbidden output: 'Invalid Syntax!'",
+                "expected": null,
+                "actual": "Invalid Syntax!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_10",
+            "section": "A.3",
+            "description": "Tests valid syntax with multiple background operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_11",
+            "section": "A.3",
+            "description": "Tests a long, valid chain of sequential commands ending in a background operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_12",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a leading pipe operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_13",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a trailing semicolon operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_14",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with consecutive pipe operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_15",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with consecutive semicolon operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_16",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a pipe followed by a semicolon.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_17",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a background operator followed by a semicolon.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_18",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with an incomplete output redirection.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_19",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' where an input redirection is immediately followed by a pipe.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_20",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with empty commands between semicolons.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_21",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' when an operator is used as a filename for redirection.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_22",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a trailing pipe operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_23",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with consecutive background operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_24",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a leading semicolon operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_25",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with consecutive output redirection operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_26",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with consecutive input redirection operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_27",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' with a background operator immediately followed by a pipe.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_28",
+            "section": "A.3",
+            "description": "Tests a complex but valid command involving pipes, redirections, sequential, and background operators.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_29",
+            "section": "A.3",
+            "description": "Tests valid syntax with no spaces between a command, an input redirection, and an output redirection.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "cmd<in>out",
+                "reason": "Found forbidden output: 'Invalid Syntax!'",
+                "expected": null,
+                "actual": "Invalid Syntax!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_30",
+            "section": "A.3",
+            "description": "Tests valid syntax with filenames/command names containing special characters permitted by the grammar.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_31",
+            "section": "A.3",
+            "description": "Tests valid syntax where multiple I/O redirections are used in a single command. The shell should accept this syntax.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "a<f1>f2<f3>>f4",
+                "reason": "Found forbidden output: 'Invalid Syntax!'",
+                "expected": null,
+                "actual": "Invalid Syntax!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_32",
+            "section": "A.3",
+            "description": "Tests valid syntax for a command that ends with a semicolon followed by a background operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_33",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' when a redirection operator is not followed by a filename but by another operator.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_34",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' when a command group after a semicolon starts with a redirection operator instead of a command name.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_35",
+            "section": "A.3",
+            "description": "Tests a valid command and arguments containing various special characters allowed by the grammar for a 'name'.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_36",
+            "section": "A.3",
+            "description": "Tests for 'Invalid Syntax!' when a pipe is followed by a background operator where a command is expected.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_37",
+            "section": "A.3",
+            "description": "Tests a complex but valid command string with a mix of sequential, background, and pipe operators without spaces.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_38",
+            "section": "B.1",
+            "description": "Tests sequential execution of multiple arguments for the hop command, including relative paths, parent directories, and the previous directory.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_39",
+            "section": "B.1",
+            "description": "Tests that hop prints an error and does not change the current working directory when the target directory does not exist.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_40",
+            "section": "B.1",
+            "description": "Tests that hop handles an attempt to change directory into a file, which should fail.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_41",
+            "section": "B.1",
+            "description": "Tests hop with a complex relative path involving parent directory navigation.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_42",
+            "section": "B.1",
+            "description": "Tests that 'hop' with no arguments and 'hop ~' both change the CWD to the home directory.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_43",
+            "section": "B.1",
+            "description": "Tests that 'hop -' does nothing if no previous working directory is stored.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_44",
+            "section": "B.1",
+            "description": "Tests sequential 'hop' arguments where one is invalid. The valid hops before and after the invalid one should still execute.",
+            "passed": false,
+            "failure": {
+                "step_index": 1,
+                "command": "pwd",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "/app/test/folder2",
+                "actual": "/app/test/folder1"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_45",
+            "section": "B.1",
+            "description": "Tests `hop` with absolute paths, the special `.` path, and navigating to the root directory.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_46",
+            "section": "B.1",
+            "description": "Tests that `hop -` correctly swaps between the two most recent directories upon repeated use.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_47",
+            "section": "B.1",
+            "description": "Tests that `hop` prints an error for each invalid directory in a sequence and successfully navigates to the valid ones.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "hop test/folder1 invalid1 test/folder2 invalid2",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 2,
+                "actual": 1
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_48",
+            "section": "B.2",
+            "description": "Tests 'reveal -al' to ensure it lists all files and directories, including hidden ones, in a line-by-line and lexicographically sorted format.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_49",
+            "section": "B.2",
+            "description": "Tests that reveal prints a syntax error when more than one path argument is provided.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_50",
+            "section": "B.2",
+            "description": "Tests reveal on an empty directory, both with and without the -a flag.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_51",
+            "section": "B.2",
+            "description": "Tests reveal with a relative path argument to list contents of another directory.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_52",
+            "section": "B.2",
+            "description": "Tests the 'reveal -l' flag to ensure it lists non-hidden items in a sorted, line-by-line format.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_53",
+            "section": "B.2",
+            "description": "Tests the behavior of 'reveal -', checking for the correct error when no previous directory exists and for correct listing otherwise.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_54",
+            "section": "B.2",
+            "description": "Tests that reveal lists files in lexicographical (ASCII) order.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_55",
+            "section": "B.2",
+            "description": "Tests that `reveal` on a file path produces a 'No such directory!' error, as it can only operate on directories.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_56",
+            "section": "B.2",
+            "description": "Tests `reveal` using special path arguments like '.', '..', and '~' to list contents of the current, parent, and home directories.",
+            "passed": false,
+            "failure": {
+                "step_index": 4,
+                "command": "reveal -l ~",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 2,
+                "actual": 5
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_57",
+            "section": "B.2",
+            "description": "Tests the default (no flags) output format of reveal, which should be space-separated and lexicographically sorted.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_58",
+            "section": "B.3",
+            "description": "Tests that using 'log execute' runs a command from history but does not alter the history itself.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_59",
+            "section": "B.3",
+            "description": "Tests if command history persists across shell restarts and if 'log purge' correctly clears it.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_60",
+            "section": "B.3",
+            "description": "Tests the 15-command history limit and ensures sequential duplicate commands are not logged.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_61",
+            "section": "B.3",
+            "description": "Tests 'log execute' with out-of-bounds indices (e.g., > history size, 0), which should result in no action.",
+            "passed": false,
+            "failure": {
+                "step_index": 2,
+                "command": "log execute 3",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "log: Invalid Syntax!",
+                "actual": "Command not found!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_62",
+            "section": "B.3",
+            "description": "Tests that the log command prints a syntax error for various invalid argument combinations.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "log foo",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 0
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_63",
+            "section": "B.3",
+            "description": "Tests that log-related commands (log, log purge, log execute) are not themselves added to the command history.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_64",
+            "section": "B.3",
+            "description": "Tests the 1-based indexing of 'log execute', which should count from newest to oldest command.",
+            "passed": false,
+            "failure": {
+                "step_index": 6,
+                "command": "pwd",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "/app/test/folder1",
+                "actual": "/app/test/folder3"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_65",
+            "section": "B.3",
+            "description": "Tests that `log` stores commands that are duplicates but not sequential, while ignoring sequential duplicates.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_66",
+            "section": "B.3",
+            "description": "Tests that executing a `hop` command from history correctly changes the CWD and does not alter the history.",
+            "passed": false,
+            "failure": {
+                "step_index": 3,
+                "command": "pwd",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "/app/test/folder1",
+                "actual": "/app/test/folder2"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_67",
+            "section": "B.3",
+            "description": "Tests `log` commands on a fresh shell with no history to ensure they execute without error and produce no output.",
+            "passed": false,
+            "failure": {
+                "step_index": 2,
+                "command": "log execute 1",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 0
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_68",
+            "section": "C.1",
+            "description": "Tests the execution of a simple, valid command (ls). The shell should not output 'Command not found!'.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_69",
+            "section": "C.1",
+            "description": "Tests that a non-existent command prints 'Command not found!'.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_70",
+            "section": "C.1",
+            "description": "Tests execution of a command specified with an absolute path.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_71",
+            "section": "C.2",
+            "description": "Tests basic input redirection. The content of file4.txt should be printed.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_72",
+            "section": "C.2",
+            "description": "Tests input redirection from a non-existent file, expecting an error.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_73",
+            "section": "C.2",
+            "description": "Tests that for multiple input redirections, only the last one takes effect.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_74",
+            "section": "C.2",
+            "description": "Tests that the shell checks for command existence before handling file redirection.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_75",
+            "section": "C.2",
+            "description": "Tests input redirection without a space between the operator and the filename.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_76",
+            "section": "C.2",
+            "description": "Tests multiple input redirections where the first file does not exist. The command should not execute.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_77",
+            "section": "C.2",
+            "description": "Tests that redirecting input from a directory results in an error.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "cat < test/folder1",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 0
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_78",
+            "section": "C.3",
+            "description": "Tests basic output redirection. Creates a file and verifies its content.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_79",
+            "section": "C.3",
+            "description": "Tests that '>>' appends to a file rather than overwriting it.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_80",
+            "section": "C.3",
+            "description": "Tests output redirection to a file in a non-existent directory.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_81",
+            "section": "C.3",
+            "description": "Tests that input redirection does not run a command if the file is not found.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_82",
+            "section": "C.3",
+            "description": "Tests that for multiple mixed output redirections, only the last one takes effect.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_83",
+            "section": "C.3",
+            "description": "Tests that output redirection does not redirect stderr. The error from ls should be printed to the terminal, and the output file should be empty.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ls non_existent_dir > out.txt",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 0
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_84",
+            "section": "C.3",
+            "description": "Tests that the append output redirection operator '>>' creates a new file if it does not exist.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_85",
+            "section": "C.3",
+            "description": "Tests that redirecting output to a directory results in an error.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_86",
+            "section": "C.3",
+            "description": "Tests combined input and append-output redirection to the same file.",
+            "passed": false,
+            "failure": {
+                "step_index": 1,
+                "command": "cat < same_file.txt >> same_file.txt",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 0
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_87",
+            "section": "C.4",
+            "description": "Tests a simple pipe to filter the output of ls.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_88",
+            "section": "C.4",
+            "description": "Tests a three-command pipeline.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_89",
+            "section": "C.4",
+            "description": "Tests a pipeline combined with both input and output redirection.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_90",
+            "section": "C.4",
+            "description": "Tests a pipeline where a command in the middle is not found. The pipeline should still execute.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ls test | nonexistentcommand | wc -l",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 2,
+                "actual": 1
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_91",
+            "section": "C.4",
+            "description": "Tests a pipeline with input redirection on the first command and output redirection on the last.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_92",
+            "section": "C.4",
+            "description": "Tests a long pipeline to ensure multiple pipes are handled correctly.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_93",
+            "section": "C.4",
+            "description": "Tests that stderr from a piped command is not redirected to the next command.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ls /nonexistent | wc -c",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 2,
+                "actual": 1
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_94",
+            "section": "C.4",
+            "description": "Tests a pipeline where the first command is invalid, ensuring subsequent commands still run.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "nonexistentcommand | wc -l",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 2,
+                "actual": 1
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_95",
+            "section": "C.4",
+            "description": "Tests that output redirection on a non-final command in a pipeline correctly redirects that command's output, starving the next command in the pipe.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_96",
+            "section": "D.1",
+            "description": "Tests basic sequential execution with two simple commands.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_97",
+            "section": "D.1",
+            "description": "Tests that sequential execution continues after a command fails.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_98",
+            "section": "D.1",
+            "description": "Tests sequential execution where commands involve pipes and I/O redirection.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_99",
+            "section": "D.1",
+            "description": "Tests that state changes (CWD) are maintained across commands in a single sequential execution string.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_100",
+            "section": "D.1",
+            "description": "Tests a long sequence of simple commands to ensure they are all executed in the correct order.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_101",
+            "section": "D.2",
+            "description": "Tests a simple background command, checking for the job ID and the subsequent completion message.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "sleep 1 &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_102",
+            "section": "D.2",
+            "description": "Tests that a background command that fails produces an 'exited abnormally' message.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "false &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_103",
+            "section": "D.2",
+            "description": "Tests a sequential command followed by a background command, ensuring the first part waits and the second does not.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_104",
+            "section": "D.2",
+            "description": "Tests the '& ;' operator sequence to ensure one command is backgrounded and the next is run in the foreground.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_105",
+            "section": "D.2",
+            "description": "Tests running a command with pipes in the background and checks for multiple cleanup messages.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ls -1 test | wc -l > meow.txt &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_106",
+            "section": "D.2",
+            "description": "Tests that a non-existent command run in the background fails gracefully.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_107",
+            "section": "D.2",
+            "description": "Tests a background command that involves both a pipe and output redirection.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ls test | sort -r > bg_out.txt &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_108",
+            "section": "D.2",
+            "description": "Tests that a background process is correctly detached from terminal input, causing it to receive an immediate EOF.",
+            "passed": false,
+            "failure": {
+                "step_index": 2,
+                "command": "ps aux | grep cat | grep -v grep",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 0
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_109",
+            "section": "E.1",
+            "description": "Checks if the activities command works correctly when no background processes are running.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_110",
+            "section": "E.1",
+            "description": "Checks if activities correctly lists a single running background process.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "sleep 2 &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_111",
+            "section": "E.1",
+            "description": "Checks if activities correctly lists multiple running background processes in lexicographical order.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "sleep 2 &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_112",
+            "section": "E.1",
+            "description": "Checks if activities correctly lists a stopped process after sending SIGTSTP (Ctrl+Z).",
+            "passed": false,
+            "failure": {
+                "step_index": 2,
+                "command": "Sequence Check",
+                "reason": "Expected 3 commands, but executed 2.",
+                "expected": null,
+                "actual": null
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_113",
+            "section": "E.1",
+            "description": "Checks if activities correctly removes a process from its list after it has terminated.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "sleep 0.5 &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_114",
+            "section": "E.2",
+            "description": "Tests ping command with a PID that does not exist.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ping 99999 9",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "No such process found",
+                "actual": "No such process found!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_115",
+            "section": "E.2",
+            "description": "Tests ping command with a non-numeric signal number.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ping 12345 abc",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "Invalid syntax!",
+                "actual": "No such process found!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_116",
+            "section": "E.2",
+            "description": "Tests ping command with missing arguments.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "ping",
+                "reason": "Mismatch at sequential line 0",
+                "expected": "Invalid syntax!",
+                "actual": "Command not found!"
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_117",
+            "section": "E.3",
+            "description": "Tests that Ctrl+C (SIGINT) terminates the foreground process but not the shell.",
+            "passed": false,
+            "failure": {
+                "step_index": 2,
+                "command": "Sequence Check",
+                "reason": "Expected 3 commands, but executed 2.",
+                "expected": null,
+                "actual": null
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_118",
+            "section": "E.3",
+            "description": "Tests that Ctrl+D on an empty line exits the shell. Note: This does not check for the 'logout' message.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_119",
+            "section": "E.3",
+            "description": "Tests that Ctrl+D kills background jobs before exiting.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_120",
+            "section": "E.4",
+            "description": "Tests that 'bg' command resumes a stopped job in the background.",
+            "passed": false,
+            "failure": {
+                "step_index": 2,
+                "command": "Sequence Check",
+                "reason": "Expected 4 commands, but executed 2.",
+                "expected": null,
+                "actual": null
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_121",
+            "section": "E.4",
+            "description": "Tests that running 'bg' on an already running job produces an error.",
+            "passed": false,
+            "failure": {
+                "step_index": 1,
+                "command": "bg 1",
+                "reason": "Incorrect number of output lines for sequential check.",
+                "expected": 1,
+                "actual": 2
+            },
+            "score": 0.0
+        },
+        {
+            "test_id": "test_122",
+            "section": "E.4",
+            "description": "Tests that running 'bg' on a non-existent job number produces an error.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_123",
+            "section": "E.4",
+            "description": "Tests that 'fg' brings a background job to the foreground and waits for it.",
+            "passed": true,
+            "failure": null,
+            "score": 1.0
+        },
+        {
+            "test_id": "test_124",
+            "section": "E.4",
+            "description": "Tests that 'fg' without a job number brings the most recently created job to the foreground.",
+            "passed": false,
+            "failure": {
+                "step_index": 0,
+                "command": "sleep 4 &",
+                "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+                "expected": null,
+                "actual": ""
+            },
+            "score": 0.0
+        }
+    ],
+    "total_tests": 125,
+    "passed_tests": 92,
+    "failed_tests": 33
+}

@@ -1,0 +1,8 @@
+{
+    "test_id": "test_30",
+    "section": "A.3",
+    "description": "Tests valid syntax with filenames/command names containing special characters permitted by the grammar.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

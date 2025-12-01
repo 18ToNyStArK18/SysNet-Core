@@ -1,0 +1,8 @@
+{
+    "test_id": "test_57",
+    "section": "B.2",
+    "description": "Tests the default (no flags) output format of reveal, which should be space-separated and lexicographically sorted.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

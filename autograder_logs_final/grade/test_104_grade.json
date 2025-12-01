@@ -1,0 +1,8 @@
+{
+    "test_id": "test_104",
+    "section": "D.2",
+    "description": "Tests the '& ;' operator sequence to ensure one command is backgrounded and the next is run in the foreground.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

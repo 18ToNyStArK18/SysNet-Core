@@ -1,0 +1,8 @@
+{
+    "test_id": "test_123",
+    "section": "E.4",
+    "description": "Tests that 'fg' brings a background job to the foreground and waits for it.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

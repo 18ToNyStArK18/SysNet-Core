@@ -1,0 +1,8 @@
+{
+    "test_id": "test_68",
+    "section": "C.1",
+    "description": "Tests the execution of a simple, valid command (ls). The shell should not output 'Command not found!'.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

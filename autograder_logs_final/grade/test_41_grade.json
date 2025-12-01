@@ -1,0 +1,8 @@
+{
+    "test_id": "test_41",
+    "section": "B.1",
+    "description": "Tests hop with a complex relative path involving parent directory navigation.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

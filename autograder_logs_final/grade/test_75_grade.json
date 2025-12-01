@@ -1,0 +1,8 @@
+{
+    "test_id": "test_75",
+    "section": "C.2",
+    "description": "Tests input redirection without a space between the operator and the filename.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

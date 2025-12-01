@@ -1,0 +1,8 @@
+{
+    "test_id": "test_3",
+    "section": "A.2",
+    "description": "Checks if the shell accepts a simple line of text as a syntactically valid command.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

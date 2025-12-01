@@ -1,0 +1,8 @@
+{
+    "test_id": "test_54",
+    "section": "B.2",
+    "description": "Tests that reveal lists files in lexicographical (ASCII) order.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

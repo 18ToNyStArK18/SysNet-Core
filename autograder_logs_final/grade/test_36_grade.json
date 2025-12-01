@@ -1,0 +1,8 @@
+{
+    "test_id": "test_36",
+    "section": "A.3",
+    "description": "Tests for 'Invalid Syntax!' when a pipe is followed by a background operator where a command is expected.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,8 @@
+{
+    "test_id": "test_18",
+    "section": "A.3",
+    "description": "Tests for 'Invalid Syntax!' with an incomplete output redirection.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

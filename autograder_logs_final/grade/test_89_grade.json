@@ -1,0 +1,8 @@
+{
+    "test_id": "test_89",
+    "section": "C.4",
+    "description": "Tests a pipeline combined with both input and output redirection.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

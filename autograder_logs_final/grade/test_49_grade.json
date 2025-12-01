@@ -1,0 +1,8 @@
+{
+    "test_id": "test_49",
+    "section": "B.2",
+    "description": "Tests that reveal prints a syntax error when more than one path argument is provided.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

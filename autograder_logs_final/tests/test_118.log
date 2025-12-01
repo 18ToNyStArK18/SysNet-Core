@@ -1,0 +1,41 @@
+{
+    "testcase": {
+        "section": "E.3",
+        "description": "Tests that Ctrl+D on an empty line exits the shell. Note: This does not check for the 'logout' message.",
+        "cmds": [
+            {
+                "expect_exit": true,
+                "skip_prompt_check": false,
+                "code": "d",
+                "output": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-30T15:19:50.418584+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T15:19:50.418825+05:30",
+            "type": "input",
+            "details": "ControlSignal(expect_exit=True, skip_prompt_check=False, code='d', output=None)"
+        },
+        {
+            "time": "2025-11-30T15:19:50.420480+05:30",
+            "type": "output",
+            "details": "logout"
+        },
+        {
+            "time": "2025-11-30T15:19:50.911437+05:30",
+            "type": "eof",
+            "details": "EOF received from child:\n    <pexpect.pty_spawn.spawn object at 0x70b0055b1fd0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_ef4ff48ef7f84c14807e59f0170d4673', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpy40_jfat:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.EOF'>\n    match: <class 'pexpect.exceptions.EOF'>\n    match_index: 2\n    exitstatus: None\n    flag_eof: True\n    pid: 1999741\n    child_fd: 144\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b054555480>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1"
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> \u0004logout\r\n",
+    "py_log": "2025-11-30 15:19:49,557 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x70b0055b1fd0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_ef4ff48ef7f84c14807e59f0170d4673', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpy40_jfat:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 1999741\n    child_fd: 144\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b054555480>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 15:19:50,418 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:50.418584+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 15:19:50,418 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:50.418825+05:30\",\n        \"type\": \"input\",\n        \"details\": \"ControlSignal(expect_exit=True, skip_prompt_check=False, code='d', output=None)\"\n    }\n2025-11-30 15:19:50,420 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:50.420480+05:30\",\n        \"type\": \"output\",\n        \"details\": \"logout\"\n    }\n2025-11-30 15:19:50,911 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:50.911437+05:30\",\n        \"type\": \"eof\",\n        \"details\": \"EOF received from child:\\n    <pexpect.pty_spawn.spawn object at 0x70b0055b1fd0>\\n    command: /usr/bin/docker\\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_ef4ff48ef7f84c14807e59f0170d4673', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpy40_jfat:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\\n    buffer (last 100 chars): ''\\n    before (last 100 chars): ''\\n    after: <class 'pexpect.exceptions.EOF'>\\n    match: <class 'pexpect.exceptions.EOF'>\\n    match_index: 2\\n    exitstatus: None\\n    flag_eof: True\\n    pid: 1999741\\n    child_fd: 144\\n    closed: False\\n    timeout: 2.0\\n    delimiter: <class 'pexpect.exceptions.EOF'>\\n    logfile: <tester.FlexibleIO object at 0x70b054555480>\\n    logfile_read: None\\n    logfile_send: None\\n    maxread: 2000\\n    ignorecase: False\\n    searchwindowsize: None\\n    delaybeforesend: 0.05\\n    delayafterclose: 0.1\\n    delayafterterminate: 0.1\"\n    }\n2025-11-30 15:19:50,914 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x70b0055b1fd0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_ef4ff48ef7f84c14807e59f0170d4673', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpy40_jfat:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.EOF'>\n    match: <class 'pexpect.exceptions.EOF'>\n    match_index: 2\n    exitstatus: 0\n    flag_eof: True\n    pid: 1999741\n    child_fd: 144\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b054555480>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 15:19:50,914 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Cleaned up temp_dir: /tmp/tmpy40_jfat\n"
+}

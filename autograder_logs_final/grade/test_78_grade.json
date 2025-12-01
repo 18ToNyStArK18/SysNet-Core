@@ -1,0 +1,8 @@
+{
+    "test_id": "test_78",
+    "section": "C.3",
+    "description": "Tests basic output redirection. Creates a file and verifies its content.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

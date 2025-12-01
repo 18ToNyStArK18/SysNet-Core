@@ -1,0 +1,69 @@
+{
+    "testcase": {
+        "section": "E.1",
+        "description": "Checks if activities correctly lists a stopped process after sending SIGTSTP (Ctrl+Z).",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "skip_prompt_check": true,
+                "cmd": "sleep 2",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "code": "z",
+                "output": {
+                    "text": "\\\\[1\\\\] Stopped (sleep|sleep\\\\s2)",
+                    "is_re": true,
+                    "negative_match": false
+                }
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "activities",
+                "sequential_outputs": [
+                    {
+                        "text": "\\\\[\\\\d+\\\\] : (sleep|sleep\\\\s2) - Stopped",
+                        "is_re": true,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-30T15:19:33.915539+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T15:19:33.915759+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=True, cmd='sleep 2', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T15:19:33.966090+05:30",
+            "type": "input",
+            "details": "ControlSignal(expect_exit=False, skip_prompt_check=False, code='z', output=Line(text='\\\\\\\\[1\\\\\\\\] Stopped (sleep|sleep\\\\\\\\s2)', is_re=True, negative_match=False))"
+        },
+        {
+            "time": "2025-11-30T15:19:36.255848+05:30",
+            "type": "timeout",
+            "details": "Child timed out:\n    <pexpect.pty_spawn.spawn object at 0x70b009b1ffe0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_33b7b13e99044883a5030c6e4d3e3b4f', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmp68d53j77:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.TIMEOUT'>\n    match: <class 'pexpect.exceptions.TIMEOUT'>\n    match_index: 3\n    exitstatus: None\n    flag_eof: False\n    pid: 1944994\n    child_fd: 67\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b054554a00>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1"
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> sleep 2\n",
+    "py_log": "2025-11-30 15:19:33,384 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x70b009b1ffe0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_33b7b13e99044883a5030c6e4d3e3b4f', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmp68d53j77:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 1944994\n    child_fd: 67\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b054554a00>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 15:19:33,915 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:33.915539+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 15:19:33,915 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:33.915759+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=True, cmd='sleep 2', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 15:19:33,966 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:33.966090+05:30\",\n        \"type\": \"input\",\n        \"details\": \"ControlSignal(expect_exit=False, skip_prompt_check=False, code='z', output=Line(text='\\\\\\\\\\\\\\\\[1\\\\\\\\\\\\\\\\] Stopped (sleep|sleep\\\\\\\\\\\\\\\\s2)', is_re=True, negative_match=False))\"\n    }\n2025-11-30 15:19:34,032 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Sent SIGTSTP to container tester_33b7b13e99044883a5030c6e4d3e3b4f\n2025-11-30 15:19:36,256 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:36.255848+05:30\",\n        \"type\": \"timeout\",\n        \"details\": \"Child timed out:\\n    <pexpect.pty_spawn.spawn object at 0x70b009b1ffe0>\\n    command: /usr/bin/docker\\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_33b7b13e99044883a5030c6e4d3e3b4f', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmp68d53j77:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\\n    buffer (last 100 chars): ''\\n    before (last 100 chars): ''\\n    after: <class 'pexpect.exceptions.TIMEOUT'>\\n    match: <class 'pexpect.exceptions.TIMEOUT'>\\n    match_index: 3\\n    exitstatus: None\\n    flag_eof: False\\n    pid: 1944994\\n    child_fd: 67\\n    closed: False\\n    timeout: 2.0\\n    delimiter: <class 'pexpect.exceptions.EOF'>\\n    logfile: <tester.FlexibleIO object at 0x70b054554a00>\\n    logfile_read: None\\n    logfile_send: None\\n    maxread: 2000\\n    ignorecase: False\\n    searchwindowsize: None\\n    delaybeforesend: 0.05\\n    delayafterclose: 0.1\\n    delayafterterminate: 0.1\"\n    }\n2025-11-30 15:19:36,256 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Exit event received, raising ChildProcessExited\n2025-11-30 15:19:38,547 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Force removed container tester_33b7b13e99044883a5030c6e4d3e3b4f\n2025-11-30 15:19:38,548 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x70b009b1ffe0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_33b7b13e99044883a5030c6e4d3e3b4f', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmp68d53j77:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.TIMEOUT'>\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 1944994\n    child_fd: 67\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b054554a00>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 15:19:38,548 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Cleaned up temp_dir: /tmp/tmp68d53j77\n"
+}

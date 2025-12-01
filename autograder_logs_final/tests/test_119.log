@@ -1,0 +1,71 @@
+{
+    "testcase": {
+        "section": "E.3",
+        "description": "Tests that Ctrl+D kills background jobs before exiting.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "sleep 5 &",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [
+                    {
+                        "text": "\\\\[1\\\\] \\\\d+",
+                        "is_re": true,
+                        "negative_match": false
+                    }
+                ],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": true,
+                "skip_prompt_check": false,
+                "code": "d",
+                "output": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-30T15:19:52.175188+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T15:19:52.175403+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='sleep 5 &', sequential_outputs=[], nonsequential_outputs=[Line(text='\\\\\\\\[1\\\\\\\\] \\\\\\\\d+', is_re=True, negative_match=False)], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T15:19:52.226905+05:30",
+            "type": "output",
+            "details": "[1] 29"
+        },
+        {
+            "time": "2025-11-30T15:19:52.227282+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T15:19:52.227376+05:30",
+            "type": "input",
+            "details": "ControlSignal(expect_exit=True, skip_prompt_check=False, code='d', output=None)"
+        },
+        {
+            "time": "2025-11-30T15:19:52.228366+05:30",
+            "type": "output",
+            "details": "logout"
+        },
+        {
+            "time": "2025-11-30T15:19:52.446138+05:30",
+            "type": "eof",
+            "details": "EOF received from child:\n    <pexpect.pty_spawn.spawn object at 0x70b004e91580>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_947c62a3d0814c96bac53b8a5ff7b76a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpsamuz3te:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.EOF'>\n    match: <class 'pexpect.exceptions.EOF'>\n    match_index: 2\n    exitstatus: None\n    flag_eof: True\n    pid: 2006369\n    child_fd: 152\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b056e3e200>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1"
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> sleep 5 &\n[1] 29\r\n<osnuser@osntesting:~> \u0004logout\r\n",
+    "py_log": "2025-11-30 15:19:51,079 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x70b004e91580>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_947c62a3d0814c96bac53b8a5ff7b76a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpsamuz3te:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2006369\n    child_fd: 152\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b056e3e200>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 15:19:52,175 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.175188+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 15:19:52,175 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.175403+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='sleep 5 &', sequential_outputs=[], nonsequential_outputs=[Line(text='\\\\\\\\\\\\\\\\[1\\\\\\\\\\\\\\\\] \\\\\\\\\\\\\\\\d+', is_re=True, negative_match=False)], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 15:19:52,226 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.226905+05:30\",\n        \"type\": \"output\",\n        \"details\": \"[1] 29\"\n    }\n2025-11-30 15:19:52,227 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.227282+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 15:19:52,227 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.227376+05:30\",\n        \"type\": \"input\",\n        \"details\": \"ControlSignal(expect_exit=True, skip_prompt_check=False, code='d', output=None)\"\n    }\n2025-11-30 15:19:52,228 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.228366+05:30\",\n        \"type\": \"output\",\n        \"details\": \"logout\"\n    }\n2025-11-30 15:19:52,446 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T15:19:52.446138+05:30\",\n        \"type\": \"eof\",\n        \"details\": \"EOF received from child:\\n    <pexpect.pty_spawn.spawn object at 0x70b004e91580>\\n    command: /usr/bin/docker\\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_947c62a3d0814c96bac53b8a5ff7b76a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpsamuz3te:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\\n    buffer (last 100 chars): ''\\n    before (last 100 chars): ''\\n    after: <class 'pexpect.exceptions.EOF'>\\n    match: <class 'pexpect.exceptions.EOF'>\\n    match_index: 2\\n    exitstatus: None\\n    flag_eof: True\\n    pid: 2006369\\n    child_fd: 152\\n    closed: False\\n    timeout: 2.0\\n    delimiter: <class 'pexpect.exceptions.EOF'>\\n    logfile: <tester.FlexibleIO object at 0x70b056e3e200>\\n    logfile_read: None\\n    logfile_send: None\\n    maxread: 2000\\n    ignorecase: False\\n    searchwindowsize: None\\n    delaybeforesend: 0.05\\n    delayafterclose: 0.1\\n    delayafterterminate: 0.1\"\n    }\n2025-11-30 15:19:52,447 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x70b004e91580>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_947c62a3d0814c96bac53b8a5ff7b76a', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpsamuz3te:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: <class 'pexpect.exceptions.EOF'>\n    match: <class 'pexpect.exceptions.EOF'>\n    match_index: 2\n    exitstatus: 0\n    flag_eof: True\n    pid: 2006369\n    child_fd: 152\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x70b056e3e200>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 15:19:52,447 - tester.f8a8dfaf-6449-4663-bd10-a80c0d6ef31f - INFO - Cleaned up temp_dir: /tmp/tmpsamuz3te\n"
+}

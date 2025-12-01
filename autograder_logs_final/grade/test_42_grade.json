@@ -1,0 +1,8 @@
+{
+    "test_id": "test_42",
+    "section": "B.1",
+    "description": "Tests that 'hop' with no arguments and 'hop ~' both change the CWD to the home directory.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

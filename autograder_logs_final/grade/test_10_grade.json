@@ -1,0 +1,8 @@
+{
+    "test_id": "test_10",
+    "section": "A.3",
+    "description": "Tests valid syntax with multiple background operators.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

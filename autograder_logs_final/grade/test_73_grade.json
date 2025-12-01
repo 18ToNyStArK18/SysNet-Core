@@ -1,0 +1,8 @@
+{
+    "test_id": "test_73",
+    "section": "C.2",
+    "description": "Tests that for multiple input redirections, only the last one takes effect.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

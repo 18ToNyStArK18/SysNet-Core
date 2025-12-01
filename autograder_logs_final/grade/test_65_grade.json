@@ -1,0 +1,8 @@
+{
+    "test_id": "test_65",
+    "section": "B.3",
+    "description": "Tests that `log` stores commands that are duplicates but not sequential, while ignoring sequential duplicates.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

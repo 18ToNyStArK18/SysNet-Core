@@ -1,0 +1,8 @@
+{
+    "test_id": "test_70",
+    "section": "C.1",
+    "description": "Tests execution of a command specified with an absolute path.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

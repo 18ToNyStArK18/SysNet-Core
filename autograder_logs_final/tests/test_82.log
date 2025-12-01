@@ -1,0 +1,166 @@
+{
+    "testcase": {
+        "section": "C.3",
+        "description": "Tests that for multiple mixed output redirections, only the last one takes effect.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "echo hello > combo_redir.txt",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "echo world >> combo_redir.txt",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "cat combo_redir.txt",
+                "sequential_outputs": [
+                    {
+                        "text": "hello",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "world",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "echo overwrite >> combo_redir.txt",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "echo final > combo_redir.txt",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "cat combo_redir.txt",
+                "sequential_outputs": [
+                    {
+                        "text": "final",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": false
+    },
+    "events": [
+        {
+            "time": "2025-11-30T06:45:26.498072+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:26.498598+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo hello > combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:26.660074+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:26.660433+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo world >> combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:26.816192+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:26.816737+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='cat combo_redir.txt', sequential_outputs=[Line(text='hello', is_re=False, negative_match=False), Line(text='world', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:26.890394+05:30",
+            "type": "output",
+            "details": "hello"
+        },
+        {
+            "time": "2025-11-30T06:45:26.890758+05:30",
+            "type": "output",
+            "details": "world"
+        },
+        {
+            "time": "2025-11-30T06:45:26.890985+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:26.891194+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo overwrite >> combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:27.018733+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:27.019146+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo final > combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:27.151014+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:27.151414+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='cat combo_redir.txt', sequential_outputs=[Line(text='final', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:27.391203+05:30",
+            "type": "output",
+            "details": "final"
+        },
+        {
+            "time": "2025-11-30T06:45:27.391633+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> echo hello > combo_redir.txt\n<osnuser@osntesting:~> echo world >> combo_redir.txt\n<osnuser@osntesting:~> cat combo_redir.txt\nhello\r\nworld\r\n<osnuser@osntesting:~> echo overwrite >> combo_redir.txt\n<osnuser@osntesting:~> echo final > combo_redir.txt\n<osnuser@osntesting:~> cat combo_redir.txt\nfinal\r\n<osnuser@osntesting:~> ",
+    "py_log": "2025-11-30 06:45:26,123 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x798489b523c0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_07f675043278467aa7881c46bcdbc342', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmprndhs7v3:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2227385\n    child_fd: 190\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x7985186410c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:45:26,498 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.498072+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:26,498 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.498598+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo hello > combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:26,660 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.660074+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:26,660 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.660433+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo world >> combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:26,816 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.816192+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:26,816 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.816737+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='cat combo_redir.txt', sequential_outputs=[Line(text='hello', is_re=False, negative_match=False), Line(text='world', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:26,890 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.890394+05:30\",\n        \"type\": \"output\",\n        \"details\": \"hello\"\n    }\n2025-11-30 06:45:26,890 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.890758+05:30\",\n        \"type\": \"output\",\n        \"details\": \"world\"\n    }\n2025-11-30 06:45:26,891 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.890985+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:26,891 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:26.891194+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo overwrite >> combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:27,018 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:27.018733+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:27,019 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:27.019146+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='echo final > combo_redir.txt', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:27,151 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:27.151014+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:27,151 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:27.151414+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='cat combo_redir.txt', sequential_outputs=[Line(text='final', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:27,391 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:27.391203+05:30\",\n        \"type\": \"output\",\n        \"details\": \"final\"\n    }\n2025-11-30 06:45:27,391 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:27.391633+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:28,063 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x798489b523c0>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_07f675043278467aa7881c46bcdbc342', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmprndhs7v3:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<osnuser@osntesting:~> '\n    match: <re.Match object; span=(0, 23), match='<osnuser@osntesting:~> '>\n    match_index: 0\n    exitstatus: 129\n    flag_eof: False\n    pid: 2227385\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x7985186410c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:45:28,077 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Cleaned up temp_dir: /tmp/tmprndhs7v3\n"
+}

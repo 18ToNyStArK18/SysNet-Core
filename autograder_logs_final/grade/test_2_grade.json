@@ -1,0 +1,8 @@
+{
+    "test_id": "test_2",
+    "section": "A.2",
+    "description": "Checks if the shell can handle multiple consecutive empty inputs.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

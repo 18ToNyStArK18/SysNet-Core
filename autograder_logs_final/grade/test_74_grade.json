@@ -1,0 +1,8 @@
+{
+    "test_id": "test_74",
+    "section": "C.2",
+    "description": "Tests that the shell checks for command existence before handling file redirection.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

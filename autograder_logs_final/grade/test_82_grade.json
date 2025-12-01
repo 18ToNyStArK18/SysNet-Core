@@ -1,0 +1,8 @@
+{
+    "test_id": "test_82",
+    "section": "C.3",
+    "description": "Tests that for multiple mixed output redirections, only the last one takes effect.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

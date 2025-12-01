@@ -1,0 +1,80 @@
+{
+    "testcase": {
+        "section": "C.2",
+        "description": "Tests input redirection without a space between the operator and the filename.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "cat <test/file4.txt",
+                "sequential_outputs": [
+                    {
+                        "text": "This is file4.txt! I have 4 lines. This is line 1.",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "This is line 2.",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "This is line 3.",
+                        "is_re": false,
+                        "negative_match": false
+                    },
+                    {
+                        "text": "This is line 4.",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": true
+    },
+    "events": [
+        {
+            "time": "2025-11-30T06:45:05.444073+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:45:05.444863+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='cat <test/file4.txt', sequential_outputs=[Line(text='This is file4.txt! I have 4 lines. This is line 1.', is_re=False, negative_match=False), Line(text='This is line 2.', is_re=False, negative_match=False), Line(text='This is line 3.', is_re=False, negative_match=False), Line(text='This is line 4.', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:45:05.730092+05:30",
+            "type": "output",
+            "details": "This is file4.txt! I have 4 lines. This is line 1."
+        },
+        {
+            "time": "2025-11-30T06:45:05.730490+05:30",
+            "type": "output",
+            "details": "This is line 2."
+        },
+        {
+            "time": "2025-11-30T06:45:05.730731+05:30",
+            "type": "output",
+            "details": "This is line 3."
+        },
+        {
+            "time": "2025-11-30T06:45:05.730948+05:30",
+            "type": "output",
+            "details": "This is line 4."
+        },
+        {
+            "time": "2025-11-30T06:45:05.731070+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> cat <test/file4.txt\nThis is file4.txt! I have 4 lines. This is line 1.\r\nThis is line 2.\r\nThis is line 3.\r\nThis is line 4.<osnuser@osntesting:~> ",
+    "py_log": "2025-11-30 06:45:04,891 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x798489e1a090>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_1c3e767cc8f64275961f2db0dd7d7d82', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpr4lde80s:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2218933\n    child_fd: 178\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x798518642ec0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:45:05,444 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.444073+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:05,445 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.444863+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='cat <test/file4.txt', sequential_outputs=[Line(text='This is file4.txt! I have 4 lines. This is line 1.', is_re=False, negative_match=False), Line(text='This is line 2.', is_re=False, negative_match=False), Line(text='This is line 3.', is_re=False, negative_match=False), Line(text='This is line 4.', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:45:05,730 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.730092+05:30\",\n        \"type\": \"output\",\n        \"details\": \"This is file4.txt! I have 4 lines. This is line 1.\"\n    }\n2025-11-30 06:45:05,730 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.730490+05:30\",\n        \"type\": \"output\",\n        \"details\": \"This is line 2.\"\n    }\n2025-11-30 06:45:05,730 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.730731+05:30\",\n        \"type\": \"output\",\n        \"details\": \"This is line 3.\"\n    }\n2025-11-30 06:45:05,730 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.730948+05:30\",\n        \"type\": \"output\",\n        \"details\": \"This is line 4.\"\n    }\n2025-11-30 06:45:05,731 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:45:05.731070+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:45:06,193 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x798489e1a090>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_1c3e767cc8f64275961f2db0dd7d7d82', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmpr4lde80s:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): 'This is line 4.'\n    after: '<osnuser@osntesting:~> '\n    match: <re.Match object; span=(15, 38), match='<osnuser@osntesting:~> '>\n    match_index: 0\n    exitstatus: 129\n    flag_eof: False\n    pid: 2218933\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x798518642ec0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:45:06,211 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Cleaned up temp_dir: /tmp/tmpr4lde80s\n"
+}

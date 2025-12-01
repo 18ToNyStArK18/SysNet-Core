@@ -1,0 +1,14 @@
+{
+    "test_id": "test_102",
+    "section": "D.2",
+    "description": "Tests that a background command that fails produces an 'exited abnormally' message.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "false &",
+        "reason": "Missing required non-sequential output: '\\\\[1\\\\] \\\\d+'",
+        "expected": null,
+        "actual": ""
+    },
+    "score": 0.0
+}

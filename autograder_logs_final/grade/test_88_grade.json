@@ -1,0 +1,8 @@
+{
+    "test_id": "test_88",
+    "section": "C.4",
+    "description": "Tests a three-command pipeline.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

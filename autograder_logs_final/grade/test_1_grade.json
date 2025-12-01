@@ -1,0 +1,8 @@
+{
+    "test_id": "test_1",
+    "section": "A.2",
+    "description": "Checks if the shell can handle a single empty input (user pressing enter).",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

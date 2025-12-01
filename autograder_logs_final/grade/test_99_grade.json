@@ -1,0 +1,8 @@
+{
+    "test_id": "test_99",
+    "section": "D.1",
+    "description": "Tests that state changes (CWD) are maintained across commands in a single sequential execution string.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,167 @@
+{
+    "testcase": {
+        "section": "B.1",
+        "description": "Tests sequential execution of multiple arguments for the hop command, including relative paths, parent directories, and the previous directory.",
+        "cmds": [
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "hop test/folder1/folder4",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": "~/test/folder1/folder4"
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "pwd",
+                "sequential_outputs": [
+                    {
+                        "text": "/app/test/folder1/folder4",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "hop ../../folder2",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": "~/test/folder2"
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "pwd",
+                "sequential_outputs": [
+                    {
+                        "text": "/app/test/folder2",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "hop -",
+                "sequential_outputs": [],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": "~/test/folder1/folder4"
+            },
+            {
+                "expect_exit": false,
+                "skip_prompt_check": false,
+                "cmd": "pwd",
+                "sequential_outputs": [
+                    {
+                        "text": "/app/test/folder1/folder4",
+                        "is_re": false,
+                        "negative_match": false
+                    }
+                ],
+                "nonsequential_outputs": [],
+                "ignore_output": false,
+                "cwd_after": null
+            }
+        ],
+        "timeout": 2.0,
+        "strict_prompt": false,
+        "requires_test_folder": true
+    },
+    "events": [
+        {
+            "time": "2025-11-30T06:42:39.194359+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~> "
+        },
+        {
+            "time": "2025-11-30T06:42:39.194806+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='hop test/folder1/folder4', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after='~/test/folder1/folder4')"
+        },
+        {
+            "time": "2025-11-30T06:42:39.257137+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~/test/folder1/folder4> "
+        },
+        {
+            "time": "2025-11-30T06:42:39.257230+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='pwd', sequential_outputs=[Line(text='/app/test/folder1/folder4', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:42:39.453465+05:30",
+            "type": "output",
+            "details": "/app/test/folder1/folder4"
+        },
+        {
+            "time": "2025-11-30T06:42:39.453640+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~/test/folder1/folder4> "
+        },
+        {
+            "time": "2025-11-30T06:42:39.453746+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='hop ../../folder2', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after='~/test/folder2')"
+        },
+        {
+            "time": "2025-11-30T06:42:39.639903+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~/test/folder2> "
+        },
+        {
+            "time": "2025-11-30T06:42:39.640125+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='pwd', sequential_outputs=[Line(text='/app/test/folder2', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:42:39.742493+05:30",
+            "type": "output",
+            "details": "/app/test/folder2"
+        },
+        {
+            "time": "2025-11-30T06:42:39.742684+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~/test/folder2> "
+        },
+        {
+            "time": "2025-11-30T06:42:39.742759+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='hop -', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after='~/test/folder1/folder4')"
+        },
+        {
+            "time": "2025-11-30T06:42:39.900271+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~/test/folder1/folder4> "
+        },
+        {
+            "time": "2025-11-30T06:42:39.900409+05:30",
+            "type": "input",
+            "details": "GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='pwd', sequential_outputs=[Line(text='/app/test/folder1/folder4', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)"
+        },
+        {
+            "time": "2025-11-30T06:42:39.990436+05:30",
+            "type": "output",
+            "details": "/app/test/folder1/folder4"
+        },
+        {
+            "time": "2025-11-30T06:42:39.990547+05:30",
+            "type": "output",
+            "details": "<osnuser@osntesting:~/test/folder1/folder4> "
+        }
+    ],
+    "raw_log": "##### START RAW OUTPUT #####\n<osnuser@osntesting:~> hop test/folder1/folder4\n<osnuser@osntesting:~/test/folder1/folder4> pwd\n/app/test/folder1/folder4\r\n<osnuser@osntesting:~/test/folder1/folder4> hop ../../folder2\n<osnuser@osntesting:~/test/folder2> pwd\n/app/test/folder2\r\n<osnuser@osntesting:~/test/folder2> hop -\n<osnuser@osntesting:~/test/folder1/folder4> pwd\n/app/test/folder1/folder4\r\n<osnuser@osntesting:~/test/folder1/folder4> ",
+    "py_log": "2025-11-30 06:42:38,531 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Spawned child:\n    <pexpect.pty_spawn.spawn object at 0x79848c0f8410>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_01d7d3cebcb04e86b43167d428fe2c1e', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmprrrpji64:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: None\n    match: None\n    match_index: None\n    exitstatus: None\n    flag_eof: False\n    pid: 2167897\n    child_fd: 206\n    closed: False\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x7985186644c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:42:39,194 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.194359+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~> \"\n    }\n2025-11-30 06:42:39,194 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.194806+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='hop test/folder1/folder4', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after='~/test/folder1/folder4')\"\n    }\n2025-11-30 06:42:39,257 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.257137+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~/test/folder1/folder4> \"\n    }\n2025-11-30 06:42:39,257 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.257230+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='pwd', sequential_outputs=[Line(text='/app/test/folder1/folder4', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:42:39,453 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.453465+05:30\",\n        \"type\": \"output\",\n        \"details\": \"/app/test/folder1/folder4\"\n    }\n2025-11-30 06:42:39,453 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.453640+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~/test/folder1/folder4> \"\n    }\n2025-11-30 06:42:39,453 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.453746+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='hop ../../folder2', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after='~/test/folder2')\"\n    }\n2025-11-30 06:42:39,639 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.639903+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~/test/folder2> \"\n    }\n2025-11-30 06:42:39,640 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.640125+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='pwd', sequential_outputs=[Line(text='/app/test/folder2', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:42:39,742 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.742493+05:30\",\n        \"type\": \"output\",\n        \"details\": \"/app/test/folder2\"\n    }\n2025-11-30 06:42:39,742 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.742684+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~/test/folder2> \"\n    }\n2025-11-30 06:42:39,742 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.742759+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='hop -', sequential_outputs=[], nonsequential_outputs=[], ignore_output=False, cwd_after='~/test/folder1/folder4')\"\n    }\n2025-11-30 06:42:39,900 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.900271+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~/test/folder1/folder4> \"\n    }\n2025-11-30 06:42:39,900 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.900409+05:30\",\n        \"type\": \"input\",\n        \"details\": \"GenericCmd(expect_exit=False, skip_prompt_check=False, cmd='pwd', sequential_outputs=[Line(text='/app/test/folder1/folder4', is_re=False, negative_match=False)], nonsequential_outputs=[], ignore_output=False, cwd_after=None)\"\n    }\n2025-11-30 06:42:39,990 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.990436+05:30\",\n        \"type\": \"output\",\n        \"details\": \"/app/test/folder1/folder4\"\n    }\n2025-11-30 06:42:39,990 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - DEBUG - Received event:\n    {\n        \"time\": \"2025-11-30T06:42:39.990547+05:30\",\n        \"type\": \"output\",\n        \"details\": \"<osnuser@osntesting:~/test/folder1/folder4> \"\n    }\n2025-11-30 06:42:40,516 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Finished running testcase. Child info at exit:\n    <pexpect.pty_spawn.spawn object at 0x79848c0f8410>\n    command: /usr/bin/docker\n    args: [b'/usr/bin/docker', b'run', b'--name', b'tester_01d7d3cebcb04e86b43167d428fe2c1e', b'-i', b'-t', b'--rm', b'--init', b'-h', b'osntesting', b'-v', b'/tmp/tmprrrpji64:/app', b'-w', b'/app', b'shell_tester:latest', b'/app/shell.out']\n    buffer (last 100 chars): ''\n    before (last 100 chars): ''\n    after: '<osnuser@osntesting:~/test/folder1/folder4> '\n    match: <re.Match object; span=(0, 44), match='<osnuser@osntesting:~/test/folder1/folder4> '>\n    match_index: 0\n    exitstatus: 129\n    flag_eof: False\n    pid: 2167897\n    child_fd: -1\n    closed: True\n    timeout: 2.0\n    delimiter: <class 'pexpect.exceptions.EOF'>\n    logfile: <tester.FlexibleIO object at 0x7985186644c0>\n    logfile_read: None\n    logfile_send: None\n    maxread: 2000\n    ignorecase: False\n    searchwindowsize: None\n    delaybeforesend: 0.05\n    delayafterclose: 0.1\n    delayafterterminate: 0.1\n2025-11-30 06:42:40,516 - tester.53b130d9-c3b5-470e-9ead-bc9b7e47a998 - INFO - Cleaned up temp_dir: /tmp/tmprrrpji64\n"
+}

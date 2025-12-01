@@ -1,0 +1,8 @@
+{
+    "test_id": "test_4",
+    "section": "A.2",
+    "description": "Tests if the shell can handle a very long but syntactically valid input.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

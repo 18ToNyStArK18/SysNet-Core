@@ -1,0 +1,8 @@
+{
+    "test_id": "test_53",
+    "section": "B.2",
+    "description": "Tests the behavior of 'reveal -', checking for the correct error when no previous directory exists and for correct listing otherwise.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

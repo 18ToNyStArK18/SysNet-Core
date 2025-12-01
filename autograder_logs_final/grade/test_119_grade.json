@@ -1,0 +1,8 @@
+{
+    "test_id": "test_119",
+    "section": "E.3",
+    "description": "Tests that Ctrl+D kills background jobs before exiting.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

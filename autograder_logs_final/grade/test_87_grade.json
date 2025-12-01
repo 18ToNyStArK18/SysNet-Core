@@ -1,0 +1,8 @@
+{
+    "test_id": "test_87",
+    "section": "C.4",
+    "description": "Tests a simple pipe to filter the output of ls.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

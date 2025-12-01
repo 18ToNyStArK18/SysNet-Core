@@ -1,0 +1,8 @@
+{
+    "test_id": "test_98",
+    "section": "D.1",
+    "description": "Tests sequential execution where commands involve pipes and I/O redirection.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

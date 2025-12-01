@@ -1,0 +1,8 @@
+{
+    "test_id": "test_84",
+    "section": "C.3",
+    "description": "Tests that the append output redirection operator '>>' creates a new file if it does not exist.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

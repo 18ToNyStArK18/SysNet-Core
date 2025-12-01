@@ -1,0 +1,8 @@
+{
+    "test_id": "test_80",
+    "section": "C.3",
+    "description": "Tests output redirection to a file in a non-existent directory.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,14 @@
+{
+    "test_id": "test_115",
+    "section": "E.2",
+    "description": "Tests ping command with a non-numeric signal number.",
+    "passed": false,
+    "failure": {
+        "step_index": 0,
+        "command": "ping 12345 abc",
+        "reason": "Mismatch at sequential line 0",
+        "expected": "Invalid syntax!",
+        "actual": "No such process found!"
+    },
+    "score": 0.0
+}

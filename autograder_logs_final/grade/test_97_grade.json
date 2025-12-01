@@ -1,0 +1,8 @@
+{
+    "test_id": "test_97",
+    "section": "D.1",
+    "description": "Tests that sequential execution continues after a command fails.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

@@ -1,0 +1,8 @@
+{
+    "test_id": "test_122",
+    "section": "E.4",
+    "description": "Tests that running 'bg' on a non-existent job number produces an error.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}

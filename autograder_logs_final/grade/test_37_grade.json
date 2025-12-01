@@ -1,0 +1,8 @@
+{
+    "test_id": "test_37",
+    "section": "A.3",
+    "description": "Tests a complex but valid command string with a mix of sequential, background, and pipe operators without spaces.",
+    "passed": true,
+    "failure": null,
+    "score": 1.0
+}
