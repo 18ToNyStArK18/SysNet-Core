@@ -26,7 +26,6 @@ Reliable-UDP-Protocol/
   - **Sequencing:** Handles out-of-order packet arrival.
   - **Cumulative ACKs:** Efficient acknowledgment strategy.
 - **Flow Control:** Sliding Window mechanism based on receiver buffer availability.
-- **Verification:** MD5 checksum validation upon file transfer completion.
 
 ## 🎮 Modes of Operation
 
