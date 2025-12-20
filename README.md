@@ -7,17 +7,8 @@
 ```text
 SysNet-Core/
 ├── Custom-Shell/               # POSIX-Compliant Command Line Interpreter
-│   ├── src/             # Source code (Parsing, Execution, Built-ins)
-│   ├── include/         # Header files
-│   └── Makefile         # Build configuration
 ├── Reliable-UDP-Protocol/          # S.H.A.M. Reliable Transport Protocol
-│   ├── client.c         # Client implementation (File Transfer & Chat)
-│   ├── server.c         # Server implementation
-│   └── sham.h           # Protocol header definitions
 └── xv6-Scheduler-Implementation/                 # Modified xv6 Kernel
-    ├── kernel/          # Kernel source with FCFS, CFS, and MLFQ schedulers
-    ├── user/            # User-space utilities (readcount, schedulertest)
-    └── report.md        # Performance analysis and scheduling report
 ```
 
 ## 🚀 Components

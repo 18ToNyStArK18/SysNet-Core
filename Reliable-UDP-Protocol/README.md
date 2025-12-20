@@ -1,6 +1,19 @@
 # Reliable-UDP-Protocol
 
 **S.H.A.M.** (Sequenced Header for Asynchronous Messaging) is a custom application-layer protocol built on top of UDP. It implements core TCP features—reliability, sequencing, and flow control—to ensure data integrity over an unreliable network.
+## 📂 Project Structure
+```text
+Reliable-UDP-Protocol/
+├── client.c                    # Client implementation (file transfer & chat)
+├── server.c                    # Server implementation (listens and handles connections)
+├── sham.h                      # Protocol header definitions and structures
+├── Makefile                    # Build configuration
+├── README.md                   # This file
+├── client                      # Compiled client executable (after make)
+├── server                      # Compiled server executable (after make)
+├── server_log.txt              # Server logging output (when RUDP_LOG=1)
+└── client_log.txt              # Client logging output (when RUDP_LOG=1)
+```
 
 ## 📡 Protocol Features
 

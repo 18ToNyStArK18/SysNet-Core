@@ -1,6 +1,27 @@
 # Custom C-Shell
 
 A robust, POSIX-compliant command-line interpreter implemented in C. This shell features a recursive descent parser based on a custom Context-Free Grammar (CFG) to handle complex command chains, piping, and redirection.
+## 📂 Project Structure
+```text
+Custom-Shell/
+├── include/
+│   └── include.h               # All function declarations and headers
+├── src/
+│   ├── main.c                  # Entry point and main shell loop
+│   ├── Parsing.c               # CFG-based recursive descent parser
+│   ├── execute.c               # Command execution engine
+│   ├── handlers.c              # Signal handling (Ctrl-C, Ctrl-Z, Ctrl-D)
+│   ├── redirection.c           # I/O redirection and piping logic
+│   ├── jobs.c                  # Background/foreground job management
+│   ├── hop.c                   # Directory navigation built-in
+│   ├── reveal.c                # Directory listing built-in
+│   ├── log.c                   # Command history management
+│   ├── activities.c            # Process status listing
+│   └── ping.c                  # Signal sending to processes
+├── Makefile                    # Build configuration
+├── README.md                   # This file
+└── shell.out                   # Compiled executable (after make)
+```
 
 ## ✨ Features
 
