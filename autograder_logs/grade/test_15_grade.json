@@ -1,8 +1,0 @@
-{
-    "test_id": "test_15",
-    "section": "A.3",
-    "description": "Tests for 'Invalid Syntax!' with consecutive semicolon operators.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

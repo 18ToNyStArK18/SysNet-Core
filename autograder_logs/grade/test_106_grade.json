@@ -1,8 +1,0 @@
-{
-    "test_id": "test_106",
-    "section": "D.2",
-    "description": "Tests that a non-existent command run in the background fails gracefully.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

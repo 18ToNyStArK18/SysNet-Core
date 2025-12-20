@@ -1,8 +1,0 @@
-make: *** No rule to make target 'clean'.  Stop.
-gcc  -std=c99 \
-  -D_POSIX_C_SOURCE=200809L \
-  -D_XOPEN_SOURCE=700 \
-  -Wall -Wextra -Werror \
-  -Wno-unused-parameter \
-  -fno-asm \
-  	src/jobs.c src/main.c src/Parsing.c src/hop.c src/handlers.c src/reveal.c src/log.c src/redirection.c src/execute.c src/activities.c src/ping.c include/include.h -o shell.out -O0 -g

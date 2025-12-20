@@ -1,8 +1,0 @@
-{
-    "test_id": "test_69",
-    "section": "C.1",
-    "description": "Tests that a non-existent command prints 'Command not found!'.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

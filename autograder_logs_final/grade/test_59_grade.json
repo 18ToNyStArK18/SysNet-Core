@@ -1,8 +1,0 @@
-{
-    "test_id": "test_59",
-    "section": "B.3",
-    "description": "Tests if command history persists across shell restarts and if 'log purge' correctly clears it.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

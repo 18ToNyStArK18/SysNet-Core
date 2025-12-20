@@ -1,8 +1,0 @@
-{
-    "test_id": "test_19",
-    "section": "A.3",
-    "description": "Tests for 'Invalid Syntax!' where an input redirection is immediately followed by a pipe.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

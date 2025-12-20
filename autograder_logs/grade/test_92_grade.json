@@ -1,8 +1,0 @@
-{
-    "test_id": "test_92",
-    "section": "C.4",
-    "description": "Tests a long pipeline to ensure multiple pipes are handled correctly.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

@@ -1,8 +1,0 @@
-{
-    "test_id": "test_51",
-    "section": "B.2",
-    "description": "Tests reveal with a relative path argument to list contents of another directory.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}

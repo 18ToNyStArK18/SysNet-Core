@@ -1,8 +1,0 @@
-{
-    "test_id": "test_113",
-    "section": "E.1",
-    "description": "Checks if activities correctly removes a process from its list after it has terminated.",
-    "passed": true,
-    "failure": null,
-    "score": 1.0
-}
