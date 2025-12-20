@@ -1,1 +1,51 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/fkrRRp25)
+# SysNet Core: Systems & Networking Suite
+
+**SysNet Core** is a comprehensive systems programming repository comprised of three distinct projects: a fully functional POSIX-compliant shell, a reliable transport layer protocol implementation over UDP, and kernel-level scheduling modifications for the xv6 operating system.
+
+## 📂 Project Structure
+
+```text
+SysNet-Core/
+├── Custom-Shell/               # POSIX-Compliant Command Line Interpreter
+│   ├── src/             # Source code (Parsing, Execution, Built-ins)
+│   ├── include/         # Header files
+│   └── Makefile         # Build configuration
+├── Reliable-UDP-Protocol/          # S.H.A.M. Reliable Transport Protocol
+│   ├── client.c         # Client implementation (File Transfer & Chat)
+│   ├── server.c         # Server implementation
+│   └── sham.h           # Protocol header definitions
+└── xv6-Scheduler-Implementation/                 # Modified xv6 Kernel
+    ├── kernel/          # Kernel source with FCFS, CFS, and MLFQ schedulers
+    ├── user/            # User-space utilities (readcount, schedulertest)
+    └── report.md        # Performance analysis and scheduling report
+```
+
+## 🚀 Components
+
+### 1. Custom Shell (C-Shell)
+
+A UNIX shell built from scratch capable of process management, I/O redirection, and signal handling. It features a custom Context-Free Grammar (CFG) parser.
+
+**Key Features:** Redirection (`<`, `>>`), Piping (`|`), Background processes (`&`), and job control (`fg`, `bg`).
+
+### 2. S.H.A.M. Networking Protocol
+
+An implementation of S.H.A.M. (Sequenced Header for Asynchronous Messaging). This module simulates TCP-like reliability over unreliable UDP.
+
+**Key Features:** 3-way handshake, Sliding Window flow control, Retransmission Timeouts (RTO), and MD5 data verification.
+
+### 3. xv6 Kernel Modifications
+
+Deep modifications to the educational xv6 operating system to implement advanced scheduling algorithms and system calls.
+
+**Key Features:** getreadcount syscall, FCFS Scheduler, Completely Fair Scheduler (CFS), and Multi-Level Feedback Queue (MLFQ).
+
+## 🛠️ Tech Stack
+
+- **Languages:** C (C99 Standard), RISC-V Assembly
+- **Environment:** Linux (Ubuntu/Debian)
+- **Tools:** GCC, Make, QEMU, GDB, Wireshark
+
+## 📜 License
+
+Distributed under the MIT License. See LICENSE for more information.
