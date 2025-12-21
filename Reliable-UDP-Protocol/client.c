@@ -480,6 +480,9 @@ int main(int argc, char *argv[])
     // file mode ------------------------------------------------------------------
     else
     {
+        double estimated_rtt = 50.0;
+        double dev_rtt = 0.0;
+        double current_timeout = 50.0;
         fd_set readfds;
         socklen_t len = sizeof(server_addr);
         not_ACKed buffer_data[10];
@@ -501,10 +504,9 @@ int main(int argc, char *argv[])
             buffer_data[i].len = 0;
         }
         int total_size = 0;
-        int done = 0, flag1 = 0, flag2 = 1;
+        int done = 0, flag1 = 0;
         while (!done)
         {
-            flag2 = 1;
             struct timeval tv;
             tv.tv_sec = 0;
             tv.tv_usec = 50000;
@@ -528,6 +530,21 @@ int main(int argc, char *argv[])
                 {
                     if (buffer_data[i].end <= ack_num)
                     {
+                        struct timeval now_ack;
+                        gettimeofday(&now_ack, NULL);
+
+                        double sample_rtt = (double)elapsed_ms(buffer_data[i].time, now_ack);
+
+                        estimated_rtt = (0.875 * estimated_rtt) + (0.125 * sample_rtt);
+
+                        double diff = sample_rtt - estimated_rtt;
+                        if (diff < 0) diff = -diff; 
+                        dev_rtt = (0.75 * dev_rtt) + (0.25 * diff);
+                        current_timeout = estimated_rtt + (4 * dev_rtt);
+
+                        if(current_timeout < 50.0) current_timeout = 50.0;
+                        if(current_timeout > 500.0) current_timeout = 500.0;
+
                         buffer_data[i].data[0] = '\0';
                         buffer_data[i].end = 0;
                         buffer_data[i].len = 0;
@@ -599,10 +616,18 @@ int main(int argc, char *argv[])
                         fprintf(fp, "[%s.%06ld] [LOG] RETX DATA SEQ=%d LEN=%d\n", buffer, curr_time.tv_usec, buffer_data[i].end - buffer_data[i].len, buffer_data[i].len);
                     sendto(socketfd, &curr_pac, to_send, 0, (struct sockaddr *)&server_addr, len);
                     gettimeofday(&buffer_data[i].time, NULL);
-                    flag2 = 0;
                 }
             }
-            if (flag1 & flag2)
+            int pending_packets = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                if (buffer_data[i].len > 0) 
+                {
+                    pending_packets = 1;
+                    break;
+                }
+            }
+            if (flag1 && !pending_packets)
             {
                 pack_str pc;
                 pc.a.flags = htons(FIN);
