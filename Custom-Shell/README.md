@@ -1,7 +1,7 @@
 # Custom C-Shell
 
 A robust, POSIX-compliant command-line interpreter implemented in C. This shell features a recursive descent parser based on a custom Context-Free Grammar (CFG) to handle complex command chains, piping, and redirection.
-## 📂 Project Structure
+##  Project Structure
 ```text
 Custom-Shell/
 ├── include/
@@ -23,7 +23,7 @@ Custom-Shell/
 └── shell.out                   # Compiled executable (after make)
 ```
 
-## ✨ Features
+##  Features
 
 ### Core Functionality
 - **Prompt:** Displays `<Username@SystemName:current_path>`. Auto-detects home directory (`~`).
@@ -48,7 +48,7 @@ Custom-Shell/
 - **Ctrl-C:** Interrupts foreground process.
 - **Ctrl-D:** Logout/Exit.
 
-## 🔨 Build & Run
+##  Build & Run
 
 ```bash
 # Compile the shell
@@ -58,7 +58,7 @@ make
 ./shell.out
 ```
 
-## 📝 Usage Examples
+##  Usage Examples
 
 ### Directory Navigation
 ```bash
@@ -79,7 +79,7 @@ make
 [1234] : sleep - Running
 ```
 
-## 🏗️ Architecture
+##  Architecture
 
 The shell is structured around a recursive descent parser that converts user input into an Abstract Syntax Tree (AST) for execution. The parser handles operator precedence and constructs pipelines dynamically.
 
