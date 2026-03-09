@@ -1,7 +1,7 @@
 # Reliable-UDP-Protocol
 
 **S.H.A.M.** (Sequenced Header for Asynchronous Messaging) is a custom application-layer protocol built on top of UDP. It implements core TCP features—reliability, sequencing, and flow control—to ensure data integrity over an unreliable network.
-## 📂 Project Structure
+##  Project Structure
 ```text
 Reliable-UDP-Protocol/
 ├── client.c                    # Client implementation (file transfer & chat)
@@ -15,7 +15,7 @@ Reliable-UDP-Protocol/
 └── client_log.txt              # Client logging output (when RUDP_LOG=1)
 ```
 
-## 📡 Protocol Features
+## Protocol Features
 
 - **Packet Structure:** Custom 8-byte header containing Sequence Number, Ack Number, Flags (SYN/ACK/FIN), and Window Size.
 - **Connection Management:**
@@ -27,12 +27,12 @@ Reliable-UDP-Protocol/
   - **Cumulative ACKs:** Efficient acknowledgment strategy.
 - **Flow Control:** Sliding Window mechanism based on receiver buffer availability.
 
-## 🎮 Modes of Operation
+## Modes of Operation
 
 1. **File Transfer Mode:** Reliable transfer of text/binary files with simulated packet loss.
 2. **Chat Mode:** Real-time bi-directional messaging between client and server.
 
-## ⚙️ Compilation
+## Compilation
 
 ### Linux
 ```bash
@@ -46,7 +46,7 @@ brew install openssl
 make
 ```
 
-## 🚀 Usage
+##  Usage
 
 ### Server
 
@@ -69,7 +69,7 @@ Start the server on a specific port.
 ./client <server_ip> <server_port> --chat [loss_rate]
 ```
 
-## 📊 Logging
+##  Logging
 
 Enable verbose logging by setting `RUDP_LOG=1`. Logs are written to `server_log.txt` and `client_log.txt`.
 
@@ -77,7 +77,7 @@ Enable verbose logging by setting `RUDP_LOG=1`. Logs are written to `server_log.
 export RUDP_LOG=1
 ```
 
-## 🧪 Testing
+## Testing
 
 The protocol has been tested under various network conditions including:
 - Packet loss rates up to 30%
@@ -85,7 +85,7 @@ The protocol has been tested under various network conditions including:
 - Variable latency conditions
 - Large file transfers (>100MB)
 
-## 🔧 Configuration
+## Configuration
 
 Key parameters can be adjusted in `sham.h`:
 - `MAX_PACKET_SIZE`: Maximum payload per packet (default: 1024 bytes)
